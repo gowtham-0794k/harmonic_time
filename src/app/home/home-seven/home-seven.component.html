@@ -1,26 +1,31 @@
 <!-- header start -->
-<app-header-four></app-header-four>
+<!-- <app-header-four></app-header-four> -->
 <!-- header end -->
 
 <main>
-
   <!-- hero slider area start -->
   <section class="slider__area slider__area-3 p-relative">
     <div class="slider-active-3 swiper-container" #heroSliderContainer>
-      <button (click)="swiperInstance?.slidePrev()" type="button" class="slick-prev slick-arrow">
+      <button
+        (click)="swiperInstance?.slidePrev()"
+        type="button"
+        class="slick-prev slick-arrow"
+      >
         <i class="fal fa-angle-left"></i>
       </button>
       <div class="swiper-wrapper">
-        <div *ngFor="let item of hero_slider_data"
+        <div
+          *ngFor="let item of hero_slider_data"
           class="single-slider single-slider-2 slider__height-6 d-flex align-items-center swiper-slide"
-          [style.backgroundImage]="'url(' + item.bgImg + ')'">
+          [style.backgroundImage]="'url(' + item.bgImg + ')'"
+        >
           <div class="container custom-container-2">
             <div class="row">
               <div class="col-xl-7 col-lg-7 col-md-10">
                 <div class="slider__content slider__content-5">
-                  <span [class.meta]="item.meta">{{item.sm_title}}</span>
+                  <span [class.meta]="item.meta">{{ item.sm_title }}</span>
                   <h2 [innerHTML]="item.title"></h2>
-                  <p>{{item.subtitle}}</p>
+                  <p>{{ item.subtitle }}</p>
                   <a routerLink="/shop" class="os-btn-4">Shop Now</a>
                 </div>
               </div>
@@ -29,7 +34,11 @@
         </div>
       </div>
       <div class="tp-slider-dot tp-swiper-dot"></div>
-      <button (click)="swiperInstance?.slideNext()" type="button" class="slick-next slick-arrow">
+      <button
+        (click)="swiperInstance?.slideNext()"
+        type="button"
+        class="slick-next slick-arrow"
+      >
         <i class="fal fa-angle-right"></i>
       </button>
     </div>
@@ -56,7 +65,10 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="row">
-                <div *ngFor="let item of sm_best_prd.slice(0,2); let i = index" class="col-xl-6 col-lg-12 col-md-6">
+                <div
+                  *ngFor="let item of sm_best_prd.slice(0, 2); let i = index"
+                  class="col-xl-6 col-lg-12 col-md-6"
+                >
                   <app-product-item-two [product]="item"></app-product-item-two>
                 </div>
               </div>
@@ -64,7 +76,7 @@
             <div class="col-lg-12">
               <div class="product__big-image effectThree mb-40">
                 <a [routerLink]="['/shop/shop-details', big_item_1?.id]">
-                  <img [src]="big_item_1?.img" alt="product-img">
+                  <img [src]="big_item_1?.img" alt="product-img" />
                 </a>
               </div>
             </div>
@@ -75,13 +87,16 @@
             <div class="col-lg-12">
               <div class="product__big-image effectThree mb-40">
                 <a [routerLink]="['/shop/shop-details', big_item_2?.id]">
-                  <img [src]="big_item_2?.img" alt="product-img">
+                  <img [src]="big_item_2?.img" alt="product-img" />
                 </a>
               </div>
             </div>
             <div class="col-lg-12">
               <div class="row">
-                <div *ngFor="let item of sm_best_prd.slice(2,4); let i = index" class="col-xl-6 col-lg-12 col-md-6">
+                <div
+                  *ngFor="let item of sm_best_prd.slice(2, 4); let i = index"
+                  class="col-xl-6 col-lg-12 col-md-6"
+                >
                   <app-product-item-two [product]="item"></app-product-item-two>
                 </div>
               </div>
@@ -94,16 +109,25 @@
   <!-- product__view-area end -->
 
   <!-- video__area start -->
-  <div class="video__area-df" style="background-image: url(/assets/img/bg/bg-video.webp)">
+  <div
+    class="video__area-df"
+    style="background-image: url(/assets/img/bg/bg-video.webp)"
+  >
     <div class="container">
       <div class="video__content text-center">
         <div class="video__button mb-60">
-          <a (click)="utilsService.playVideo('9ykYqS63Go0')" class="cursor-pointer">
+          <a
+            (click)="utilsService.playVideo('9ykYqS63Go0')"
+            class="cursor-pointer"
+          >
             <i class="fas fa-play"></i>
           </a>
         </div>
-        <h5 class="video__title">AWESOME VIDEO LIGHTBOX </h5>
-        <p>Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. </p>
+        <h5 class="video__title">AWESOME VIDEO LIGHTBOX</h5>
+        <p>
+          Investigationes demonstraverunt lectores legere me lius quod ii legunt
+          saepius.
+        </p>
       </div>
     </div>
   </div>
@@ -125,18 +149,27 @@
           <div class="product_slider p-relative" #productSliderContainer>
             <div class="product__slider-active swiper-container">
               <div class="swiper-wrapper product__slider-item">
-                <div *ngFor="let item of sm_best_prd;let i = index" class="swiper-slide">
+                <div
+                  *ngFor="let item of sm_best_prd; let i = index"
+                  class="swiper-slide"
+                >
                   <app-product-item-two [product]="item"></app-product-item-two>
                 </div>
               </div>
             </div>
             <div class="owl-nav">
-              <div class="owl-prev" (click)="productSliderInstance?.slidePrev()">
+              <div
+                class="owl-prev"
+                (click)="productSliderInstance?.slidePrev()"
+              >
                 <button>
                   <i class="fal fa-angle-left"></i>
                 </button>
               </div>
-              <div class="owl-next" (click)="productSliderInstance?.slideNext()">
+              <div
+                class="owl-next"
+                (click)="productSliderInstance?.slideNext()"
+              >
                 <button>
                   <i class="fal fa-angle-right"></i>
                 </button>
@@ -172,26 +205,39 @@
         <div class="col-xl-12">
           <div class="blog_slider">
             <div class="blog_slider-area p-relative">
-              <div class="blog__slider-active swiper-container" #blogSliderContainer>
+              <div
+                class="blog__slider-active swiper-container"
+                #blogSliderContainer
+              >
                 <div class="swiper-wrapper">
-                  <div *ngFor="let blog of blog_items" class="blog__slider-item swiper-slide">
+                  <div
+                    *ngFor="let blog of blog_items"
+                    class="blog__slider-item swiper-slide"
+                  >
                     <div class="blog-thumb m-img">
-                      <img [src]="blog.img" alt="blog-img">
-                      <a class="btn" [routerLink]="['/pages/blog-details', blog.id]">
+                      <img [src]="blog.img" alt="blog-img" />
+                      <a
+                        class="btn"
+                        [routerLink]="['/pages/blog-details', blog.id]"
+                      >
                         <i class="fa fa-link"></i>
                       </a>
                     </div>
                     <div class="blog__post-content">
                       <div class="blog__wrapper">
                         <h5 class="blog__post-title">
-                          <a [routerLink]="['/pages/blog-details', blog.id]">{{blog.title}}</a>
+                          <a [routerLink]="['/pages/blog-details', blog.id]">{{
+                            blog.title
+                          }}</a>
                         </h5>
                         <div class="article-meta d-flex justify-content-center">
-                          <span class="article-author"><span>By</span> {{blog.author}}</span>
+                          <span class="article-author"
+                            ><span>By</span> {{ blog.author }}</span
+                          >
                           <span> /</span>
                           <span class="article-publish">
                             <i class="fa fa-calendar-o"></i>
-                            {{blog.date}}
+                            {{ blog.date }}
                           </span>
                         </div>
                       </div>
@@ -219,20 +265,26 @@
   <div class="brand__area pb-90">
     <div class="container custom-container-2">
       <div class="client_slider p-relative">
-        <div class="brand__slider-active swiper-container" #brandSliderContainer>
+        <div
+          class="brand__slider-active swiper-container"
+          #brandSliderContainer
+        >
           <div class="swiper-wrapper">
-            <div *ngFor="let logo of client_logos" class="brand__slider-item swiper-slide">
-                <div class="brand__image">
-                    <img [src]="logo" alt="logo">
-                </div>
+            <div
+              *ngFor="let logo of client_logos"
+              class="brand__slider-item swiper-slide"
+            >
+              <div class="brand__image">
+                <img [src]="logo" alt="logo" />
+              </div>
             </div>
           </div>
         </div>
         <div class="owl-nav">
-          <div class="owl-prev"  (click)="brandSliderInstance?.slidePrev()">
+          <div class="owl-prev" (click)="brandSliderInstance?.slidePrev()">
             <button><i class="fal fa-angle-left"></i></button>
           </div>
-          <div class="owl-next"  (click)="brandSliderInstance?.slideNext()">
+          <div class="owl-next" (click)="brandSliderInstance?.slideNext()">
             <button><i class="fal fa-angle-right"></i></button>
           </div>
         </div>
@@ -240,15 +292,12 @@
     </div>
   </div>
   <!-- brand__area end -->
-
 </main>
 
-
 <!-- footer start -->
-<app-footer-three></app-footer-three>
+<!-- <app-footer-three></app-footer-three> -->
 <!-- footer end -->
 
-
 <!-- video popup start -->
-<app-video-popup></app-video-popup>
+<!-- <app-video-popup></app-video-popup> -->
 <!-- video popup end -->

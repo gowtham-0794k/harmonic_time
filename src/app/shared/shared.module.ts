@@ -35,6 +35,7 @@ import { BlogReplyFormComponent } from './components/forms/blog-reply-form/blog-
 import { ProductModalComponent } from './components/modals/product-modal/product-modal.component';
 import { ContactFormComponent } from './components/forms/contact-form/contact-form.component';
 import { OffcanvasComponent } from './components/offcanvas/offcanvas.component';
+import { HomeLayoutComponent } from './layout/home-layout/home-layout.component';
 
 
 @NgModule({
@@ -71,6 +72,7 @@ import { OffcanvasComponent } from './components/offcanvas/offcanvas.component';
     ProductModalComponent,
     ContactFormComponent,
     OffcanvasComponent,
+    HomeLayoutComponent,
   ],
   imports: [
     CommonModule,
