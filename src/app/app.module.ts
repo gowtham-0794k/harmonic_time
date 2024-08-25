@@ -3,10 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ShopModule } from './shop/shop.module';
 
 
 
@@ -17,8 +15,6 @@ import { ShopModule } from './shop/shop.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SharedModule,
-    ShopModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       timeOut: 3000,
