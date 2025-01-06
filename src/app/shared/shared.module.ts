@@ -35,7 +35,7 @@ import { BlogReplyFormComponent } from './components/forms/blog-reply-form/blog-
 import { ProductModalComponent } from './components/modals/product-modal/product-modal.component';
 import { ContactFormComponent } from './components/forms/contact-form/contact-form.component';
 import { OffcanvasComponent } from './components/offcanvas/offcanvas.component';
-import { LayoutOneComponent } from './layout/layout-one/layout-one.component';
+
 
 @NgModule({
   declarations: [
@@ -71,10 +71,14 @@ import { LayoutOneComponent } from './layout/layout-one/layout-one.component';
     ProductModalComponent,
     ContactFormComponent,
     OffcanvasComponent,
-    LayoutOneComponent,
   ],
-  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
-  exports: [
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
+  exports:[
     HeaderOneComponent,
     BlogItemComponent,
     SubscribeAreaComponent,
@@ -102,7 +106,6 @@ import { LayoutOneComponent } from './layout/layout-one/layout-one.component';
     ProductModalComponent,
     ContactFormComponent,
     OffcanvasComponent,
-    LayoutOneComponent,
-  ],
+  ]
 })
-export class SharedModule {}
+export class SharedModule { }

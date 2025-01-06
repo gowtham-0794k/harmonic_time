@@ -12,14 +12,9 @@ import { RegisterComponent } from './register/register.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { ContactComponent } from './contact/contact.component';
 import { AccountComponent } from './account/account.component';
-import { LayoutOneComponent } from '../shared/layout/layout-one/layout-one.component';
+
 
 const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'register',
-    pathMatch: 'full',
-  },
   {
     path: 'blog',
     component: BlogComponent,
@@ -66,15 +61,9 @@ const routes: Routes = [
     title: 'Register Page',
   },
   {
-    path: '',
-    component: LayoutOneComponent,
-    children: [
-      {
-        path: 'checkout',
-        component: CheckoutComponent,
-        title: 'Checkout Page',
-      },
-    ],
+    path: 'checkout',
+    component: CheckoutComponent,
+    title: 'Checkout Page',
   },
   {
     path: 'contact',
@@ -92,4 +81,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
+
 export class PagesRoutingModule {}

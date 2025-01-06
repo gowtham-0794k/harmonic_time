@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'app-breadcrumb-one',
   templateUrl: './breadcrumb-one.component.html',
-  styleUrls: ['./breadcrumb-one.component.scss'],
+  styleUrls: ['./breadcrumb-one.component.scss']
 })
 export class BreadcrumbOneComponent {
   @Input() bg?: string;
@@ -12,8 +12,8 @@ export class BreadcrumbOneComponent {
 
   public bg_img = '/assets/img/page-title/page-title-1.jpg';
 
-  ngOnInit() {
-    if (this.bg) {
+  ngOnInit () {
+    if(this.bg){
       this.bg_img = this.bg;
     }
   }
