@@ -20,7 +20,7 @@ const routes: Routes = [
       {
         path: '',
         component: ShopComponent,
-        title: 'Shop Page',
+        title: 'Harmonic Time : Shop Page',
       },
       {
         path: 'shop-right',

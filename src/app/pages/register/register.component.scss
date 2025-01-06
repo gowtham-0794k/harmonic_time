@@ -1,0 +1,16 @@
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 30px;
+    /* Add space for the eye icon */
+}
+
+.password-wrapper i {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}

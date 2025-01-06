@@ -91,6 +91,19 @@ const menuData: IMenuType[] = [
   //     { link: '/404', title: 'Error 404' },
   //   ]
   // },
+
+  {
+    link: '/',
+    title: `What's New`,
+  },
+  {
+    link: '/',
+    title: 'Stories',
+  },
+  {
+    link: '/',
+    title: 'Videos',
+  },
   {
     link: '/shop',
     title: 'Shop',

@@ -16,6 +16,11 @@ import { LayoutOneComponent } from '../shared/layout/layout-one/layout-one.compo
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'register',
+    pathMatch: 'full',
+  },
+  {
     path: 'blog',
     component: BlogComponent,
     title: 'Blog Page',
