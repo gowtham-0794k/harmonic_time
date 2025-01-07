@@ -1,8 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
 import {
-  loadData,
-  loadDataSuccess,
-  loadDataFailure,
+  registerUser,
+  registerUserSuccess,
+  registerUserFailure,
 } from '../actions/user.actions';
 
 export interface UserState {
@@ -19,13 +19,13 @@ export const initialState: UserState = {
 
 export const userReducer = createReducer(
   initialState,
-  on(loadData, (state) => ({ ...state, loading: true })),
-  on(loadDataSuccess, (state, { data }) => ({
+  on(registerUser, (state) => ({ ...state, loading: true })),
+  on(registerUserSuccess, (state, { data }) => ({
     ...state,
     data,
     loading: false,
   })),
-  on(loadDataFailure, (state, { error }) => ({
+  on(registerUserFailure, (state, { error }) => ({
     ...state,
     error,
     loading: false,

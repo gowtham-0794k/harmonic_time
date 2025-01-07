@@ -31,7 +31,7 @@ import { UserEffects } from './store/effects/user.effects';
       enableHtml: true,
       positionClass: 'toast-top-center',
     }),
-    StoreModule.forRoot({ example: userReducer }),
+    StoreModule.forRoot({ user: userReducer }),
     EffectsModule.forRoot([UserEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,

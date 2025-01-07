@@ -1,11 +1,14 @@
 import { createAction, props } from '@ngrx/store';
 
-export const loadData = createAction('[User] Load Data');
-export const loadDataSuccess = createAction(
-  '[user] Load Data Success',
+export const registerUser = createAction(
+  '[User] Register',
+  props<{ url: string; payload: { email: string; password: number } }>()
+);
+export const registerUserSuccess = createAction(
+  '[User] Register Success',
   props<{ data: string[] }>()
 );
-export const loadDataFailure = createAction(
-  '[user] Load Data Failure',
+export const registerUserFailure = createAction(
+  '[User] Register Failure',
   props<{ error: string }>()
 );
