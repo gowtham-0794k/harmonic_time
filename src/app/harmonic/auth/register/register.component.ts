@@ -7,9 +7,16 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { environment } from '@environment';
+import { Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
 import { REGISTER_USER } from 'src/app/config';
 import { GenericService } from 'src/app/shared/services/generic.service';
+import { loadData } from 'src/app/store/actions/user.actions';
+import { AppState } from 'src/app/store/app.state';
+import {
+  selectData,
+  selectLoading,
+} from 'src/app/store/selectors/user.selectors';
 
 @Component({
   selector: 'app-register',
@@ -27,11 +34,18 @@ export class RegisterComponent {
 
   constructor(
     private toastrService: ToastrService,
-    public genericService: GenericService
+    public genericService: GenericService,
+    private store: Store<AppState>
   ) {}
 
   ngOnInit() {
     console.log({ environment });
+    this.store.dispatch(loadData());
+    this.store.select(selectData).subscribe((data) => {
+      const values = data;
+      // Perform functionality with the data
+      console.log('Fetched Data:', values);
+    });
     // Initialize the form with validators
     this.registerForm = new FormGroup(
       {

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -32,5 +32,9 @@ export class GenericService {
   postObservable(_url: string, data: any): Observable<any> {
     const url = _url;
     return this._httpClient.post(url, data, this.httpOptions);
+  }
+
+  getData() {
+    return of([1, 2, 3]);
   }
 }
