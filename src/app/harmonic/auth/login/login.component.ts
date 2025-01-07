@@ -1,29 +1,29 @@
 import { Component } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { FormControl, FormGroup,Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
   isShowPass = false;
 
-  handleShowPass () {
+  handleShowPass() {
     this.isShowPass = !this.isShowPass;
   }
 
   public loginForm!: FormGroup;
   public formSubmitted = false;
 
-  constructor(private toastrService: ToastrService) { }
+  constructor(private toastrService: ToastrService) {}
 
-  ngOnInit () {
+  ngOnInit() {
     this.loginForm = new FormGroup({
-      email:new FormControl(null,[Validators.required,Validators.email]),
-      password:new FormControl(null,[Validators.required,Validators.minLength(6)]),
-    })
+      email: new FormControl(null, [Validators.required, Validators.email]),
+      password: new FormControl(null, [Validators.required]),
+    });
   }
 
   onSubmit() {
@@ -38,6 +38,10 @@ export class LoginComponent {
     }
   }
 
-  get email() { return this.loginForm.get('email') }
-  get password() { return this.loginForm.get('password') }
+  get email() {
+    return this.loginForm.get('email');
+  }
+  get password() {
+    return this.loginForm.get('password');
+  }
 }

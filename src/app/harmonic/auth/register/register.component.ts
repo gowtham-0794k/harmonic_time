@@ -1,6 +1,15 @@
 import { Component } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
+import { environment } from '@environment';
 import { ToastrService } from 'ngx-toastr';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { REGISTER_USER } from 'src/app/config';
+import { GenericService } from 'src/app/shared/services/generic.service';
 
 @Component({
   selector: 'app-register',
@@ -8,47 +17,97 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent {
-  isShowPass = false;
+  // Show/Hide Password States
+  public showPassword = false;
+  public showConfirmPassword = false;
 
-  handleShowPass() {
-    this.isShowPass = !this.isShowPass;
-  }
-
+  // Form Group
   public registerForm!: FormGroup;
   public formSubmitted = false;
 
-  constructor(private toastrService: ToastrService) {}
+  constructor(
+    private toastrService: ToastrService,
+    public genericService: GenericService
+  ) {}
 
   ngOnInit() {
-    this.registerForm = new FormGroup({
-      name: new FormControl(null, [Validators.required]),
-      email: new FormControl(null, [Validators.required, Validators.email]),
-      password: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(6),
-      ]),
-    });
+    console.log({ environment });
+    // Initialize the form with validators
+    this.registerForm = new FormGroup(
+      {
+        email: new FormControl(null, [Validators.required, Validators.email]),
+        password: new FormControl(null, [
+          Validators.required,
+          Validators.pattern(
+            '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'
+          ), // Minimum 8 characters, at least one uppercase, one lowercase, one number, and one special character
+        ]),
+        confirmPassword: new FormControl(null, [Validators.required]),
+      },
+      { validators: this.passwordsMatchValidator }
+    );
   }
 
-  onSubmit() {
-    this.formSubmitted = true;
-    if (this.registerForm.valid) {
-      console.log('register-form-value', this.registerForm.value);
-      this.toastrService.success(`Message sent successfully`);
-
-      // Reset the form
-      this.registerForm.reset();
-      this.formSubmitted = false; // Reset formSubmitted to false
-    }
+  // Custom Validator: Check if passwords match
+  passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
+    const password = group.get('password')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { passwordsMismatch: true };
   }
 
-  get name() {
-    return this.registerForm.get('name');
-  }
+  // Getters for form controls
   get email() {
     return this.registerForm.get('email');
   }
   get password() {
     return this.registerForm.get('password');
+  }
+  get confirmPassword() {
+    return this.registerForm.get('confirmPassword');
+  }
+
+  // Toggle Password Visibility
+  togglePasswordVisibility(field: string) {
+    if (field === 'password') {
+      this.showPassword = !this.showPassword;
+    } else if (field === 'confirmPassword') {
+      this.showConfirmPassword = !this.showConfirmPassword;
+    }
+  }
+
+  // Submit Form
+  onSubmit() {
+    const url = REGISTER_USER;
+    this.formSubmitted = true;
+
+    if (this.registerForm.valid) {
+      const formValue = this.registerForm.value;
+
+      console.log('Registration successful:', formValue);
+      this.toastrService.success('Registration successful!');
+      this.registerForm.reset();
+      this.formSubmitted = false; // Reset the form submission state
+      const payload = {
+        email: formValue.email,
+        password: formValue.password,
+      };
+      console.log({ payload });
+      this.genericService.postObservable(url, payload).subscribe({
+        next: (result) => {
+          // Handle success
+          console.log({ result });
+        },
+        error: (err) => {
+          // Handle error
+          console.error({ err });
+        },
+        complete: () => {
+          // Handle completion
+          console.log('Request completed.');
+        },
+      });
+    } else if (this.registerForm.hasError('passwordsMismatch')) {
+      this.toastrService.error('Passwords do not match.');
+    }
   }
 }

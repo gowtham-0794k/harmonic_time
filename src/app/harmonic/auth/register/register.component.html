@@ -3,33 +3,19 @@
     <div class="row">
       <div class="col-lg-8 offset-lg-2">
         <div class="basic-login">
-          <h3 class="text-center mb-60">Signup From Here</h3>
+          <h3 class="text-center mb-60">Signup</h3>
           <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <!-- Email Field -->
             <div class="mb-20">
-              <label for="name">Username <span>**</span></label>
-              <input
-                id="name"
-                type="text"
-                placeholder="Enter Username"
-                formControlName="name"
-              />
-              <span
-                *ngIf="
-                  name?.hasError('required') && (name?.touched || formSubmitted)
-                "
-                class="text-danger"
-              >
-                Name is required
-              </span>
-            </div>
-            <div class="mb-20">
-              <label for="email-id">Email Address <span>**</span></label>
-              <input
-                id="email"
-                type="text"
-                placeholder="Email address..."
-                formControlName="email"
-              />
+              <label for="email">Email Address <span>**</span></label>
+              <div class="input-wrapper">
+                <input
+                  id="email"
+                  type="text"
+                  placeholder="Enter your email address"
+                  formControlName="email"
+                />
+              </div>
               <span
                 *ngIf="
                   (email?.hasError('required') && email?.touched) ||
@@ -41,25 +27,85 @@
                 Email is required and must be a valid email address
               </span>
             </div>
-            <div class="mb-30">
-              <label for="pass">Password <span>**</span></label>
-              <input
-                id="password"
-                type="password"
-                placeholder="Enter password..."
-                formControlName="password"
-              />
+
+            <!-- Password Field -->
+            <div class="mb-20">
+              <label for="password">Password <span>**</span></label>
+              <div class="input-wrapper">
+                <input
+                  id="password"
+                  [type]="showPassword ? 'text' : 'password'"
+                  placeholder="Enter your password"
+                  formControlName="password"
+                />
+                <i
+                  class="fal"
+                  [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"
+                  (click)="togglePasswordVisibility('password')"
+                ></i>
+              </div>
               <span
-                *ngIf="(password?.hasError('required') && password?.touched) || (password?.errors?.['minlength'] && password?.dirty) || (formSubmitted && !password?.value)"
+                *ngIf="
+                  (password?.hasError('required') && password?.touched) ||
+                  (password?.errors?.['pattern'] && password?.dirty) ||
+                  (formSubmitted && !password?.value)
+                "
                 class="text-danger"
               >
-                Password is required and must be a 6 character
+                Password is required and must be at least 8 characters long,
+                contain uppercase, lowercase, and a special character
               </span>
             </div>
-            <button type="submit" class="os-btn w-100">Register Now</button>
+
+            <!-- Confirm Password Field -->
+            <div class="mb-20">
+              <label for="confirm-password"
+                >Confirm Password <span>**</span></label
+              >
+              <div class="input-wrapper">
+                <input
+                  id="confirm-password"
+                  [type]="showConfirmPassword ? 'text' : 'password'"
+                  placeholder="Confirm your password"
+                  formControlName="confirmPassword"
+                />
+                <i
+                  class="fal"
+                  [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"
+                  (click)="togglePasswordVisibility('confirmPassword')"
+                ></i>
+              </div>
+              <span
+                *ngIf="
+                  confirmPassword?.hasError('required') &&
+                  confirmPassword?.touched
+                "
+                class="text-danger"
+              >
+                Confirm Password is required
+              </span>
+              <span
+                *ngIf="
+                  registerForm.hasError('passwordsMismatch') &&
+                  (confirmPassword?.dirty || formSubmitted)
+                "
+                class="text-danger"
+              >
+                Confirm Password does not match Password
+              </span>
+            </div>
+
+            <!-- Register Button -->
+            <button
+              type="submit"
+              class="os-btn w-100"
+              [disabled]="!registerForm.valid"
+            >
+              Register Now
+            </button>
             <div class="or-divide"><span>or</span></div>
             <a routerLink="/auth/login" class="os-btn os-btn-black w-100"
-              >login Now</a
+              >Login Now</a
             >
           </form>
         </div>

@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-lg-8 offset-lg-2">
         <div class="basic-login">
-          <h3 class="text-center mb-60">Login From Here</h3>
+          <h3 class="text-center mb-60">Login</h3>
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <div class="mb-20">
               <label for="email">Email Address <span>**</span></label>
@@ -52,7 +52,7 @@
             </div>
             <button class="os-btn w-100">Login Now</button>
             <div class="or-divide"><span>or</span></div>
-            <a routerLink="/pages/register" class="os-btn os-btn-black w-100"
+            <a routerLink="/auth/register" class="os-btn os-btn-black w-100"
               >Register Now</a
             >
           </form>
