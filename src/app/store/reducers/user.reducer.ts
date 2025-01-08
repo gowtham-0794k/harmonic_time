@@ -3,6 +3,9 @@ import {
   registerUser,
   registerUserSuccess,
   registerUserFailure,
+  loginUser,
+  loginUserSuccess,
+  loginUserFailure,
 } from '../actions/user.actions';
 
 export interface UserState {
@@ -19,15 +22,40 @@ export const initialState: UserState = {
 
 export const userReducer = createReducer(
   initialState,
-  on(registerUser, (state) => ({ ...state, loading: true })),
+
+  // Login Actions
+  on(loginUser, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(loginUserSuccess, (state, { data }) => ({
+    ...state,
+    data,
+    loading: false,
+    error: null,
+  })),
+  on(loginUserFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  // Register Actions
+  on(registerUser, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
   on(registerUserSuccess, (state, { data }) => ({
     ...state,
     data,
     loading: false,
+    error: null,
   })),
   on(registerUserFailure, (state, { error }) => ({
     ...state,
-    error,
     loading: false,
+    error,
   }))
 );

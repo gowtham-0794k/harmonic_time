@@ -37,6 +37,8 @@ import { ContactFormComponent } from './components/forms/contact-form/contact-fo
 import { OffcanvasComponent } from './components/offcanvas/offcanvas.component';
 import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
 import { SellerLayoutComponent } from './layout/seller-layout/seller-layout.component';
+import { BuyerLayoutComponent } from './layout/buyer-layout/buyer-layout.component';
+import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +76,8 @@ import { SellerLayoutComponent } from './layout/seller-layout/seller-layout.comp
     OffcanvasComponent,
     AuthLayoutComponent,
     SellerLayoutComponent,
+    BuyerLayoutComponent,
+    AdminLayoutComponent,
   ],
   imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
   exports: [
@@ -104,6 +108,8 @@ import { SellerLayoutComponent } from './layout/seller-layout/seller-layout.comp
     ProductModalComponent,
     ContactFormComponent,
     OffcanvasComponent,
+    BuyerLayoutComponent,
+    AdminLayoutComponent,
   ],
 })
 export class SharedModule {}

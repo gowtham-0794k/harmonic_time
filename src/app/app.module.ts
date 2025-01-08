@@ -14,6 +14,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '@environment';
 import { UserEffects } from './store/effects/user.effects';
+import { appReducer } from './store/app.reducer';
 
 @NgModule({
   declarations: [AppComponent],

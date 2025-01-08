@@ -12,7 +12,7 @@ import { REGISTER_USER } from 'src/app/config';
 import { GenericService } from 'src/app/shared/services/generic.service';
 import { registerUser } from 'src/app/store/actions/user.actions';
 import { AppState } from 'src/app/store/app.state';
-import { selectData } from 'src/app/store/selectors/user.selectors';
+import { selectUserData } from 'src/app/store/selectors/user.selectors';
 
 @Component({
   selector: 'app-register',
@@ -82,7 +82,7 @@ export class RegisterComponent {
       };
       console.log({ payload });
       this.store.dispatch(registerUser({ url, payload }));
-      this.store.select(selectData).subscribe((state) => {
+      this.store.select(selectUserData).subscribe((state) => {
         console.log({ state });
         // this.toastrService.success('Registration successful!');
         // this.registerForm.reset();

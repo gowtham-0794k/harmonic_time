@@ -14,11 +14,6 @@ const routes: Routes = [
       import('./harmonic/auth/auth.module').then((m) => m.AuthModule),
   },
   {
-    path: 'seller',
-    loadChildren: () =>
-      import('./harmonic/seller/seller.module').then((m) => m.SellerModule),
-  },
-  {
     path: 'home',
     loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
   },
@@ -30,6 +25,21 @@ const routes: Routes = [
     path: 'pages',
     loadChildren: () =>
       import('./pages/pages.module').then((m) => m.PagesModule),
+  },
+  {
+    path: 'seller',
+    loadChildren: () =>
+      import('./harmonic/seller/seller.module').then((m) => m.SellerModule),
+  },
+  {
+    path: 'buyer',
+    loadChildren: () =>
+      import('./harmonic/buyer/buyer.module').then((m) => m.BuyerModule),
+  },
+  {
+    path: 'admin',
+    loadChildren: () =>
+      import('./harmonic/admin/admin.module').then((m) => m.AdminModule),
   },
   {
     path: '**',

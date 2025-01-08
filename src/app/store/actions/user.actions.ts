@@ -12,3 +12,16 @@ export const registerUserFailure = createAction(
   '[User] Register Failure',
   props<{ error: string }>()
 );
+
+export const loginUser = createAction(
+  '[User] Login',
+  props<{ url: string; payload: { email: string; password: number } }>()
+);
+export const loginUserSuccess = createAction(
+  '[User] Login Success',
+  props<{ data: string[] }>()
+);
+export const loginUserFailure = createAction(
+  '[User] Login Failure',
+  props<{ error: string }>()
+);

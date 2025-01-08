@@ -6,6 +6,9 @@ import {
   registerUser,
   registerUserSuccess,
   registerUserFailure,
+  loginUserSuccess,
+  loginUserFailure,
+  loginUser,
 } from '../actions/user.actions';
 import { GenericService } from 'src/app/shared/services/generic.service';
 
@@ -22,12 +25,28 @@ export class UserEffects {
       mergeMap((action) =>
         this.genericService.postObservable(action.url, action.payload).pipe(
           map((result: any) => {
-            console.log({ result });
             return registerUserSuccess({ data: result });
           }),
           catchError((err) => {
             console.error({ err });
             return of(registerUserFailure({ error: err }));
+          })
+        )
+      )
+    )
+  );
+
+  loginUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loginUser),
+      mergeMap((action) =>
+        this.genericService.postObservable(action.url, action.payload).pipe(
+          map((result: any) => {
+            return loginUserSuccess({ data: result });
+          }),
+          catchError((err) => {
+            console.error({ err });
+            return of(loginUserFailure({ error: err }));
           })
         )
       )
