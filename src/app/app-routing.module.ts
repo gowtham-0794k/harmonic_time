@@ -14,6 +14,11 @@ const routes: Routes = [
       import('./harmonic/auth/auth.module').then((m) => m.AuthModule),
   },
   {
+    path: 'seller',
+    loadChildren: () =>
+      import('./harmonic/seller/seller.module').then((m) => m.SellerModule),
+  },
+  {
     path: 'home',
     loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
   },

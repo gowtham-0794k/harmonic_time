@@ -3,9 +3,11 @@
 <!-- header end -->
 
 <main>
-
   <!-- breadcrumb start -->
-  <app-breadcrumb-one title="Product Details" subtitle="Product Details"></app-breadcrumb-one>
+  <app-breadcrumb-one
+    title="Product Details"
+    subtitle="Product Details"
+  ></app-breadcrumb-one>
   <!-- breadcrumb end -->
 
   <!-- shop details area start -->
@@ -13,7 +15,10 @@
   <!-- shop details area end -->
 
   <!-- related products start -->
-  <app-related-products [brand]="product?.brand" [productId]="product?.id"></app-related-products>
+  <app-related-products
+    [brand]="product?.brand"
+    [productId]="product?.id"
+  ></app-related-products>
   <!-- related products end -->
 </main>
 

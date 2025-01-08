@@ -1,0 +1,285 @@
+<section class="product-insert-area pt-100 pb-100">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="basic-login select-one">
+          <h3 class="text-center mb-60">Add New Product</h3>
+          <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+            <div class="row">
+              <!-- Product Name -->
+              <div class="col-md-6 mb-20">
+                <label for="productName">Product Name <span>**</span></label>
+                <div class="input-wrapper">
+                  <input
+                    id="productName"
+                    type="text"
+                    placeholder="Enter the product name"
+                    formControlName="productName"
+                  />
+                </div>
+                <span
+                  *ngIf="
+                    productName?.hasError('required') && productName?.touched
+                  "
+                  class="text-danger"
+                >
+                  Product Name is required
+                </span>
+              </div>
+
+              <!-- Brand -->
+              <div class="col-md-6 mb-20">
+                <label for="brand">Brand <span>**</span></label>
+                <select id="brand" formControlName="brandId">
+                  <option value="" disabled>- Please select -</option>
+                  <option *ngFor="let brand of brands" [value]="brand.id">
+                    {{ brand.name }}
+                  </option>
+                </select>
+                <span
+                  *ngIf="brandId?.hasError('required') && brandId?.touched"
+                  class="text-danger"
+                >
+                  Brand is required
+                </span>
+              </div>
+
+              <!-- Category -->
+              <div class="col-md-6 mb-20">
+                <label for="category">Category <span>**</span></label>
+                <select id="category" formControlName="categoryId">
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let category of categories"
+                    [value]="category.id"
+                  >
+                    {{ category.name }}
+                  </option>
+                </select>
+                <span
+                  *ngIf="
+                    categoryId?.hasError('required') && categoryId?.touched
+                  "
+                  class="text-danger"
+                >
+                  Category is required
+                </span>
+              </div>
+
+              <!-- Price -->
+              <div class="col-md-6 mb-20">
+                <label for="price">Price <span>**</span></label>
+                <div class="input-wrapper">
+                  <input
+                    id="price"
+                    type="number"
+                    placeholder="Enter the product price"
+                    formControlName="price"
+                  />
+                </div>
+                <span
+                  *ngIf="price?.hasError('required') && price?.touched"
+                  class="text-danger"
+                >
+                  Price is required
+                </span>
+              </div>
+
+              <!-- Recipient -->
+              <div class="col-md-6 mb-20">
+                <label for="recipient">Recipient <span>**</span></label>
+                <select id="recipient" formControlName="recipientId">
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let recipient of recipients"
+                    [value]="recipient.id"
+                  >
+                    {{ recipient.name }}
+                  </option>
+                </select>
+                <span
+                  *ngIf="
+                    recipientId?.hasError('required') && recipientId?.touched
+                  "
+                  class="text-danger"
+                >
+                  Recipient is required
+                </span>
+              </div>
+
+              <!-- Image Upload -->
+              <div class="col-md-6 mb-20">
+                <label for="imageUpload">Upload Product Image</label>
+                <div class="image-upload-wrapper">
+                  <div class="upload-icon">
+                    <i class="fa fa-upload"></i>
+                    <input
+                      type="file"
+                      id="imageUpload"
+                      (change)="onImageUpload($event)"
+                      accept="image/*"
+                    />
+                  </div>
+                  <div *ngIf="uploadedImage" class="image-preview">
+                    <img [src]="uploadedImage" alt="Uploaded Image" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="product__wrapper mb-60">
+                <div class="product-thumbnail">
+                  <a class="w-img">
+                    <img [src]="product" alt="product-img" />
+                  </a>
+                </div>
+              </div>
+
+              <!-- Additional Product Details -->
+
+              <!-- Dial Color -->
+              <div class="col-md-6 mb-20">
+                <label for="dialColor">Dial Color</label>
+                <select id="dialColor" formControlName="dialColorId">
+                  <option value="" disabled>- Please select -</option>
+                  <option *ngFor="let color of dialColors" [value]="color.id">
+                    {{ color.name }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Diameter -->
+              <div class="col-md-6 mb-20">
+                <label for="diameter">Diameter</label>
+                <input
+                  id="diameter"
+                  type="text"
+                  placeholder="Enter diameter"
+                  formControlName="diameter"
+                />
+              </div>
+
+              <!-- Water Resistant -->
+              <div class="col-md-6 mb-20">
+                <label for="waterResistant">Water Resistant</label>
+                <select id="waterResistant" formControlName="waterResistant">
+                  <option value="" disabled>- Please select -</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                  <option value="50m">50m</option>
+                  <option value="100m">100m</option>
+                </select>
+              </div>
+
+              <!-- Movement -->
+              <div class="col-md-6 mb-20">
+                <label for="movement">Movement</label>
+                <select id="movement" formControlName="movementId">
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let movement of movements"
+                    [value]="movement.id"
+                  >
+                    {{ movement.name }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Strap Material -->
+              <div class="col-md-6 mb-20">
+                <label for="strapMaterial">Strap Material</label>
+                <select id="strapMaterial" formControlName="strapMaterialId">
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let material of strapMaterials"
+                    [value]="material.id"
+                  >
+                    {{ material.name }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Case Material -->
+              <div class="col-md-6 mb-20">
+                <label for="caseMaterial">Case Material</label>
+                <select id="caseMaterial" formControlName="caseMaterialId">
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let material of caseMaterials"
+                    [value]="material.id"
+                  >
+                    {{ material.name }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Watch Markers -->
+              <div class="col-md-6 mb-20">
+                <label for="watchMarkers">Watch Markers</label>
+                <select id="watchMarkers" formControlName="watchMarkersId">
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let marker of watchMarkers"
+                    [value]="marker.id"
+                  >
+                    {{ marker.name }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Manufacturer Product Number -->
+              <div class="col-md-6 mb-20">
+                <label for="manufacturerProductNumber"
+                  >Manufacturer Product Number</label
+                >
+                <input
+                  id="manufacturerProductNumber"
+                  type="text"
+                  placeholder="Enter manufacturer product number"
+                  formControlName="manufacturerProductNumber"
+                />
+              </div>
+
+              <!-- Guarantee -->
+              <div class="col-md-6 mb-20">
+                <label for="guarantee">Guarantee</label>
+                <input
+                  id="guarantee"
+                  type="text"
+                  placeholder="Enter guarantee details"
+                  formControlName="guarantee"
+                />
+              </div>
+
+              <!-- Delivery Option -->
+              <div class="col-md-6 mb-20">
+                <label for="deliveryOption">Delivery Option</label>
+                <select id="deliveryOption" formControlName="deliveryOptionId">
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let option of deliveryOptions"
+                    [value]="option.id"
+                  >
+                    {{ option.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="row">
+              <div class="col-12">
+                <button
+                  type="submit"
+                  class="os-btn w-100"
+                  [disabled]="!productForm.valid"
+                >
+                  Add Product
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

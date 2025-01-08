@@ -36,6 +36,7 @@ import { ProductModalComponent } from './components/modals/product-modal/product
 import { ContactFormComponent } from './components/forms/contact-form/contact-form.component';
 import { OffcanvasComponent } from './components/offcanvas/offcanvas.component';
 import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
+import { SellerLayoutComponent } from './layout/seller-layout/seller-layout.component';
 
 @NgModule({
   declarations: [
@@ -72,6 +73,7 @@ import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component'
     ContactFormComponent,
     OffcanvasComponent,
     AuthLayoutComponent,
+    SellerLayoutComponent,
   ],
   imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
   exports: [
