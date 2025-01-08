@@ -5,9 +5,15 @@ import { SellerRoutingModule } from './seller-routing.module';
 import { AddProductComponent } from './add-product/add-product.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ListComponent } from './products/list/list.component';
+import { AddEditComponent } from './products/add-edit/add-edit.component';
+import { DetailsComponent } from './products/details/details.component';
+import { OrdersComponent } from './orders/orders.component';
+import { AnalyticsComponent } from './analytics/analytics.component';
 
 @NgModule({
-  declarations: [AddProductComponent],
+  declarations: [AddProductComponent, DashboardComponent, ListComponent, AddEditComponent, DetailsComponent, OrdersComponent, AnalyticsComponent],
   imports: [
     CommonModule,
     SellerRoutingModule,

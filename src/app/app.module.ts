@@ -12,7 +12,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { userReducer } from './store/reducers/user.reducer';
 import { environment } from '@environment';
 import { UserEffects } from './store/effects/user.effects';
 
@@ -31,7 +30,7 @@ import { UserEffects } from './store/effects/user.effects';
       enableHtml: true,
       positionClass: 'toast-top-center',
     }),
-    StoreModule.forRoot({ user: userReducer }),
+    StoreModule.forRoot(appReducer),
     EffectsModule.forRoot([UserEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
