@@ -80,10 +80,8 @@ export class RegisterComponent {
         email: formValue.email,
         password: formValue.password,
       };
-      console.log({ payload });
       this.store.dispatch(registerUser({ url, payload }));
       this.store.select(selectUserData).subscribe((state) => {
-        console.log({ state });
         // this.toastrService.success('Registration successful!');
         // this.registerForm.reset();
         // this.formSubmitted = false; // Reset the form submission state

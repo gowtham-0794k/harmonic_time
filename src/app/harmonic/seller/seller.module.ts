@@ -11,15 +11,25 @@ import { AddEditComponent } from './products/add-edit/add-edit.component';
 import { DetailsComponent } from './products/details/details.component';
 import { OrdersComponent } from './orders/orders.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
+import { ShopModule } from 'src/app/shop/shop.module';
 
 @NgModule({
-  declarations: [AddProductComponent, DashboardComponent, ListComponent, AddEditComponent, DetailsComponent, OrdersComponent, AnalyticsComponent],
+  declarations: [
+    AddProductComponent,
+    DashboardComponent,
+    ListComponent,
+    AddEditComponent,
+    DetailsComponent,
+    OrdersComponent,
+    AnalyticsComponent,
+  ],
   imports: [
     CommonModule,
     SellerRoutingModule,
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
+    ShopModule,
   ],
 })
 export class SellerModule {}

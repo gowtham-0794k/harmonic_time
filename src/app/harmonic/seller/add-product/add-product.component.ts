@@ -174,7 +174,6 @@ export class AddProductComponent implements OnInit {
   onSubmit() {
     if (this.productForm.valid) {
       const formData = this.productForm.value;
-      console.log('Form Data:', formData);
       // Here, you can send the formData to your backend using an HTTP service.
     } else {
       console.error('Form is invalid');

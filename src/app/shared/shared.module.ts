@@ -39,6 +39,8 @@ import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component'
 import { SellerLayoutComponent } from './layout/seller-layout/seller-layout.component';
 import { BuyerLayoutComponent } from './layout/buyer-layout/buyer-layout.component';
 import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
+import { BreadcrumbTwoComponent } from './components/breadcrumb/breadcrumb-two/breadcrumb-two.component';
+import { ProductDetailsUpperSellerComponent } from './components/product-details-upper-seller/product-details-upper-seller.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +80,8 @@ import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.compone
     SellerLayoutComponent,
     BuyerLayoutComponent,
     AdminLayoutComponent,
+    BreadcrumbTwoComponent,
+    ProductDetailsUpperSellerComponent,
   ],
   imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
   exports: [
@@ -110,6 +114,8 @@ import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.compone
     OffcanvasComponent,
     BuyerLayoutComponent,
     AdminLayoutComponent,
+    BreadcrumbTwoComponent,
+    ProductDetailsUpperSellerComponent,
   ],
 })
 export class SharedModule {}

@@ -3,7 +3,6 @@
 <!-- header end -->
 
 <main>
-
   <!-- breadcrumb start -->
   <app-breadcrumb-one title="Wishlist" subtitle="Wishlist"></app-breadcrumb-one>
   <!-- breadcrumb end -->
@@ -11,9 +10,14 @@
   <!-- wishlist area start-->
   <section class="cart-area pt-100 pb-100">
     <div class="container">
-      <div *ngIf="wishlistService.getWishlistProducts().length === 0" class="text-center pt-50">
+      <div
+        *ngIf="wishlistService.getWishlistProducts().length === 0"
+        class="text-center pt-50"
+      >
         <h3>No Wishlist Items Found</h3>
-        <a routerLink="/shop" class="os-btn os-btn-black mt-20">Continue Shopping</a>
+        <a routerLink="/shop" class="os-btn os-btn-black mt-20"
+          >Continue Shopping</a
+        >
       </div>
       <div *ngIf="wishlistService.getWishlistProducts().length > 0" class="row">
         <div class="col-12">
@@ -32,22 +36,30 @@
                 <tr *ngFor="let item of wishlistService.getWishlistProducts()">
                   <td class="product-thumbnail">
                     <a [routerLink]="['/shop/shop-details', item.id]">
-                      <img [src]="item.img" alt="product-img">
+                      <img [src]="item.img" alt="product-img" />
                     </a>
                   </td>
                   <td class="product-name">
-                    <a [routerLink]="['/shop/shop-details', item.id]">{{item.title}}</a>
+                    <a [routerLink]="['/shop/shop-details', item.id]">{{
+                      item.title
+                    }}</a>
                   </td>
                   <td class="product-price">
-                    <span class="amount">${{item.price.toFixed(2)}}</span>
+                    <span class="amount">${{ item.price.toFixed(2) }}</span>
                   </td>
                   <td class="product-quantity">
-                    <button (click)="cartService.addCartProduct(item)" class="os-btn os-btn-black">
+                    <button
+                      (click)="cartService.addCartProduct(item)"
+                      class="os-btn os-btn-black"
+                    >
                       Add TO Cart
                     </button>
                   </td>
                   <td class="product-remove">
-                    <a (click)="wishlistService.removeWishlist(item)" class="cursor-pointer">
+                    <a
+                      (click)="wishlistService.removeWishlist(item)"
+                      class="cursor-pointer"
+                    >
                       <i class="fa fa-times"></i>
                     </a>
                   </td>
@@ -60,7 +72,6 @@
     </div>
   </section>
   <!-- wishlist area End-->
-
 </main>
 
 <!-- footer start -->

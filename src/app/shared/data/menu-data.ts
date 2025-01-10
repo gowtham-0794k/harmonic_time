@@ -1,6 +1,6 @@
-import { IMenuType, IMobileMenu } from "../types/menu-d-t";
+import { IMenuType, IMobileMenu } from '../types/menu-d-t';
 
-const menuData:IMenuType[] = [
+const menuData: IMenuType[] = [
   {
     link: '/',
     title: 'Home',
@@ -14,7 +14,15 @@ const menuData:IMenuType[] = [
       { link: '/home/home-style-5', title: 'Home Style 5' },
       { link: '/home/home-style-6', title: 'Home Style 6' },
       { link: '/home/home-style-7', title: 'Home Style 7' },
-    ]
+    ],
+  },
+
+  {
+    link: '/seller',
+    title: 'Seller',
+    hasDropdown: true,
+    megamenu: false,
+    dropdownItems: [{ link: '/seller/product-list', title: 'Product List' }],
   },
   {
     link: '/shop',
@@ -33,7 +41,7 @@ const menuData:IMenuType[] = [
           { link: '/shop', title: 'Shop Page' },
           { link: '/shop', title: 'Shop Page' },
           { link: '/shop', title: 'Shop Infinity' },
-        ]
+        ],
       },
       {
         link: '/shop',
@@ -46,7 +54,7 @@ const menuData:IMenuType[] = [
           { link: '/shop/shop-details', title: 'Simple Product' },
           { link: '/shop/shop-details', title: 'Variable Product' },
           { link: '/shop/shop-details', title: 'External Product' },
-        ]
+        ],
       },
       {
         link: '/shop',
@@ -58,9 +66,9 @@ const menuData:IMenuType[] = [
           { link: '/pages/checkout', title: 'Checkout' },
           { link: '/pages/register', title: 'Register' },
           { link: '/pages/login', title: 'Login' },
-        ]
+        ],
       },
-    ]
+    ],
   },
   {
     link: '/pages/blog',
@@ -74,7 +82,7 @@ const menuData:IMenuType[] = [
       { link: '/pages/blog-2-col', title: 'Blog 2 Column' },
       { link: '/pages/blog-3-col', title: 'Blog 3 Column' },
       { link: '/pages/blog-details', title: 'Blog Details' },
-    ]
+    ],
   },
   {
     link: '/shop',
@@ -89,20 +97,20 @@ const menuData:IMenuType[] = [
       { link: '/pages/register', title: 'Register' },
       { link: '/pages/login', title: 'Login' },
       { link: '/404', title: 'Error 404' },
-    ]
+    ],
   },
   {
     link: '/pages/contact',
     title: 'Contact',
   },
-]
+];
 
 export default menuData;
 
 // mobile menus
-export const mobile_menus:IMobileMenu[] = [
+export const mobile_menus: IMobileMenu[] = [
   {
-    title: "Home",
+    title: 'Home',
     dropdownMenu: [
       { link: '/home/home-style-1', title: 'Home Style 1' },
       { link: '/home/home-style-2', title: 'Home Style 2' },
@@ -114,7 +122,7 @@ export const mobile_menus:IMobileMenu[] = [
     ],
   },
   {
-    title: "Shop",
+    title: 'Shop',
     dropdownMenu: [
       { link: '/shop', title: 'Standard Shop Page' },
       { link: '/shop/shop-right', title: 'Shop Right Sidebar' },
@@ -124,7 +132,7 @@ export const mobile_menus:IMobileMenu[] = [
     ],
   },
   {
-    title: "Other Pages",
+    title: 'Other Pages',
     dropdownMenu: [
       { link: '/shop/wishlist', title: 'Wishlist' },
       { link: '/shop/compare', title: 'Compare' },
@@ -137,7 +145,7 @@ export const mobile_menus:IMobileMenu[] = [
     ],
   },
   {
-    title: "Blog",
+    title: 'Blog',
     dropdownMenu: [
       { link: '/pages/blog', title: 'Blog' },
       { link: '/pages/blog-left-sidebar', title: 'Blog Left Sidebar' },
@@ -148,7 +156,7 @@ export const mobile_menus:IMobileMenu[] = [
     ],
   },
   {
-    title: "Contact",
+    title: 'Contact',
     link: '/pages/contact',
   },
 ];

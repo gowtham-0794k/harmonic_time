@@ -47,7 +47,6 @@ export class LoginComponent {
     const url = LOGIN_USER;
     this.formSubmitted = true;
     if (this.loginForm.valid) {
-      // console.log('login-form-value', this.loginForm.value);
       // this.toastrService.success(`Message sent successfully`);
 
       // // Reset the form
@@ -61,7 +60,6 @@ export class LoginComponent {
       };
       this.store.dispatch(loginUser({ url, payload }));
       this.store.select(selectUserData).subscribe((state) => {
-        console.log({ state });
         // this.toastrService.success('Registration successful!');
         // this.registerForm.reset();
         // this.formSubmitted = false; // Reset the form submission state

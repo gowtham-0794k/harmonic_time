@@ -33,8 +33,7 @@ import { CartComponent } from './pages/cart/cart.component';
 import { WishlistComponent } from './pages/wishlist/wishlist.component';
 import { CompareComponent } from './pages/compare/compare.component';
 import { SearchComponent } from './pages/search/search.component';
-
-
+import { ProductDetailsAreaSellerComponent } from './product-details-area-seller/product-details-area-seller.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +64,7 @@ import { SearchComponent } from './pages/search/search.component';
     WishlistComponent,
     CompareComponent,
     SearchComponent,
+    ProductDetailsAreaSellerComponent,
   ],
   imports: [
     CommonModule,
@@ -74,7 +74,7 @@ import { SearchComponent } from './pages/search/search.component';
     NgxSliderModule,
     FormsModule,
   ],
-  exports:[
+  exports: [
     ProductItemComponent,
     ProductBannerComponent,
     ShopCategoryComponent,
@@ -83,6 +83,8 @@ import { SearchComponent } from './pages/search/search.component';
     SaleOfProductsComponent,
     ProductItemTwoComponent,
     ShopComponent,
-  ]
+    ProductDetailsAreaComponent,
+    ProductDetailsAreaSellerComponent,
+  ],
 })
-export class ShopModule { }
+export class ShopModule {}
