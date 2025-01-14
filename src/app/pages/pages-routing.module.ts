@@ -7,7 +7,6 @@ import { BlogTwoColComponent } from './blog-two-col/blog-two-col.component';
 import { BlogThreeColComponent } from './blog-three-col/blog-three-col.component';
 import { BlogDetailsComponent } from './blog-details/blog-details.component';
 import { BlogDynamicDetailsComponent } from './blog-dynamic-details/blog-dynamic-details.component';
-import { CheckoutComponent } from './checkout/checkout.component';
 import { ContactComponent } from './contact/contact.component';
 import { AccountComponent } from './account/account.component';
 
@@ -46,11 +45,6 @@ const routes: Routes = [
     path: 'blog-details/:id',
     component: BlogDynamicDetailsComponent,
     title: 'Blog Details Page',
-  },
-  {
-    path: 'checkout',
-    component: CheckoutComponent,
-    title: 'Checkout Page',
   },
   {
     path: 'contact',

@@ -11,7 +11,6 @@ import { BlogTwoColComponent } from './blog-two-col/blog-two-col.component';
 import { BlogThreeColComponent } from './blog-three-col/blog-three-col.component';
 import { BlogDetailsComponent } from './blog-details/blog-details.component';
 import { BlogDynamicDetailsComponent } from './blog-dynamic-details/blog-dynamic-details.component';
-import { CheckoutComponent } from './checkout/checkout.component';
 import { ContactComponent } from './contact/contact.component';
 import { AccountComponent } from './account/account.component';
 import { NotFoundComponent } from './not-found/not-found.component';
@@ -25,7 +24,6 @@ import { NotFoundComponent } from './not-found/not-found.component';
     BlogThreeColComponent,
     BlogDetailsComponent,
     BlogDynamicDetailsComponent,
-    CheckoutComponent,
     ContactComponent,
     AccountComponent,
     NotFoundComponent,

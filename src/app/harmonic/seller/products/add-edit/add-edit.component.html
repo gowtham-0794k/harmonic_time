@@ -5,455 +5,428 @@
 
 <section class="product-insert-area pt-100 pb-100">
   <div class="container">
-    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-      <!-- Basic Product Information -->
-
-      <h4 class="border-bottom-sub-heading pb-10 mb-20">
-        Basic Product Information
-      </h4>
-
-      <div class="row">
-        <!-- Product Name -->
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="checkout-form-list">
-            <label for="productName"
-              >Product Name <span class="required">*</span></label
-            >
-            <input
-              id="productName"
-              type="text"
-              placeholder="Enter the product name"
-              formControlName="productName"
-            />
-            <span
-              *ngIf="productName?.hasError('required') && productName?.touched"
-              class="text-danger"
-              >Product Name is required</span
-            >
-          </div>
-        </div>
-
-        <!-- Brand -->
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="country-select">
-            <label for="brand">Brand <span class="required">*</span></label>
-            <select id="brand" formControlName="brandId">
-              <option value="" disabled>- Please select -</option>
-              <option *ngFor="let brand of brands" [value]="brand.id">
-                {{ brand.name }}
-              </option>
-            </select>
-            <span
-              *ngIf="brandId?.hasError('required') && brandId?.touched"
-              class="text-danger"
-              >Brand is required</span
-            >
-          </div>
-        </div>
-
-        <!-- Category -->
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="country-select">
-            <label for="category"
-              >Category <span class="required">*</span></label
-            >
-            <select id="category" formControlName="categoryId">
-              <option value="" disabled>- Please select -</option>
-              <option *ngFor="let category of categories" [value]="category.id">
-                {{ category.name }}
-              </option>
-            </select>
-            <span
-              *ngIf="categoryId?.hasError('required') && categoryId?.touched"
-              class="text-danger"
-              >Category is required</span
-            >
-          </div>
-        </div>
-
-        <!-- Collection -->
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="country-select">
-            <label for="collection">Collection</label>
-            <select id="collection" formControlName="collectionId">
-              <option value="" disabled>- Please select -</option>
-              <option
-                *ngFor="let collection of collections"
-                [value]="collection.id"
-              >
-                {{ collection.name }}
-              </option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Price -->
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="checkout-form-list">
-            <label for="price">Price</label>
-            <input
-              id="price"
-              type="number"
-              placeholder="Enter Price"
-              formControlName="price"
-            />
-          </div>
-        </div>
-
-        <!-- Recipient -->
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="country-select">
-            <label for="recipient"
-              >Recipient <span class="required">*</span></label
-            >
-            <select id="recipient" formControlName="recipientId">
-              <option value="" disabled>- Please select -</option>
-              <option
-                *ngFor="let recipient of recipients"
-                [value]="recipient.id"
-              >
-                {{ recipient.name }}
-              </option>
-            </select>
-            <span
-              *ngIf="recipientId?.hasError('required') && recipientId?.touched"
-              class="text-danger"
-              >Recipient is required</span
-            >
-          </div>
-        </div>
-      </div>
-
-      <!-- Product Specifications -->
-
-      <h4 class="border-bottom-sub-heading pb-10 mb-20">
-        Product Specifications
-      </h4>
-
-      <div class="row">
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="country-select">
-            <label for="recipient"
-              >Dial Color <span class="required">*</span></label
-            >
-            <select id="recipient" formControlName="recipientId">
-              <option value="" disabled>- Please select -</option>
-              <option
-                *ngFor="let recipient of recipients"
-                [value]="recipient.id"
-              >
-                {{ recipient.name }}
-              </option>
-            </select>
-            <span
-              *ngIf="recipientId?.hasError('required') && recipientId?.touched"
-              class="text-danger"
-              >Recipient is required</span
-            >
-          </div>
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="checkout-form-list">
-            <label for="descriptionTitle">Diameter</label>
-            <input
-              id="descriptionTitle"
-              type="text"
-              placeholder="Short Title"
-              formControlName="descriptionTitle"
-            />
-          </div>
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="country-select">
-            <label for="recipient"
-              >Water Resistant <span class="required">*</span></label
-            >
-            <select id="recipient" formControlName="recipientId">
-              <option value="" disabled>- Please select -</option>
-              <option
-                *ngFor="let recipient of recipients"
-                [value]="recipient.id"
-              >
-                {{ recipient.name }}
-              </option>
-            </select>
-            <span
-              *ngIf="recipientId?.hasError('required') && recipientId?.touched"
-              class="text-danger"
-              >Recipient is required</span
-            >
-          </div>
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="country-select">
-            <label for="recipient"
-              >Movement <span class="required">*</span></label
-            >
-            <select id="recipient" formControlName="recipientId">
-              <option value="" disabled>- Please select -</option>
-              <option
-                *ngFor="let recipient of recipients"
-                [value]="recipient.id"
-              >
-                {{ recipient.name }}
-              </option>
-            </select>
-            <span
-              *ngIf="recipientId?.hasError('required') && recipientId?.touched"
-              class="text-danger"
-              >Recipient is required</span
-            >
-          </div>
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="country-select">
-            <label for="recipient"
-              >Strap Material <span class="required">*</span></label
-            >
-            <select id="recipient" formControlName="recipientId">
-              <option value="" disabled>- Please select -</option>
-              <option
-                *ngFor="let recipient of recipients"
-                [value]="recipient.id"
-              >
-                {{ recipient.name }}
-              </option>
-            </select>
-            <span
-              *ngIf="recipientId?.hasError('required') && recipientId?.touched"
-              class="text-danger"
-              >Recipient is required</span
-            >
-          </div>
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="country-select">
-            <label for="recipient"
-              >Case Material <span class="required">*</span></label
-            >
-            <select id="recipient" formControlName="recipientId">
-              <option value="" disabled>- Please select -</option>
-              <option
-                *ngFor="let recipient of recipients"
-                [value]="recipient.id"
-              >
-                {{ recipient.name }}
-              </option>
-            </select>
-            <span
-              *ngIf="recipientId?.hasError('required') && recipientId?.touched"
-              class="text-danger"
-              >Recipient is required</span
-            >
-          </div>
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="country-select">
-            <label for="recipient"
-              >Watch Markers <span class="required">*</span></label
-            >
-            <select id="recipient" formControlName="recipientId">
-              <option value="" disabled>- Please select -</option>
-              <option
-                *ngFor="let recipient of recipients"
-                [value]="recipient.id"
-              >
-                {{ recipient.name }}
-              </option>
-            </select>
-            <span
-              *ngIf="recipientId?.hasError('required') && recipientId?.touched"
-              class="text-danger"
-              >Recipient is required</span
-            >
-          </div>
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="checkout-form-list">
-            <label for="descriptionTitle">Manufacturer Product Number</label>
-            <input
-              id="descriptionTitle"
-              type="text"
-              placeholder="Short Title"
-              formControlName="descriptionTitle"
-            />
-          </div>
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="checkout-form-list">
-            <label for="descriptionTitle">Guarantee</label>
-            <input
-              id="descriptionTitle"
-              type="text"
-              placeholder="Short Title"
-              formControlName="descriptionTitle"
-            />
-          </div>
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="country-select">
-            <label for="recipient"
-              >Delivery Option <span class="required">*</span></label
-            >
-            <select id="recipient" formControlName="recipientId">
-              <option value="" disabled>- Please select -</option>
-              <option
-                *ngFor="let recipient of recipients"
-                [value]="recipient.id"
-              >
-                {{ recipient.name }}
-              </option>
-            </select>
-            <span
-              *ngIf="recipientId?.hasError('required') && recipientId?.touched"
-              class="text-danger"
-              >Recipient is required</span
-            >
-          </div>
-        </div>
-      </div>
-
-      <!-- Product Description -->
-
-      <h4 class="border-bottom-sub-heading pb-10 mb-20">Product Description</h4>
-
-      <div class="row">
-        <!-- Product Description -->
-        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-          <div class="checkout-form-list">
-            <label for="descriptionTitle">Short Title</label>
-            <input
-              id="descriptionTitle"
-              type="text"
-              placeholder="Short Title"
-              formControlName="descriptionTitle"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-          <div class="checkout-form-list">
-            <label for="descriptionContent">Detailed Description</label>
-            <textarea
-              id="descriptionContent"
-              placeholder="Detailed Description"
-              formControlName="descriptionContent"
-            ></textarea>
-          </div>
-        </div>
-
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-          <div class="checkout-form-list">
-            <label for="descriptionContent">Additional Details</label>
-            <textarea
-              id="descriptionContent"
-              placeholder="Detailed Description"
-              formControlName="descriptionContent"
-            ></textarea>
-          </div>
-        </div>
-      </div>
-
-      <h4 class="border-bottom-sub-heading pb-10 mb-20">Delivery & Returns</h4>
-
-      <div class="row">
-        <!-- Delivery Information -->
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-          <div class="checkout-form-list">
-            <label for="deliveryInfo">Delivery Information</label>
-            <textarea
-              id="deliveryInfo"
-              placeholder="Enter Delivery Information"
-              formControlName="deliveryInfo"
-            ></textarea>
-          </div>
-        </div>
-
-        <!-- Returns Policy -->
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-          <div class="checkout-form-list">
-            <label for="returnsPolicy">Returns Policy</label>
-            <textarea
-              id="returnsPolicy"
-              placeholder="Enter Returns Policy"
-              formControlName="returnsPolicy"
-            ></textarea>
-          </div>
-        </div>
-      </div>
-
-      <h4 class="border-bottom-sub-heading pb-10 mb-20">Media</h4>
-
-      <div class="row">
-        <!-- Product Images -->
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-          <div class="checkout-form-list">
-            <label for="productImages">Upload Images (Min: 2, Max: 5)</label>
-            <input
-              id="productImages"
-              type="file"
-              (change)="onImageUpload($event)"
-              multiple
-              accept="image/jpeg, image/png, image/jpg"
-            />
-            <div *ngIf="errorMessage" class="text-danger">
-              {{ errorMessage }}
+    <mat-vertical-stepper [linear]="isLinear" #stepper>
+      <mat-step [stepControl]="basicProductInformation">
+        <form [formGroup]="basicProductInformation">
+          <ng-template matStepLabel>Basic Product Information</ng-template>
+          <div class="row">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="checkout-form-list">
+                <label for="productName"
+                  >Product Name <span class="required">*</span></label
+                >
+                <input
+                  id="productName"
+                  type="text"
+                  placeholder="Enter the product name"
+                  formControlName="productName"
+                />
+                <span
+                  *ngIf="
+                    productName?.hasError('required') && productName?.touched
+                  "
+                  class="text-danger"
+                  >Product Name is required</span
+                >
+              </div>
             </div>
-            <span *ngIf="uploadedImages.length < 2" class="text-danger"
-              >Please upload at least 2 images.</span
-            >
-            <span *ngIf="uploadedImages.length > 5" class="text-danger"
-              >You can upload a maximum of 5 images.</span
-            >
-          </div>
-        </div>
-        <div class="col-12">
-          <div class="col-12" *ngIf="uploadedImages.length > 0">
-            <div class="table-content table-responsive">
-              <table class="table">
-                <tbody>
-                  <tr *ngFor="let img of uploadedImages; let i = index">
-                    <td class="product-thumbnail">
-                      <a>
-                        <img [src]="img.url" alt="product-img" />
-                      </a>
-                    </td>
-                    <td class="product-name">
-                      <a>{{ img.file.name }}</a>
-                    </td>
-                    <td class="product-remove">
-                      <a (click)="removeImage(i)" class="cursor-pointer">
-                        <i class="fa fa-times"></i>
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="country-select">
+                <label for="brand">Brand <span class="required">*</span></label>
+                <select id="brand" formControlName="brandId">
+                  <option value="" disabled>- Please select -</option>
+                  <option *ngFor="let brand of brands" [value]="brand.id">
+                    {{ brand.name }}
+                  </option>
+                </select>
+                <span
+                  *ngIf="brandId?.hasError('required') && brandId?.touched"
+                  class="text-danger"
+                  >Brand is required</span
+                >
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="country-select">
+                <label for="category"
+                  >Category <span class="required">*</span></label
+                >
+                <select id="category" formControlName="categoryId">
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let category of categories"
+                    [value]="category.id"
+                  >
+                    {{ category.name }}
+                  </option>
+                </select>
+                <span
+                  *ngIf="
+                    categoryId?.hasError('required') && categoryId?.touched
+                  "
+                  class="text-danger"
+                  >Category is required</span
+                >
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="country-select">
+                <label for="collection">Collection</label>
+                <select id="collection" formControlName="collectionId">
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let collection of collections"
+                    [value]="collection.id"
+                  >
+                    {{ collection.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="checkout-form-list">
+                <label for="price">Price</label>
+                <input
+                  id="price"
+                  type="number"
+                  placeholder="Enter Price"
+                  formControlName="price"
+                />
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="country-select">
+                <label for="recipientId"
+                  >Recipient <span class="required">*</span></label
+                >
+                <select id="recipientId" formControlName="recipientId">
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let recipient of recipients"
+                    [value]="recipient.id"
+                  >
+                    {{ recipient.name }}
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
+          <div>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="productInformation">
+        <form [formGroup]="productInformation">
+          <ng-template matStepLabel>Product Specifications</ng-template>
+          <div class="row">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="country-select">
+                <label for="dialColorId"
+                  >Dial Color <span class="required">*</span></label
+                >
+                <select id="dialColorId" formControlName="dialColorId">
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let recipient of recipients"
+                    [value]="recipient.id"
+                  >
+                    {{ recipient.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
 
-        <!-- Submit Button -->
-        <div class="col-12 mt-10">
-          <button
-            type="submit"
-            class="os-btn w-100"
-            [disabled]="!productForm.valid"
-          >
-            Add Product
-          </button>
-        </div>
-      </div>
-    </form>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="checkout-form-list">
+                <label for="diameter">Diameter</label>
+                <input
+                  id="diameter"
+                  type="text"
+                  placeholder="Short Title"
+                  formControlName="diameter"
+                />
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="country-select">
+                <label for="waterResistant"
+                  >Water Resistant <span class="required">*</span></label
+                >
+                <select id="waterResistant" formControlName="waterResistant">
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let recipient of recipients"
+                    [value]="recipient.id"
+                  >
+                    {{ recipient.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="country-select">
+                <label for="movementId"
+                  >Movement <span class="required">*</span></label
+                >
+                <select id="movementId" formControlName="movementId">
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let recipient of recipients"
+                    [value]="recipient.id"
+                  >
+                    {{ recipient.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="country-select">
+                <label for="strapMaterialId"
+                  >Strap Material <span class="required">*</span></label
+                >
+                <select id="strapMaterialId" formControlName="strapMaterialId">
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let recipient of recipients"
+                    [value]="recipient.id"
+                  >
+                    {{ recipient.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="country-select">
+                <label for="caseMaterialId"
+                  >Case Material <span class="required">*</span></label
+                >
+                <select id="caseMaterialId" formControlName="caseMaterialId">
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let recipient of recipients"
+                    [value]="recipient.id"
+                  >
+                    {{ recipient.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="country-select">
+                <label for="watchMarkersId"
+                  >Watch Markers <span class="required">*</span></label
+                >
+                <select id="watchMarkersId" formControlName="watchMarkersId">
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let recipient of recipients"
+                    [value]="recipient.id"
+                  >
+                    {{ recipient.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="checkout-form-list">
+                <label for="manufacturerProductNumber"
+                  >Manufacturer Product Number</label
+                >
+                <input
+                  id="manufacturerProductNumber"
+                  type="text"
+                  placeholder="Short Title"
+                  formControlName="manufacturerProductNumber"
+                />
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="checkout-form-list">
+                <label for="guarantee">Guarantee</label>
+                <input
+                  id="guarantee"
+                  type="text"
+                  placeholder="Short Title"
+                  formControlName="guarantee"
+                />
+              </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="country-select">
+                <label for="deliveryOptionId"
+                  >Delivery Option <span class="required">*</span></label
+                >
+                <select
+                  id="deliveryOptionId"
+                  formControlName="deliveryOptionId"
+                >
+                  <option value="" disabled>- Please select -</option>
+                  <option
+                    *ngFor="let recipient of recipients"
+                    [value]="recipient.id"
+                  >
+                    {{ recipient.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="productDescription">
+        <form [formGroup]="productDescription">
+          <ng-template matStepLabel>Product Description</ng-template>
+          <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+              <div class="checkout-form-list">
+                <label for="shortTitle">Short Title</label>
+                <input
+                  id="shortTitle"
+                  type="text"
+                  placeholder="Short Title"
+                  formControlName="shortTitle"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+              <div class="checkout-form-list">
+                <label for="detailedDescription">Detailed Description</label>
+                <textarea
+                  id="detailedDescription"
+                  placeholder="Detailed Description"
+                  formControlName="detailedDescription"
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+              <div class="checkout-form-list">
+                <label for="additionalDescription">Additional Details</label>
+                <textarea
+                  id="additionalDescription"
+                  placeholder="Detailed Description"
+                  formControlName="additionalDescription"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="deliveryAndReturns">
+        <form [formGroup]="deliveryAndReturns">
+          <ng-template matStepLabel>Delivery & Returns</ng-template>
+          <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+              <div class="checkout-form-list">
+                <label for="deliveryInfo">Delivery Information</label>
+                <textarea
+                  id="deliveryInfo"
+                  placeholder="Enter Delivery Information"
+                  formControlName="deliveryInfo"
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+              <div class="checkout-form-list">
+                <label for="returnsPolicy">Returns Policy</label>
+                <textarea
+                  id="returnsPolicy"
+                  placeholder="Enter Returns Policy"
+                  formControlName="returnsPolicy"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="media">
+        <form [formGroup]="media">
+          <ng-template matStepLabel>Media</ng-template>
+          <div class="row">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="checkout-form-list">
+                <label for="productImages"
+                  >Upload Images (Min: 2, Max: 5)</label
+                >
+                <input
+                  id="productImages"
+                  type="file"
+                  (change)="onImageUpload($event)"
+                  multiple
+                  accept="image/jpeg, image/png, image/jpg"
+                />
+                <div *ngIf="errorMessage" class="text-danger">
+                  {{ errorMessage }}
+                </div>
+                <span *ngIf="uploadedImages.length < 2" class="text-danger"
+                  >Please upload at least 2 images.</span
+                >
+                <span *ngIf="uploadedImages.length > 5" class="text-danger"
+                  >You can upload a maximum of 5 images.</span
+                >
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="col-12" *ngIf="uploadedImages.length > 0">
+                <div class="table-content table-responsive">
+                  <table class="table">
+                    <tbody>
+                      <tr *ngFor="let img of uploadedImages; let i = index">
+                        <td class="product-thumbnail">
+                          <a>
+                            <img [src]="img.url" alt="product-img" />
+                          </a>
+                        </td>
+                        <td class="product-name">
+                          <a>{{ img.file.name }}</a>
+                        </td>
+                        <td class="product-remove">
+                          <a (click)="removeImage(i)" class="cursor-pointer">
+                            <i class="fa fa-times"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+    </mat-vertical-stepper>
   </div>
 </section>

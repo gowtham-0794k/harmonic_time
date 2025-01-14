@@ -12,6 +12,11 @@ import { DetailsComponent } from './products/details/details.component';
 import { OrdersComponent } from './orders/orders.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { ShopModule } from 'src/app/shop/shop.module';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -30,6 +35,11 @@ import { ShopModule } from 'src/app/shop/shop.module';
     FormsModule,
     ReactiveFormsModule,
     ShopModule,
+    MatStepperModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule,
   ],
 })
 export class SellerModule {}

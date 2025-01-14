@@ -1,101 +1,129 @@
+// add-edit.component.ts
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+
+interface SelectOption {
+  id: number;
+  name: string;
+}
+
+interface UploadedImage {
+  file: File;
+  url: string;
+}
 
 @Component({
-  selector: 'app-add-edit',
+  selector: 'app-add-edit-product',
   templateUrl: './add-edit.component.html',
   styleUrls: ['./add-edit.component.scss'],
 })
 export class AddEditComponent implements OnInit {
-  productForm!: FormGroup;
+  // Form groups
+  basicProductInformation!: FormGroup;
+  productInformation!: FormGroup;
+  productDescription!: FormGroup;
+  deliveryAndReturns!: FormGroup;
+  media!: FormGroup;
 
-  // Sample data for dropdowns
-  brands = [
+  // Component state
+  isLinear = false;
+  isEditing = false;
+  productId?: number;
+  uploadedImages: UploadedImage[] = [];
+  errorMessage = '';
+
+  // Dropdown options
+  brands: SelectOption[] = [
     { id: 1, name: 'Brand A' },
     { id: 2, name: 'Brand B' },
     { id: 3, name: 'Brand C' },
   ];
 
-  categories = [
+  categories: SelectOption[] = [
     { id: 1, name: 'Category A' },
     { id: 2, name: 'Category B' },
     { id: 3, name: 'Category C' },
   ];
 
-  recipients = [
+  collections: SelectOption[] = [
+    { id: 1, name: 'Collection A' },
+    { id: 2, name: 'Collection B' },
+    { id: 3, name: 'Collection C' },
+  ];
+
+  recipients: SelectOption[] = [
     { id: 1, name: 'Men' },
     { id: 2, name: 'Women' },
     { id: 3, name: 'Unisex' },
   ];
 
-  dialColors = [
+  dialColors: SelectOption[] = [
     { id: 1, name: 'Black' },
     { id: 2, name: 'White' },
     { id: 3, name: 'Blue' },
   ];
 
-  movements = [
+  movements: SelectOption[] = [
     { id: 1, name: 'Quartz' },
     { id: 2, name: 'Automatic' },
     { id: 3, name: 'Mechanical' },
   ];
 
-  strapMaterials = [
+  strapMaterials: SelectOption[] = [
     { id: 1, name: 'Leather' },
     { id: 2, name: 'Metal' },
     { id: 3, name: 'Rubber' },
   ];
 
-  caseMaterials = [
+  caseMaterials: SelectOption[] = [
     { id: 1, name: 'Stainless Steel' },
     { id: 2, name: 'Plastic' },
     { id: 3, name: 'Titanium' },
   ];
 
-  watchMarkers = [
+  watchMarkers: SelectOption[] = [
     { id: 1, name: 'Roman' },
     { id: 2, name: 'Arabic' },
     { id: 3, name: 'Dashes' },
   ];
 
-  deliveryOptions = [
+  deliveryOptions: SelectOption[] = [
     { id: 1, name: 'Standard Delivery' },
     { id: 2, name: 'Express Delivery' },
     { id: 3, name: 'Next-Day Delivery' },
   ];
-  uploadedImage: string | null = null;
-  product = 'assets/img/shop/product/product_1.png';
-  collections = [
-    { id: 1, name: 'Standard Delivery' },
-    { id: 2, name: 'Express Delivery' },
-    { id: 3, name: 'Next-Day Delivery' },
-  ];
-  uploadedImages: { file: File; url: string }[] = [];
-  errorMessage: string = '';
 
-  // Allowed image types
-  allowedTypes: string[] = ['image/jpeg', 'image/png', 'image/jpg'];
+  // Image upload configuration
+  readonly allowedImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+  readonly maxImages = 5;
+  readonly minImages = 2;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.initializeForm();
+    this.initializeForms();
+    this.checkForEditMode();
   }
 
-  initializeForm() {
-    this.productForm = this.fb.group({
-      // Fields for Products table
-      productName: ['', Validators.required],
-      brandId: ['', Validators.required],
-      categoryId: ['', Validators.required],
-      price: ['', [Validators.required, Validators.min(0)]],
-      recipientId: ['', Validators.required],
-      imageUpload: [null],
+  private initializeForms(): void {
+    this.basicProductInformation = this.fb.group({
+      productName: [''],
+      brandId: [''],
+      categoryId: [''],
+      collectionId: [''],
+      price: [''],
+      recipientId: [''],
+    });
 
-      // Fields for ProductDetails table
+    this.productInformation = this.fb.group({
       dialColorId: [''],
       diameter: [''],
-      waterResistant: [''],
+      waterResistant: [false],
       movementId: [''],
       strapMaterialId: [''],
       caseMaterialId: [''],
@@ -103,122 +131,159 @@ export class AddEditComponent implements OnInit {
       manufacturerProductNumber: [''],
       guarantee: [''],
       deliveryOptionId: [''],
-      collectionId: [''],
-      descriptionTitle: [''],
-      descriptionContent: [''],
+    });
+
+    this.productDescription = this.fb.group({
+      shortTitle: [''],
+      detailedDescription: [''],
+      additionalDescription: [''],
+    });
+
+    this.deliveryAndReturns = this.fb.group({
       deliveryInfo: [''],
       returnsPolicy: [''],
     });
+
+    this.media = this.fb.group({});
   }
 
-  // Getter methods for easy access to form controls
-  get productName() {
-    return this.productForm.get('productName');
-  }
-
-  get brandId() {
-    return this.productForm.get('brandId');
-  }
-
-  get categoryId() {
-    return this.productForm.get('categoryId');
-  }
-
-  get price() {
-    return this.productForm.get('price');
-  }
-
-  get recipientId() {
-    return this.productForm.get('recipientId');
-  }
-
-  get dialColorId() {
-    return this.productForm.get('dialColorId');
-  }
-
-  get diameter() {
-    return this.productForm.get('diameter');
-  }
-
-  get waterResistant() {
-    return this.productForm.get('waterResistant');
-  }
-
-  get movementId() {
-    return this.productForm.get('movementId');
-  }
-
-  get strapMaterialId() {
-    return this.productForm.get('strapMaterialId');
-  }
-
-  get caseMaterialId() {
-    return this.productForm.get('caseMaterialId');
-  }
-
-  get watchMarkersId() {
-    return this.productForm.get('watchMarkersId');
-  }
-
-  get manufacturerProductNumber() {
-    return this.productForm.get('manufacturerProductNumber');
-  }
-
-  get guarantee() {
-    return this.productForm.get('guarantee');
-  }
-
-  get deliveryOptionId() {
-    return this.productForm.get('deliveryOptionId');
-  }
-
-  // Handle form submission
-  onSubmit() {
-    if (this.productForm.valid) {
-      const formData = this.productForm.value;
-      // Here, you can send the formData to your backend using an HTTP service.
-    } else {
-      console.error('Form is invalid');
+  private checkForEditMode(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.isEditing = true;
+      this.productId = +id;
+      this.loadProductData();
     }
   }
 
-  // Handle Image Upload
-  onImageUpload(event: any): void {
-    const files: FileList = event.target.files;
+  private async loadProductData(): Promise<void> {
+    try {
+      // Example of loading product data
+      // const product = await this.productService.getProduct(this.productId);
+      // this.patchFormValues(product);
+    } catch (error) {
+      console.error('Error loading product:', error);
+      // Handle error appropriately
+    }
+  }
 
-    if (files.length + this.uploadedImages.length > 5) {
-      alert('You can upload a maximum of 5 images.');
+  private patchFormValues(product: any): void {
+    this.basicProductInformation.patchValue({
+      productName: product.productName,
+      brandId: product.brandId,
+      categoryId: product.categoryId,
+      collectionId: product.collectionId,
+      price: product.price,
+    });
+
+    // Patch other form groups similarly
+  }
+
+  // Form getters for template access
+  get productName() {
+    return this.basicProductInformation.get('productName');
+  }
+  get brandId() {
+    return this.basicProductInformation.get('brandId');
+  }
+  get categoryId() {
+    return this.basicProductInformation.get('categoryId');
+  }
+  get price() {
+    return this.basicProductInformation.get('price');
+  }
+  get recipientId() {
+    return this.productInformation.get('recipientId');
+  }
+
+  onImageUpload(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+
+    const files = Array.from(input.files);
+
+    if (files.length + this.uploadedImages.length > this.maxImages) {
+      this.errorMessage = `Maximum ${this.maxImages} images allowed`;
       return;
     }
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-
-      // Validate file type
-      if (!this.allowedTypes.includes(file.type)) {
-        this.errorMessage = `Invalid file type: ${file.name}. Please upload standard images (JPEG, PNG, JPG).`;
-        continue;
+    files.forEach((file) => {
+      if (!this.allowedImageTypes.includes(file.type)) {
+        this.errorMessage = `Invalid file type: ${file.name}. Please upload JPEG, PNG, or JPG files.`;
+        return;
       }
 
       const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.uploadedImages.push({ file, url: e.target.result });
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        if (e.target?.result) {
+          this.uploadedImages.push({
+            file,
+            url: e.target.result as string,
+          });
+        }
       };
       reader.readAsDataURL(file);
-    }
+    });
+
+    this.errorMessage = '';
   }
 
-  // Remove Image
   removeImage(index: number): void {
     this.uploadedImages.splice(index, 1);
   }
 
-  // Optional: Validate before form submission
-  validateImageUpload(): boolean {
-    if (this.uploadedImages.length < 2) {
-      alert('Please upload at least 2 images.');
-      return false;
+  isFormValid(): boolean {
+    return (
+      this.basicProductInformation.valid &&
+      this.productInformation.valid &&
+      this.productDescription.valid &&
+      this.deliveryAndReturns.valid &&
+      this.uploadedImages.length >= this.minImages &&
+      this.uploadedImages.length <= this.maxImages
+    );
+  }
+
+  async onSubmit(): Promise<void> {
+    if (!this.isFormValid()) {
+      this.errorMessage =
+        'Please fill in all required fields and upload at least 2 images';
+      return;
     }
-    return true;
+
+    const formData = new FormData();
+
+    // Combine all form values
+    const productData = {
+      ...this.basicProductInformation.value,
+      ...this.productInformation.value,
+      ...this.productDescription.value,
+      ...this.deliveryAndReturns.value,
+    };
+
+    // Append form data
+    Object.entries(productData).forEach(([key, value]) => {
+      formData.append(key, value as string);
+    });
+
+    // Append images
+    this.uploadedImages.forEach((image, index) => {
+      formData.append(`image${index}`, image.file);
+    });
+
+    try {
+      // Example of submitting the form
+      // if (this.isEditing) {
+      //   await this.productService.updateProduct(this.productId!, formData);
+      // } else {
+      //   await this.productService.createProduct(formData);
+      // }
+
+      // Navigate back to products list
+      this.router.navigate(['/products']);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      this.errorMessage =
+        'An error occurred while saving the product. Please try again.';
+    }
   }
 }

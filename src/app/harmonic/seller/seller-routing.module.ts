@@ -4,6 +4,7 @@ import { SellerLayoutComponent } from 'src/app/shared/layout/seller-layout/selle
 import { ListComponent } from './products/list/list.component';
 import { DetailsComponent } from './products/details/details.component';
 import { AddEditComponent } from './products/add-edit/add-edit.component';
+import { OrdersComponent } from './orders/orders.component';
 
 const routes: Routes = [
   {
@@ -30,9 +31,14 @@ const routes: Routes = [
         component: DetailsComponent,
         title: 'Product Details Page',
       },
+      {
+        path: 'order-list',
+        component: OrdersComponent,
+        title: 'Order List Page',
+      },
     ],
   },
-  { path: '**', redirectTo: 'product-list' },
+  { path: '**', redirectTo: '/seller/product-list' },
 ];
 
 @NgModule({
