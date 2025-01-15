@@ -12,9 +12,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '@environment';
 import { UserEffects } from './store/effects/user.effects';
 import { appReducer } from './store/app.reducer';
+import { environment } from '@env/environment';
 
 @NgModule({
   declarations: [AppComponent],

@@ -17,7 +17,7 @@ export class GenericService {
 
   // get api data
 
-  getObservable(_url: string): Observable<any> {
+  getObservable(_url: string | any): Observable<any> {
     const url = _url;
     return this._httpClient.get(url, this.httpOptions);
   }

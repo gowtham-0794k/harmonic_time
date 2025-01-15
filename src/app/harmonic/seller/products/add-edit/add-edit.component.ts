@@ -2,6 +2,31 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import {
+  GET_BRANDS,
+  GET_CASE_MATERIAL,
+  GET_CATEGORIES,
+  GET_COLLECTION,
+  GET_DELIVERY_OPTIONS,
+  GET_DIAL_COLOR,
+  GET_MOVEMENTS,
+  GET_RECIPIENTS,
+  GET_STRAP_MATERIAL,
+  GET_WATCH_MARKERS,
+} from 'src/app/config';
+import { GenericService } from 'src/app/shared/services/generic.service';
+import {
+  Brand,
+  CaseMaterial,
+  Category,
+  Collection,
+  DeliveryOption,
+  DialColor,
+  Movement,
+  Recipient,
+  StrapMaterial,
+  WatchMarker,
+} from 'src/app/shared/types/product-d-t';
 
 interface SelectOption {
   id: number;
@@ -34,65 +59,21 @@ export class AddEditComponent implements OnInit {
   errorMessage = '';
 
   // Dropdown options
-  brands: SelectOption[] = [
-    { id: 1, name: 'Brand A' },
-    { id: 2, name: 'Brand B' },
-    { id: 3, name: 'Brand C' },
+  brands: Brand[] = [];
+  categories: Category[] = [];
+  collections: Collection[] = [];
+  recipients: Recipient[] = [];
+  dialColors: DialColor[] = [];
+  waterResistant: SelectOption[] = [
+    { id: 1, name: 'Yes' },
+    { id: 2, name: 'No' },
+    { id: 3, name: 'Both' },
   ];
-
-  categories: SelectOption[] = [
-    { id: 1, name: 'Category A' },
-    { id: 2, name: 'Category B' },
-    { id: 3, name: 'Category C' },
-  ];
-
-  collections: SelectOption[] = [
-    { id: 1, name: 'Collection A' },
-    { id: 2, name: 'Collection B' },
-    { id: 3, name: 'Collection C' },
-  ];
-
-  recipients: SelectOption[] = [
-    { id: 1, name: 'Men' },
-    { id: 2, name: 'Women' },
-    { id: 3, name: 'Unisex' },
-  ];
-
-  dialColors: SelectOption[] = [
-    { id: 1, name: 'Black' },
-    { id: 2, name: 'White' },
-    { id: 3, name: 'Blue' },
-  ];
-
-  movements: SelectOption[] = [
-    { id: 1, name: 'Quartz' },
-    { id: 2, name: 'Automatic' },
-    { id: 3, name: 'Mechanical' },
-  ];
-
-  strapMaterials: SelectOption[] = [
-    { id: 1, name: 'Leather' },
-    { id: 2, name: 'Metal' },
-    { id: 3, name: 'Rubber' },
-  ];
-
-  caseMaterials: SelectOption[] = [
-    { id: 1, name: 'Stainless Steel' },
-    { id: 2, name: 'Plastic' },
-    { id: 3, name: 'Titanium' },
-  ];
-
-  watchMarkers: SelectOption[] = [
-    { id: 1, name: 'Roman' },
-    { id: 2, name: 'Arabic' },
-    { id: 3, name: 'Dashes' },
-  ];
-
-  deliveryOptions: SelectOption[] = [
-    { id: 1, name: 'Standard Delivery' },
-    { id: 2, name: 'Express Delivery' },
-    { id: 3, name: 'Next-Day Delivery' },
-  ];
+  movements: Movement[] = [];
+  strapMaterials: StrapMaterial[] = [];
+  caseMaterials: CaseMaterial[] = [];
+  watchMarkers: WatchMarker[] = [];
+  deliveryOptions: DeliveryOption[] = [];
 
   // Image upload configuration
   readonly allowedImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
@@ -102,12 +83,14 @@ export class AddEditComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private genericService: GenericService
   ) {}
 
   ngOnInit(): void {
     this.initializeForms();
     this.checkForEditMode();
+    this.initialApiCalls();
   }
 
   private initializeForms(): void {
@@ -123,7 +106,7 @@ export class AddEditComponent implements OnInit {
     this.productInformation = this.fb.group({
       dialColorId: [''],
       diameter: [''],
-      waterResistant: [false],
+      waterResistant: [''],
       movementId: [''],
       strapMaterialId: [''],
       caseMaterialId: [''],
@@ -154,6 +137,84 @@ export class AddEditComponent implements OnInit {
       this.productId = +id;
       this.loadProductData();
     }
+  }
+
+  private initialApiCalls(): void {
+    console.log('initial API calls !');
+    const GET_BRANDS_URL = GET_BRANDS;
+    const GET_CATEGORIES_URL = GET_CATEGORIES;
+    const GET_COLLECTION_URL = GET_COLLECTION;
+    const GET_DIAL_COLOR_URL = GET_DIAL_COLOR;
+    const GET_MOVEMENTS_URL = GET_MOVEMENTS;
+    const GET_STRAP_MATERIAL_URL = GET_STRAP_MATERIAL;
+    const GET_CASE_MATERIAL_URL = GET_CASE_MATERIAL;
+    const GET_WATCH_MARKERS_URL = GET_WATCH_MARKERS;
+    const GET_DELIVERY_OPTIONS_URL = GET_DELIVERY_OPTIONS;
+    const GET_RECIPIENTS_URL = GET_RECIPIENTS;
+    this.genericService.getObservable(GET_BRANDS_URL).subscribe((response) => {
+      this.brands = response?.data;
+    });
+
+    this.genericService
+      .getObservable(GET_CATEGORIES_URL)
+      .subscribe((response) => {
+        this.categories = response?.data;
+      });
+
+    this.genericService
+      .getObservable(GET_COLLECTION_URL)
+      .subscribe((response) => {
+        this.collections = response?.data;
+      });
+
+    this.genericService
+      .getObservable(GET_DIAL_COLOR_URL)
+      .subscribe((response) => {
+        console.log({ response });
+        this.dialColors = response?.data;
+      });
+
+    this.genericService
+      .getObservable(GET_MOVEMENTS_URL)
+      .subscribe((response) => {
+        console.log({ response });
+        this.movements = response?.data;
+      });
+
+    this.genericService
+      .getObservable(GET_STRAP_MATERIAL_URL)
+      .subscribe((response) => {
+        console.log({ response });
+        this.strapMaterials = response?.data;
+      });
+
+    this.genericService
+      .getObservable(GET_CASE_MATERIAL_URL)
+      .subscribe((response) => {
+        console.log({ response });
+        this.caseMaterials = response?.data;
+      });
+
+    this.genericService
+      .getObservable(GET_WATCH_MARKERS_URL)
+      .subscribe((response) => {
+        console.log({ response });
+        this.watchMarkers = response?.data;
+      });
+
+    this.genericService
+      .getObservable(GET_DELIVERY_OPTIONS_URL)
+      .subscribe((response) => {
+        console.log({ response });
+        this.deliveryOptions = response?.data;
+      });
+
+    this.genericService
+      .getObservable(GET_RECIPIENTS_URL)
+      .subscribe((response) => {
+        console.log({ response });
+        this.deliveryOptions = response?.data;
+      });
   }
 
   private async loadProductData(): Promise<void> {

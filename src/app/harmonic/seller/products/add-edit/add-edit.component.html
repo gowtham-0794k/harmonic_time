@@ -36,8 +36,8 @@
                 <label for="brand">Brand <span class="required">*</span></label>
                 <select id="brand" formControlName="brandId">
                   <option value="" disabled>- Please select -</option>
-                  <option *ngFor="let brand of brands" [value]="brand.id">
-                    {{ brand.name }}
+                  <option *ngFor="let brand of brands" [value]="brand._id">
+                    {{ brand.BrandName }}
                   </option>
                 </select>
                 <span
@@ -57,9 +57,9 @@
                   <option value="" disabled>- Please select -</option>
                   <option
                     *ngFor="let category of categories"
-                    [value]="category.id"
+                    [value]="category._id"
                   >
-                    {{ category.name }}
+                    {{ category.CategoryName }}
                   </option>
                 </select>
                 <span
@@ -79,9 +79,9 @@
                   <option value="" disabled>- Please select -</option>
                   <option
                     *ngFor="let collection of collections"
-                    [value]="collection.id"
+                    [value]="collection._id"
                   >
-                    {{ collection.name }}
+                    {{ collection.CollectionName }}
                   </option>
                 </select>
               </div>
@@ -108,9 +108,9 @@
                   <option value="" disabled>- Please select -</option>
                   <option
                     *ngFor="let recipient of recipients"
-                    [value]="recipient.id"
+                    [value]="recipient._id"
                   >
-                    {{ recipient.name }}
+                    {{ recipient.RecipientName }}
                   </option>
                 </select>
               </div>
@@ -132,11 +132,8 @@
                 >
                 <select id="dialColorId" formControlName="dialColorId">
                   <option value="" disabled>- Please select -</option>
-                  <option
-                    *ngFor="let recipient of recipients"
-                    [value]="recipient.id"
-                  >
-                    {{ recipient.name }}
+                  <option *ngFor="let color of dialColors" [value]="color._id">
+                    {{ color.DialColorName }}
                   </option>
                 </select>
               </div>
@@ -161,11 +158,8 @@
                 >
                 <select id="waterResistant" formControlName="waterResistant">
                   <option value="" disabled>- Please select -</option>
-                  <option
-                    *ngFor="let recipient of recipients"
-                    [value]="recipient.id"
-                  >
-                    {{ recipient.name }}
+                  <option *ngFor="let type of waterResistant" [value]="type.id">
+                    {{ type.name }}
                   </option>
                 </select>
               </div>
@@ -179,10 +173,10 @@
                 <select id="movementId" formControlName="movementId">
                   <option value="" disabled>- Please select -</option>
                   <option
-                    *ngFor="let recipient of recipients"
-                    [value]="recipient.id"
+                    *ngFor="let movement of movements"
+                    [value]="movement._id"
                   >
-                    {{ recipient.name }}
+                    {{ movement.MovementName }}
                   </option>
                 </select>
               </div>
@@ -196,10 +190,10 @@
                 <select id="strapMaterialId" formControlName="strapMaterialId">
                   <option value="" disabled>- Please select -</option>
                   <option
-                    *ngFor="let recipient of recipients"
-                    [value]="recipient.id"
+                    *ngFor="let strapMaterial of strapMaterials"
+                    [value]="strapMaterial._id"
                   >
-                    {{ recipient.name }}
+                    {{ strapMaterial.StrapMaterialName }}
                   </option>
                 </select>
               </div>
@@ -213,10 +207,10 @@
                 <select id="caseMaterialId" formControlName="caseMaterialId">
                   <option value="" disabled>- Please select -</option>
                   <option
-                    *ngFor="let recipient of recipients"
-                    [value]="recipient.id"
+                    *ngFor="let caseMaterial of caseMaterials"
+                    [value]="caseMaterial._id"
                   >
-                    {{ recipient.name }}
+                    {{ caseMaterial.CaseMaterialName }}
                   </option>
                 </select>
               </div>
@@ -230,10 +224,10 @@
                 <select id="watchMarkersId" formControlName="watchMarkersId">
                   <option value="" disabled>- Please select -</option>
                   <option
-                    *ngFor="let recipient of recipients"
-                    [value]="recipient.id"
+                    *ngFor="let watchMarker of watchMarkers"
+                    [value]="watchMarker._id"
                   >
-                    {{ recipient.name }}
+                    {{ watchMarker.WatchMarkerName }}
                   </option>
                 </select>
               </div>
@@ -276,10 +270,10 @@
                 >
                   <option value="" disabled>- Please select -</option>
                   <option
-                    *ngFor="let recipient of recipients"
-                    [value]="recipient.id"
+                    *ngFor="let deliveryOptions of deliveryOptions"
+                    [value]="deliveryOptions._id"
                   >
-                    {{ recipient.name }}
+                    {{ deliveryOptions.DeliveryOptionName }}
                   </option>
                 </select>
               </div>

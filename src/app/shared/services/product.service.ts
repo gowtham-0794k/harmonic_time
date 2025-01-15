@@ -3,8 +3,6 @@ import { of, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import product_data from '../data/product-data';
 import { IProduct } from '../types/product-d-t';
-import blog_data from '../data/blog-data';
-import IBlogType from '../types/blog-d-t';
 
 const all_products = product_data;
 
