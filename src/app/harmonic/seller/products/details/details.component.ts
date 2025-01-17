@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GET_PRODUCT_BY_ID } from '@config/index';
+import { GenericService } from '@shared/services/generic.service';
 import { of, switchMap } from 'rxjs';
 import { ProductService } from 'src/app/shared/services/product.service';
 import { IProduct } from 'src/app/shared/types/product-d-t';
@@ -15,9 +17,9 @@ export class DetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private genericService: GenericService,
     private productService: ProductService,
-    private router: Router,
-    private fb: FormBuilder
+    public router: Router
   ) {}
 
   ngOnInit() {
@@ -26,17 +28,19 @@ export class DetailsComponent implements OnInit {
         switchMap((params) => {
           const productId = params.get('id');
           if (productId) {
-            return this.productService.getProductById(productId);
+            const url = GET_PRODUCT_BY_ID + `${productId}`;
+            return this.genericService.getObservable(url);
           }
           return of<IProduct | null>(null); // Emit null if there's no productId
         })
       )
-      .subscribe((product: IProduct | null | undefined) => {
+      .subscribe((product: any) => {
+        // TODO: need to work on the type of IProduct
         if (!product) {
           // Product not found, navigate to 404 page
           this.router.navigate(['/404']);
         } else {
-          this.product = product;
+          this.product = product?.data[0];
         }
       });
   }

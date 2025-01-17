@@ -6,6 +6,7 @@ const baseUrl = environment.apiBaseUrl;
 
 export const REGISTER_USER = baseUrl + '/api/users/register';
 export const LOGIN_USER = baseUrl + '/api/users/login';
+export const USER = baseUrl + '/api/users/profile';
 
 // products
 
@@ -19,3 +20,14 @@ export const GET_CASE_MATERIAL = baseUrl + '/api/products/caseMaterials';
 export const GET_WATCH_MARKERS = baseUrl + '/api/products/watchMarkers';
 export const GET_DELIVERY_OPTIONS = baseUrl + '/api/products/deliveryOptions';
 export const GET_RECIPIENTS = baseUrl + '/api/products/recipients';
+
+export const POST_PRODUCT = baseUrl + '/api/products/createProduct';
+export const POST_PRODUCT_DETAILS = baseUrl + '/api/products/productDetails';
+export const POST_PRODUCT_DESCRIPTION =
+  baseUrl + '/api/products/productDescriptions';
+export const POST_PRODUCT_RETURN_POLICY =
+  baseUrl + '/api/products/deliveryReturns';
+export const POST_UPLOAD_IMAGES = baseUrl + '/api/products/upload-images';
+
+export const GET_PRODUCT = baseUrl + '/api/products/getAllProducts';
+export const GET_PRODUCT_BY_ID = baseUrl + '/api/products/getAllProduct/';

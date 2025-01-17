@@ -15,6 +15,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { UserEffects } from './store/effects/user.effects';
 import { appReducer } from './store/app.reducer';
 import { environment } from '@env/environment';
+import { UserService } from '@shared/services/user.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -38,7 +39,7 @@ import { environment } from '@env/environment';
       logOnly: environment.production,
     }),
   ],
-  providers: [GenericService],
+  providers: [GenericService, UserService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

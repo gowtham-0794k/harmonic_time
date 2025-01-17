@@ -19,7 +19,7 @@ export const loginUser = createAction(
 );
 export const loginUserSuccess = createAction(
   '[User] Login Success',
-  props<{ data: string[] }>()
+  props<{ data: string[] | any }>()
 );
 export const loginUserFailure = createAction(
   '[User] Login Failure',

@@ -20,20 +20,22 @@
       <thead>
         <tr>
           <th scope="col">Order ID</th>
+          <th scope="col">Brand Name</th>
           <th scope="col">Product Name</th>
           <th scope="col">Price</th>
         </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let order of paginationOrders">
+        <ng-container *ngFor="let order of paginationOrders; let i = index">
           <tr
-            [routerLink]="['/seller/product-details', order.id]"
+            [routerLink]="['/seller/product-details', order._id]"
             class="clickable-row"
             [attr.aria-label]="'View order #' + order.id + ' details'"
           >
-            <td>{{ order.id }}</td>
-            <td>{{ order.name }}</td>
-            <td>{{ order.price | currency }}</td>
+            <td>{{ i + 1 }}</td>
+            <td>{{ order.Details.BrandName }}</td>
+            <td>{{ order.ProductName }}</td>
+            <td>{{ order.Price | currency : "INR" }}</td>
           </tr>
         </ng-container>
       </tbody>

@@ -22,6 +22,20 @@ export class GenericService {
     return this._httpClient.get(url, this.httpOptions);
   }
 
+  getObservableToken(_url: string | any): Observable<any> {
+    const httpOptionsToken = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Accept: '*/*',
+        Authorization: `Bearer ${JSON.parse(
+          localStorage.getItem('token') || ''
+        )}`,
+      }),
+    };
+    const url = _url;
+    return this._httpClient.get(url, httpOptionsToken);
+  }
+
   getObservableJw(_url: string): Observable<any> {
     const url = _url;
     return this._httpClient.get(url);

@@ -41,7 +41,6 @@ import { BuyerLayoutComponent } from './layout/buyer-layout/buyer-layout.compone
 import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
 import { BreadcrumbTwoComponent } from './components/breadcrumb/breadcrumb-two/breadcrumb-two.component';
 import { ProductDetailsUpperSellerComponent } from './components/product-details-upper-seller/product-details-upper-seller.component';
-import { GenericService } from 'src/app/shared/services/generic.service';
 
 @NgModule({
   declarations: [

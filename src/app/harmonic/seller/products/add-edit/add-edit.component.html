@@ -74,7 +74,9 @@
 
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div class="country-select">
-                <label for="collection">Collection</label>
+                <label for="collection"
+                  >Collection<span class="required">*</span></label
+                >
                 <select id="collection" formControlName="collectionId">
                   <option value="" disabled>- Please select -</option>
                   <option
@@ -84,18 +86,30 @@
                     {{ collection.CollectionName }}
                   </option>
                 </select>
+                <span
+                  *ngIf="
+                    collectionId?.hasError('required') && collectionId?.touched
+                  "
+                  class="text-danger"
+                  >Collection is required</span
+                >
               </div>
             </div>
 
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div class="checkout-form-list">
-                <label for="price">Price</label>
+                <label for="price">Price<span class="required">*</span></label>
                 <input
                   id="price"
                   type="number"
                   placeholder="Enter Price"
                   formControlName="price"
                 />
+                <span
+                  *ngIf="price?.hasError('required') && price?.touched"
+                  class="text-danger"
+                  >Price is required</span
+                >
               </div>
             </div>
 
@@ -113,11 +127,20 @@
                     {{ recipient.RecipientName }}
                   </option>
                 </select>
+                <span
+                  *ngIf="
+                    recipientId?.hasError('required') && recipientId?.touched
+                  "
+                  class="text-danger"
+                  >Recipient is required</span
+                >
               </div>
             </div>
           </div>
           <div>
-            <button mat-button matStepperNext>Next</button>
+            <button mat-button matStepperNext (click)="stepperNext(1, stepper)">
+              Next
+            </button>
           </div>
         </form>
       </mat-step>
@@ -136,26 +159,38 @@
                     {{ color.DialColorName }}
                   </option>
                 </select>
+                <span
+                  *ngIf="
+                    dialColorId?.hasError('required') && dialColorId?.touched
+                  "
+                  class="text-danger"
+                  >Dial Color is required</span
+                >
               </div>
             </div>
 
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div class="checkout-form-list">
-                <label for="diameter">Diameter</label>
+                <label for="diameter"
+                  >Diameter <span class="required">*</span></label
+                >
                 <input
                   id="diameter"
                   type="text"
-                  placeholder="Short Title"
+                  placeholder="Enter Diameter"
                   formControlName="diameter"
                 />
+                <span
+                  *ngIf="diameter?.hasError('required') && diameter?.touched"
+                  class="text-danger"
+                  >Diameter is required</span
+                >
               </div>
             </div>
 
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div class="country-select">
-                <label for="waterResistant"
-                  >Water Resistant <span class="required">*</span></label
-                >
+                <label for="waterResistant">Water Resistant </label>
                 <select id="waterResistant" formControlName="waterResistant">
                   <option value="" disabled>- Please select -</option>
                   <option *ngFor="let type of waterResistant" [value]="type.id">
@@ -179,6 +214,13 @@
                     {{ movement.MovementName }}
                   </option>
                 </select>
+                <span
+                  *ngIf="
+                    movementId?.hasError('required') && movementId?.touched
+                  "
+                  class="text-danger"
+                  >Movement is required</span
+                >
               </div>
             </div>
 
@@ -196,6 +238,14 @@
                     {{ strapMaterial.StrapMaterialName }}
                   </option>
                 </select>
+                <span
+                  *ngIf="
+                    strapMaterialId?.hasError('required') &&
+                    strapMaterialId?.touched
+                  "
+                  class="text-danger"
+                  >Strap Material is required</span
+                >
               </div>
             </div>
 
@@ -213,6 +263,14 @@
                     {{ caseMaterial.CaseMaterialName }}
                   </option>
                 </select>
+                <span
+                  *ngIf="
+                    caseMaterialId?.hasError('required') &&
+                    caseMaterialId?.touched
+                  "
+                  class="text-danger"
+                  >Case Material is required</span
+                >
               </div>
             </div>
 
@@ -230,6 +288,14 @@
                     {{ watchMarker.WatchMarkerName }}
                   </option>
                 </select>
+                <span
+                  *ngIf="
+                    watchMarkersId?.hasError('required') &&
+                    watchMarkersId?.touched
+                  "
+                  class="text-danger"
+                  >Watch Markers is required</span
+                >
               </div>
             </div>
 
@@ -241,7 +307,7 @@
                 <input
                   id="manufacturerProductNumber"
                   type="text"
-                  placeholder="Short Title"
+                  placeholder="Enter Manufacturer Product Number"
                   formControlName="manufacturerProductNumber"
                 />
               </div>
@@ -253,7 +319,7 @@
                 <input
                   id="guarantee"
                   type="text"
-                  placeholder="Short Title"
+                  placeholder="Enter Guarantee"
                   formControlName="guarantee"
                 />
               </div>
@@ -261,9 +327,7 @@
 
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div class="country-select">
-                <label for="deliveryOptionId"
-                  >Delivery Option <span class="required">*</span></label
-                >
+                <label for="deliveryOptionId">Delivery Option</label>
                 <select
                   id="deliveryOptionId"
                   formControlName="deliveryOptionId"
@@ -307,7 +371,7 @@
                 <label for="detailedDescription">Detailed Description</label>
                 <textarea
                   id="detailedDescription"
-                  placeholder="Detailed Description"
+                  placeholder="Enter Detailed Description"
                   formControlName="detailedDescription"
                 ></textarea>
               </div>
@@ -318,7 +382,7 @@
                 <label for="additionalDescription">Additional Details</label>
                 <textarea
                   id="additionalDescription"
-                  placeholder="Detailed Description"
+                  placeholder="Enter Additional Description"
                   formControlName="additionalDescription"
                 ></textarea>
               </div>
@@ -363,7 +427,7 @@
         </form>
       </mat-step>
       <mat-step [stepControl]="media">
-        <form [formGroup]="media">
+        <form [formGroup]="media" (ngSubmit)="onSubmit()">
           <ng-template matStepLabel>Media</ng-template>
           <div class="row">
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
@@ -417,7 +481,7 @@
           </div>
           <div>
             <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
+            <button mat-button matStepperNext>Create Product</button>
           </div>
         </form>
       </mat-step>

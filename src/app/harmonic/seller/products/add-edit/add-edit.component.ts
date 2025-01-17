@@ -1,7 +1,10 @@
 // add-edit.component.ts
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { UserService } from '@shared/services/user.service';
 import {
   GET_BRANDS,
   GET_CASE_MATERIAL,
@@ -13,6 +16,10 @@ import {
   GET_RECIPIENTS,
   GET_STRAP_MATERIAL,
   GET_WATCH_MARKERS,
+  POST_PRODUCT,
+  POST_PRODUCT_DESCRIPTION,
+  POST_PRODUCT_DETAILS,
+  POST_PRODUCT_RETURN_POLICY,
 } from 'src/app/config';
 import { GenericService } from 'src/app/shared/services/generic.service';
 import {
@@ -27,6 +34,9 @@ import {
   StrapMaterial,
   WatchMarker,
 } from 'src/app/shared/types/product-d-t';
+import { AppState } from 'src/app/store/app.state';
+import { selectUserData } from 'src/app/store/selectors/user.selectors';
+import { concatMap } from 'rxjs/operators';
 
 interface SelectOption {
   id: number;
@@ -52,7 +62,7 @@ export class AddEditComponent implements OnInit {
   media!: FormGroup;
 
   // Component state
-  isLinear = false;
+  isLinear = true;
   isEditing = false;
   productId?: number;
   uploadedImages: UploadedImage[] = [];
@@ -64,10 +74,10 @@ export class AddEditComponent implements OnInit {
   collections: Collection[] = [];
   recipients: Recipient[] = [];
   dialColors: DialColor[] = [];
-  waterResistant: SelectOption[] = [
-    { id: 1, name: 'Yes' },
-    { id: 2, name: 'No' },
-    { id: 3, name: 'Both' },
+  waterResistant: any = [
+    { id: 'Yes', name: 'Yes' },
+    { id: 'No', name: 'No' },
+    { id: 'Both', name: 'Both' },
   ];
   movements: Movement[] = [];
   strapMaterials: StrapMaterial[] = [];
@@ -79,38 +89,49 @@ export class AddEditComponent implements OnInit {
   readonly allowedImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
   readonly maxImages = 5;
   readonly minImages = 2;
+  currentIndex = 0;
+  userData: any;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
-    private genericService: GenericService
+    private genericService: GenericService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
     this.initializeForms();
     this.checkForEditMode();
     this.initialApiCalls();
+    this.userService.getUserData();
+    this.userService.userData$.subscribe({
+      next: (data) => {
+        this.userData = data;
+      },
+      error: (err) => {
+        console.error('Error fetching user data:', err);
+      },
+    });
   }
 
   private initializeForms(): void {
     this.basicProductInformation = this.fb.group({
-      productName: [''],
-      brandId: [''],
-      categoryId: [''],
-      collectionId: [''],
-      price: [''],
-      recipientId: [''],
+      productName: ['', Validators.required],
+      brandId: ['', Validators.required],
+      categoryId: ['', Validators.required],
+      collectionId: ['', Validators.required],
+      price: ['', Validators.required],
+      recipientId: ['', Validators.required],
     });
 
     this.productInformation = this.fb.group({
-      dialColorId: [''],
-      diameter: [''],
+      dialColorId: ['', Validators.required],
+      diameter: ['', Validators.required],
       waterResistant: [''],
-      movementId: [''],
-      strapMaterialId: [''],
-      caseMaterialId: [''],
-      watchMarkersId: [''],
+      movementId: ['', Validators.required],
+      strapMaterialId: ['', Validators.required],
+      caseMaterialId: ['', Validators.required],
+      watchMarkersId: ['', Validators.required],
       manufacturerProductNumber: [''],
       guarantee: [''],
       deliveryOptionId: [''],
@@ -140,81 +161,44 @@ export class AddEditComponent implements OnInit {
   }
 
   private initialApiCalls(): void {
-    console.log('initial API calls !');
-    const GET_BRANDS_URL = GET_BRANDS;
-    const GET_CATEGORIES_URL = GET_CATEGORIES;
-    const GET_COLLECTION_URL = GET_COLLECTION;
-    const GET_DIAL_COLOR_URL = GET_DIAL_COLOR;
-    const GET_MOVEMENTS_URL = GET_MOVEMENTS;
-    const GET_STRAP_MATERIAL_URL = GET_STRAP_MATERIAL;
-    const GET_CASE_MATERIAL_URL = GET_CASE_MATERIAL;
-    const GET_WATCH_MARKERS_URL = GET_WATCH_MARKERS;
-    const GET_DELIVERY_OPTIONS_URL = GET_DELIVERY_OPTIONS;
-    const GET_RECIPIENTS_URL = GET_RECIPIENTS;
-    this.genericService.getObservable(GET_BRANDS_URL).subscribe((response) => {
-      this.brands = response?.data;
+    // Define a type for the target properties
+    type TargetKeys =
+      | 'brands'
+      | 'categories'
+      | 'collections'
+      | 'dialColors'
+      | 'movements'
+      | 'strapMaterials'
+      | 'caseMaterials'
+      | 'watchMarkers'
+      | 'deliveryOptions'
+      | 'recipients';
+
+    // Define mapping of URLs to variables
+    const apiMapping: { url: string; target: TargetKeys }[] = [
+      { url: GET_BRANDS, target: 'brands' },
+      { url: GET_CATEGORIES, target: 'categories' },
+      { url: GET_COLLECTION, target: 'collections' },
+      { url: GET_DIAL_COLOR, target: 'dialColors' },
+      { url: GET_MOVEMENTS, target: 'movements' },
+      { url: GET_STRAP_MATERIAL, target: 'strapMaterials' },
+      { url: GET_CASE_MATERIAL, target: 'caseMaterials' },
+      { url: GET_WATCH_MARKERS, target: 'watchMarkers' },
+      { url: GET_DELIVERY_OPTIONS, target: 'deliveryOptions' },
+      { url: GET_RECIPIENTS, target: 'recipients' },
+    ];
+
+    // Iterate over the mapping to make API calls
+    apiMapping.forEach(({ url, target }) => {
+      this.genericService.getObservable(url).subscribe({
+        next: (response) => {
+          (this[target] as any) = response?.data; // If the type is fully known, this cast might not even be necessary
+        },
+        error: (err) => {
+          console.error(`Error fetching data for ${target}:`, err);
+        },
+      });
     });
-
-    this.genericService
-      .getObservable(GET_CATEGORIES_URL)
-      .subscribe((response) => {
-        this.categories = response?.data;
-      });
-
-    this.genericService
-      .getObservable(GET_COLLECTION_URL)
-      .subscribe((response) => {
-        this.collections = response?.data;
-      });
-
-    this.genericService
-      .getObservable(GET_DIAL_COLOR_URL)
-      .subscribe((response) => {
-        console.log({ response });
-        this.dialColors = response?.data;
-      });
-
-    this.genericService
-      .getObservable(GET_MOVEMENTS_URL)
-      .subscribe((response) => {
-        console.log({ response });
-        this.movements = response?.data;
-      });
-
-    this.genericService
-      .getObservable(GET_STRAP_MATERIAL_URL)
-      .subscribe((response) => {
-        console.log({ response });
-        this.strapMaterials = response?.data;
-      });
-
-    this.genericService
-      .getObservable(GET_CASE_MATERIAL_URL)
-      .subscribe((response) => {
-        console.log({ response });
-        this.caseMaterials = response?.data;
-      });
-
-    this.genericService
-      .getObservable(GET_WATCH_MARKERS_URL)
-      .subscribe((response) => {
-        console.log({ response });
-        this.watchMarkers = response?.data;
-      });
-
-    this.genericService
-      .getObservable(GET_DELIVERY_OPTIONS_URL)
-      .subscribe((response) => {
-        console.log({ response });
-        this.deliveryOptions = response?.data;
-      });
-
-    this.genericService
-      .getObservable(GET_RECIPIENTS_URL)
-      .subscribe((response) => {
-        console.log({ response });
-        this.deliveryOptions = response?.data;
-      });
   }
 
   private async loadProductData(): Promise<void> {
@@ -250,11 +234,33 @@ export class AddEditComponent implements OnInit {
   get categoryId() {
     return this.basicProductInformation.get('categoryId');
   }
+  get collectionId() {
+    return this.basicProductInformation.get('collectionId');
+  }
   get price() {
     return this.basicProductInformation.get('price');
   }
   get recipientId() {
-    return this.productInformation.get('recipientId');
+    return this.basicProductInformation.get('recipientId');
+  }
+
+  get dialColorId() {
+    return this.productInformation.get('dialColorId');
+  }
+  get diameter() {
+    return this.productInformation.get('diameter');
+  }
+  get movementId() {
+    return this.productInformation.get('movementId');
+  }
+  get strapMaterialId() {
+    return this.productInformation.get('strapMaterialId');
+  }
+  get caseMaterialId() {
+    return this.productInformation.get('caseMaterialId');
+  }
+  get watchMarkersId() {
+    return this.productInformation.get('watchMarkersId');
   }
 
   onImageUpload(event: Event): void {
@@ -304,7 +310,31 @@ export class AddEditComponent implements OnInit {
     );
   }
 
+  public stepperNext(index: number, stepper: MatStepper) {
+    let currentStepForm: any = this.basicProductInformation;
+    if (index === 2) {
+      currentStepForm = this.productDescription;
+    }
+    if (index === 3) {
+      currentStepForm = this.deliveryAndReturns;
+    }
+    if (index === 4) {
+      currentStepForm = this.media;
+    }
+
+    this.currentIndex = index;
+    if (currentStepForm.invalid) {
+      currentStepForm.markAllAsTouched();
+      stepper.selectedIndex = index;
+    }
+  }
+
   async onSubmit(): Promise<void> {
+    const userId = this.userData._id;
+    if (!userId) {
+      this.errorMessage = 'Please Login to Create !';
+      return;
+    }
     if (!this.isFormValid()) {
       this.errorMessage =
         'Please fill in all required fields and upload at least 2 images';
@@ -322,25 +352,109 @@ export class AddEditComponent implements OnInit {
     };
 
     // Append form data
-    Object.entries(productData).forEach(([key, value]) => {
-      formData.append(key, value as string);
-    });
+    // Object.entries(productData).forEach(([key, value]) => {
+    //   formData.append(key, value as string);
+    // });
 
     // Append images
     this.uploadedImages.forEach((image, index) => {
-      formData.append(`image${index}`, image.file);
+      formData.append(`images`, image.file);
     });
+
+    const CREATE_PRODUCT_URL = POST_PRODUCT;
+    const CREATE_PRODUCT_DETAILS_URL = POST_PRODUCT_DETAILS;
+    const CREATE_PRODUCT_DESCRIPTION_URL = POST_PRODUCT_DESCRIPTION;
+    const CREATE_PRODUCT_RETURN_POLICY_URL = POST_PRODUCT_RETURN_POLICY;
 
     try {
       // Example of submitting the form
-      // if (this.isEditing) {
-      //   await this.productService.updateProduct(this.productId!, formData);
-      // } else {
-      //   await this.productService.createProduct(formData);
-      // }
+      if (this.isEditing) {
+        await this.genericService.postObservable(CREATE_PRODUCT_URL, formData);
+      } else {
+        const productPayload = {
+          UserID: userId,
+          ProductName: productData.productName,
+          BrandID: productData.brandId,
+          CollectionID: productData.collectionId,
+          CategoryID: productData.categoryId,
+          Price: productData.price,
+          RecipientID: productData.recipientId,
+        };
 
+        this.genericService
+          .postObservable(CREATE_PRODUCT_URL, productPayload) // First API call
+          .pipe(
+            concatMap((response) => {
+              const productId = response?.data?.insertedId;
+
+              // Prepare the payloads for the next calls
+              const productDetailsPayload = {
+                ProductID: productId,
+                DialColorID: productData.dialColorId,
+                Diameter: productData.diameter,
+                WaterResistant: productData.waterResistant,
+                MovementID: productData.movementId,
+                StrapMaterialID: productData.strapMaterialId,
+                CaseMaterialID: productData.caseMaterialId,
+                WatchMarkersID: productData.watchMarkersId,
+                ManufacturerProductNumber:
+                  productData.manufacturerProductNumber,
+                Guarantee: productData.guarantee,
+                DeliveryOptionID: productData.deliveryOptionId,
+              };
+
+              const productDescriptionPayload = {
+                ProductID: productId,
+                Title: productData.shortTitle,
+                Content: productData.detailedDescription,
+                AdditionalDetails: productData.additionalDescription,
+              };
+
+              const productDeliveryReturnPayload = {
+                ProductID: productId,
+                DeliveryInformation: productData.deliveryInfo,
+                ReturnsPolicy: productData.returnsPolicy,
+              };
+
+              const uploadImagesPayload = {};
+
+              // Return each subsequent postObservable as an observable chain
+              return this.genericService
+                .postObservable(
+                  CREATE_PRODUCT_DETAILS_URL,
+                  productDetailsPayload
+                )
+                .pipe(
+                  concatMap(() =>
+                    this.genericService.postObservable(
+                      CREATE_PRODUCT_DESCRIPTION_URL,
+                      productDescriptionPayload
+                    )
+                  ),
+                  concatMap(() =>
+                    this.genericService.postObservable(
+                      CREATE_PRODUCT_RETURN_POLICY_URL,
+                      productDeliveryReturnPayload
+                    )
+                  ),
+                  concatMap(() =>
+                    this.genericService.postObservable(
+                      CREATE_PRODUCT_RETURN_POLICY_URL,
+                      productDeliveryReturnPayload
+                    )
+                  )
+                );
+            })
+          )
+          .subscribe({
+            next: (response) => {},
+            error: (err) => {
+              console.error('Error creating product or related details:', err);
+            },
+          });
+      }
       // Navigate back to products list
-      this.router.navigate(['/products']);
+      // this.router.navigate(['/products']);
     } catch (error) {
       console.error('Error submitting form:', error);
       this.errorMessage =

@@ -9,7 +9,7 @@ import { CartService } from '../../services/cart.service';
   styleUrls: ['./product-details-upper-seller.component.scss'],
 })
 export class ProductDetailsUpperSellerComponent {
-  @Input() product!: IProduct;
+  @Input() product!: any; // IProduct;
   @Input() bottomShow: boolean = true;
   @Input() style_2: boolean = false;
   @Output() itemDetails: EventEmitter<any> = new EventEmitter<any>();
@@ -21,7 +21,7 @@ export class ProductDetailsUpperSellerComponent {
 
   ngOnInit() {
     if (this.product) {
-      this.productService.activeImg = this.product.img;
+      this.productService.activeImg = this.product.Images[0].ImageURL;
     }
   }
 
