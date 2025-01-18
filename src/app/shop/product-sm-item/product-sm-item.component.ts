@@ -5,14 +5,12 @@ import { IProduct } from 'src/app/shared/types/product-d-t';
 @Component({
   selector: 'app-product-sm-item',
   templateUrl: './product-sm-item.component.html',
-  styleUrls: ['./product-sm-item.component.scss']
+  styleUrls: ['./product-sm-item.component.scss'],
 })
 export class ProductSmItemComponent {
-  @Input() product!: IProduct;
+  @Input() product!: any; // IProduct;
 
-  constructor(
-    public cartService: CartService
-  ) { }
+  constructor(public cartService: CartService) {}
 
   // add to cart
   addToCart(item: IProduct) {
@@ -21,6 +19,8 @@ export class ProductSmItemComponent {
 
   // Function to check if an item is in the cart
   isItemInCart(item: IProduct): boolean {
-    return this.cartService.getCartProducts().some((prd: IProduct) => prd.id === item.id);
+    return this.cartService
+      .getCartProducts()
+      .some((prd: IProduct) => prd.id === item.id);
   }
 }

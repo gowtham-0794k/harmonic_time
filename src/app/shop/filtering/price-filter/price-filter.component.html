@@ -7,7 +7,7 @@
       <div id="slider-range">
         <ngx-slider
           [(value)]="min"
-          [(highValue)]="max"
+          [(highValue)]="maxValue"
           [options]="options"
           (userChangeEnd)="appliedFilter($event)"
           *ngIf="isBrowser"
@@ -16,11 +16,9 @@
       </div>
       <div>
         <div>
-          <button (click)="handlePriceRoute()">Filter</button>
+          <!-- <button (click)="handlePriceRoute()">Filter</button> -->
           <label for="amount">Price :</label>
-          <span class="input-range">
-            ${{ min }} - ${{ max }}
-          </span>
+          <span class="input-range"> {{ min }} - {{ maxValue }} </span>
         </div>
       </div>
     </div>

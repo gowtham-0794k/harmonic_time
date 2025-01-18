@@ -29,7 +29,7 @@
           </div>
         </nav>
       </div>
-      <div class="mb-20">
+      <!-- <div class="mb-20">
         <div class="product__modal-img product__thumb w-img">
           <img [src]="productService.activeImg" alt="product-img" />
           <div *ngIf="product.discount || product.new" class="product__sale">
@@ -39,7 +39,7 @@
             >
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div *ngIf="style_2" class="product__modal-box">
@@ -48,7 +48,7 @@
           <img [src]="productService.activeImg" alt="product-img" />
         </div>
       </div>
-      <nav>
+      <!-- <nav>
         <div class="nav nav-tabs" id="product-details" role="tablist">
           <a
             *ngFor="let img of product.related_images"
@@ -67,7 +67,7 @@
             </div>
           </a>
         </div>
-      </nav>
+      </nav> -->
     </div>
   </div>
 
@@ -80,12 +80,12 @@
   >
     <div class="product__modal-content product__modal-content-2">
       <h4>
-        <a [routerLink]="['/shop/shop-details', product.id]">{{
+        <a [routerLink]="['/shop/shop-details', product._id]">{{
           product.Details.BrandName
         }}</a>
       </h4>
       <h5>
-        <a [routerLink]="['/shop/shop-details', product.id]">{{
+        <a [routerLink]="['/shop/shop-details', product._id]">{{
           product.ProductName
         }}</a>
       </h5>

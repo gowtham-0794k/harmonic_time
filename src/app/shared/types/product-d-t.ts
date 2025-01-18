@@ -89,3 +89,67 @@ export interface IProduct {
     review_desc: string;
   }[];
 }
+
+export interface Product {
+  _id: string;
+  UserID: string;
+  ProductName: string;
+  Price: number;
+  IsAvailable: boolean;
+  DateListed: string;
+  Description: Description;
+  Details: Details;
+  Images: Image[];
+  DeliveryAndReturns: DeliveryAndReturns;
+}
+
+export interface Description {
+  _id: string;
+  Title: string;
+  Content: string;
+  AdditionalDetails: string;
+  CreatedAt: string;
+}
+
+export interface Details {
+  Diameter: string;
+  WaterResistant: string;
+  ManufacturerProductNumber: string;
+  Guarantee: string;
+  _id: string;
+  CollectionName: string;
+  CollectionId: string;
+  CategoryName: string;
+  CategoryId: string;
+  RecipientName: string;
+  RecipientId: string;
+  DialColorName: string;
+  DialColorId: string;
+  MovementName: string;
+  MovementId: string;
+  StrapMaterialName: string;
+  StrapMaterialId: string;
+  CaseMaterialName: string;
+  CaseMaterialId: string;
+  WatchMarkerName: string;
+  WatchMarkerId: string;
+  DeliveryOptionID: string;
+  BrandName: string;
+  BrandId: string;
+}
+
+export interface Image {
+  _id: string;
+  ProductID: string;
+  ImageURL: string;
+  IsPrimary: boolean;
+  AltText: string;
+}
+
+export interface DeliveryAndReturns {
+  _id: string;
+  ProductID: string;
+  DeliveryInformation: string;
+  ReturnsPolicy: string;
+  CreatedAt: string;
+}

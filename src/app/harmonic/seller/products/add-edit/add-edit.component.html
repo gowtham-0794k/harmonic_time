@@ -1,5 +1,5 @@
 <app-breadcrumb-two
-  title="Add / Edit Product"
+  [title]="productData ? 'Edit Product' : 'Add Product'"
   subtitle="Product Details"
 ></app-breadcrumb-two>
 
@@ -481,7 +481,9 @@
           </div>
           <div>
             <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Create Product</button>
+            <button mat-button matStepperNext>
+              {{ !productData ? "Create Product" : "Update Product" }}
+            </button>
           </div>
         </form>
       </mat-step>

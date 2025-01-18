@@ -1,7 +1,7 @@
 <div class="product__item mb-40">
   <div class="product__wrapper">
     <div class="product__thumb">
-      <a [routerLink]="['/buyer/product-details', product.id]" class="w-img">
+      <a [routerLink]="['/buyer/product-details', product._id]" class="w-img">
         <img [src]="product.img" alt="product-img" />
         <img
           class="product__thumb-2"
@@ -48,7 +48,7 @@
           <a><i class="fal fa-star"></i></a>
         </div>
         <h4>
-          <a [routerLink]="['/buyer/product-details', product.id]">{{
+          <a [routerLink]="['/buyer/product-details', product._id]">{{
             product.title
           }}</a>
         </h4>

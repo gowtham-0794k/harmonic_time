@@ -1,11 +1,11 @@
 import { IMenuType, IMobileMenu } from '../types/menu-d-t';
 
 const menuData: IMenuType[] = [
-  {
-    link: '/',
-    title: 'Home',
-    hasDropdown: false,
-  },
+  // {
+  //   link: '/',
+  //   title: 'Home',
+  //   hasDropdown: false,
+  // },
   {
     link: '/seller/product-list',
     title: 'Seller',
@@ -27,21 +27,6 @@ const menuData: IMenuType[] = [
     //   { link: '/buyer/order-list', title: 'Order List' },
     // ],
   },
-  {
-    link: '/pages/blog',
-    title: 'Blog',
-    hasDropdown: true,
-    megamenu: false,
-    dropdownItems: [
-      { link: '/pages/blog', title: 'Blog' },
-      { link: '/pages/blog-left-sidebar', title: 'Blog Left Sidebar' },
-      { link: '/pages/blog-no-sidebar', title: 'Blog No Sidebar' },
-      { link: '/pages/blog-2-col', title: 'Blog 2 Column' },
-      { link: '/pages/blog-3-col', title: 'Blog 3 Column' },
-      { link: '/pages/blog-details', title: 'Blog Details' },
-    ],
-  },
-
   {
     link: '/pages/contact',
     title: 'Contact',

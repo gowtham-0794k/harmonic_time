@@ -54,10 +54,11 @@ export class ProductService {
     );
   }
   // Get max price
-  public get maxPrice(): number {
-    const max_price = all_products.reduce((max, product) => {
-      return product.price > max ? product.price : max;
+  public maxPrice(all_data: any): number {
+    const max_price = all_data.reduce((max: number, product: any) => {
+      return product.Price > max ? product.Price : max;
     }, 0);
+    console.log({ max_price });
     return max_price;
   }
   // shop filterSelect

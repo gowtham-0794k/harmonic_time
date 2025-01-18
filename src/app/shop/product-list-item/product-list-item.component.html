@@ -2,11 +2,11 @@
   <div class="row">
     <div class="col-xl-4 col-lg-4">
       <div class="product__thumb">
-        <a [routerLink]="['/buyer/product-details', product.id]" class="w-img">
-          <img [src]="product.img" alt="product-img" />
+        <a [routerLink]="['/buyer/product-details', product._id]" class="w-img">
+          <img [src]="product?.Images[0]?.ImageURL" alt="product-img" />
           <img
             class="product__thumb-2"
-            [src]="product.thumb_img"
+            [src]="product?.Images[0]?.ImageURL"
             alt="product-img"
           />
         </a>
@@ -22,23 +22,21 @@
       <div class="product__content p-relative">
         <div class="product__content-inner list">
           <h4>
-            <a [routerLink]="['/buyer/product-details', product.id]">{{
-              product.title
+            <a [routerLink]="['/buyer/product-details', product._id]">{{
+              product.Details.BrandName
             }}</a>
           </h4>
           <div class="product__price-2 mb-10">
-            <span>${{ product.price.toFixed(2) }}</span>
-            <span *ngIf="product.old_price" class="old-price"
+            <span>${{ product.Price | currency : "INR" }}</span>
+            <!-- <span *ngIf="product.old_price" class="old-price"
               >${{ product.old_price.toFixed(2) }}</span
-            >
+            > -->
           </div>
-          <p>{{ product.sm_desc }}</p>
+          <p>{{ product.Description.Title }}</p>
           <div class="product__list mb-30">
             <ul>
-              <li
-                *ngFor="let list of product.details.details_list?.slice(0, 3)"
-              >
-                <span>{{ list }}</span>
+              <li>
+                <span>{{ product.Description.Content }}</span>
               </li>
             </ul>
           </div>
@@ -87,7 +85,7 @@
               [attr.data-bs-target]="'#' + utilsService.modalId"
               (click)="
                 utilsService.handleOpenModal(
-                  'product-modal-' + product.id,
+                  'product-modal-' + product._id,
                   product
                 )
               "

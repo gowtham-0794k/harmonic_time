@@ -12,7 +12,6 @@ import { BlogThreeColComponent } from './blog-three-col/blog-three-col.component
 import { BlogDetailsComponent } from './blog-details/blog-details.component';
 import { BlogDynamicDetailsComponent } from './blog-dynamic-details/blog-dynamic-details.component';
 import { ContactComponent } from './contact/contact.component';
-import { AccountComponent } from './account/account.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
@@ -25,7 +24,6 @@ import { NotFoundComponent } from './not-found/not-found.component';
     BlogDetailsComponent,
     BlogDynamicDetailsComponent,
     ContactComponent,
-    AccountComponent,
     NotFoundComponent,
   ],
   imports: [

@@ -48,6 +48,11 @@ export class GenericService {
     return this._httpClient.post(url, data, this.httpOptions);
   }
 
+  putObservable(_url: string, data: any): Observable<any> {
+    const url = _url;
+    return this._httpClient.put(url, data, this.httpOptions);
+  }
+
   getData() {
     return of([1, 2, 3]);
   }

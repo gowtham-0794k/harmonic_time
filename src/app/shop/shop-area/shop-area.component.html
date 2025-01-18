@@ -6,39 +6,22 @@
         class="col-xl-3 col-lg-3 col-md-4"
       >
         <div class="shop__sidebar">
-          <!-- category filter start -->
-          <app-category-filter></app-category-filter>
-          <!-- category filter end -->
-
-          <!-- price filter start -->
+          <!-- <app-category-filter [products]="products"></app-category-filter> -->
           <app-price-filter
+            *ngIf="maxPrice"
             [min]="minPrice"
             [max]="maxPrice"
             (priceFilter)="updateFilter($event)"
           ></app-price-filter>
-          <!-- price filter end -->
 
-          <!-- size filter start -->
           <app-size-filtering></app-size-filtering>
-          <!-- size filter end -->
-
-          <!-- color filter start -->
           <app-color-filtering></app-color-filtering>
-          <!-- color filter end -->
-
-          <!-- brand filter start -->
           <app-brand-filtering></app-brand-filtering>
-          <!-- brand filter end -->
-
-          <!-- reset button start -->
           <div class="reset-button mt-20 mb-30">
             <button (click)="handleResetFilter()" class="os-btn os-btn-black">
               Reset Filter
             </button>
           </div>
-          <!-- reset button end -->
-
-          <!-- feature product start -->
           <div class="sidebar__widget">
             <div class="sidebar__widget-title mb-30">
               <h3>Featured Products</h3>
@@ -47,7 +30,6 @@
               <app-feature-products></app-feature-products>
             </div>
           </div>
-          <!-- feature product end -->
         </div>
       </div>
 
@@ -113,7 +95,6 @@
             </div>
           </div>
 
-          <!-- if no item in product  -->
           <div
             *ngIf="products.length === 0"
             class="cartmini__empty text-center mt-80"
@@ -178,39 +159,20 @@
 
       <div *ngIf="shop_right" class="col-xl-3 col-lg-3 col-md-4">
         <div class="shop__sidebar">
-          <!-- category filter start -->
           <app-category-filter></app-category-filter>
-          <!-- category filter end -->
-
-          <!-- price filter start -->
           <app-price-filter
             [min]="minPrice"
             [max]="maxPrice"
             (priceFilter)="updateFilter($event)"
           ></app-price-filter>
-          <!-- price filter end -->
-
-          <!-- size filter start -->
           <app-size-filtering></app-size-filtering>
-          <!-- size filter end -->
-
-          <!-- color filter start -->
           <app-color-filtering></app-color-filtering>
-          <!-- color filter end -->
-
-          <!-- brand filter start -->
           <app-brand-filtering></app-brand-filtering>
-          <!-- brand filter end -->
-
-          <!-- reset button start -->
           <div class="reset-button mt-20 mb-30">
             <button (click)="handleResetFilter()" class="os-btn os-btn-black">
               Reset Filter
             </button>
           </div>
-          <!-- reset button end -->
-
-          <!-- feature product start -->
           <div class="sidebar__widget">
             <div class="sidebar__widget-title mb-30">
               <h3>Featured Products</h3>
@@ -219,7 +181,6 @@
               <app-feature-products></app-feature-products>
             </div>
           </div>
-          <!-- feature product end -->
         </div>
       </div>
     </div>

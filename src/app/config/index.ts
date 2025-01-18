@@ -23,11 +23,14 @@ export const GET_RECIPIENTS = baseUrl + '/api/products/recipients';
 
 export const POST_PRODUCT = baseUrl + '/api/products/createProduct';
 export const POST_PRODUCT_DETAILS = baseUrl + '/api/products/productDetails';
-export const POST_PRODUCT_DESCRIPTION =
+export const PRODUCT_DESCRIPTION =
   baseUrl + '/api/products/productDescriptions';
 export const POST_PRODUCT_RETURN_POLICY =
   baseUrl + '/api/products/deliveryReturns';
 export const POST_UPLOAD_IMAGES = baseUrl + '/api/products/upload-images';
 
-export const GET_PRODUCT = baseUrl + '/api/products/getAllProducts';
+export const PRODUCT = baseUrl + '/api/products/getAllProducts';
 export const GET_PRODUCT_BY_ID = baseUrl + '/api/products/getAllProduct/';
+
+export const UPDATE_PRODUCT = baseUrl + '/api/products/getAllProduct';
+export const UPDATE_PRODUCT_DETAILS = baseUrl + '/api/products/productDetails';

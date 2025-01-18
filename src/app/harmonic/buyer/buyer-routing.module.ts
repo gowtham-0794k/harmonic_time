@@ -6,6 +6,7 @@ import { CartComponent } from './cart/cart.component';
 import { WishlistComponent } from './wishlist/wishlist.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { BuyerLayoutComponent } from 'src/app/shared/layout/buyer-layout/buyer-layout.component';
+import { AccountComponent } from './account/account.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,11 @@ const routes: Routes = [
         path: 'checkout',
         component: CheckoutComponent,
         title: 'Checkout Page',
+      },
+      {
+        path: 'account',
+        component: AccountComponent,
+        title: 'Account Page',
       },
     ],
   },

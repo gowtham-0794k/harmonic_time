@@ -1,10 +1,10 @@
 <div class="product__wrapper mb-60">
   <div class="product__thumb">
-    <a [routerLink]="['/buyer/product-details', product.id]" class="w-img">
-      <img [src]="product.img" alt="product-img" />
+    <a [routerLink]="['/buyer/product-details', product._id]" class="w-img">
+      <img [src]="product?.Images[0]?.ImageURL" alt="product-img" />
       <img
         class="product__thumb-2"
-        [src]="product.thumb_img"
+        [src]="product?.Images[0]?.ImageURL"
         alt="product-img"
       />
     </a>
@@ -52,15 +52,15 @@
     <div class="product__content-inner">
       <h4>
         <a
-          [routerLink]="['/buyer/product-details', product.id]"
-          [innerHTML]="product.title"
+          [routerLink]="['/buyer/product-details', product._id]"
+          [innerHTML]="product.Details.BrandName"
         ></a>
       </h4>
       <div class="product__price transition-3">
-        <span>${{ product.price.toFixed(2) }}</span>
-        <span *ngIf="product.old_price" class="old-price"
+        <span>${{ product.Price | currency : "INR" }}</span>
+        <!-- <span *ngIf="product.old_price" class="old-price"
           >${{ product.old_price.toFixed(2) }}</span
-        >
+        > -->
       </div>
     </div>
     <div class="add-cart p-absolute transition-3">

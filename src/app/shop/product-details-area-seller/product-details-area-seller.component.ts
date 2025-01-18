@@ -13,8 +13,6 @@ export class ProductDetailsAreaSellerComponent {
   constructor(private router: Router) {}
 
   itemDetails(item: any) {
-    this.router.navigate(['/seller/add-product'], {
-      queryParams: { id: item.id },
-    });
+    this.router.navigate(['/seller/add-product' + `/${item._id}`]);
   }
 }

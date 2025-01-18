@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatStepperModule } from '@angular/material/stepper';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ShopModule } from 'src/app/shop/shop.module';
+import { AccountComponent } from './account/account.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { ShopModule } from 'src/app/shop/shop.module';
     WishlistComponent,
     CheckoutComponent,
     OrdersComponent,
+    AccountComponent,
   ],
   imports: [
     CommonModule,

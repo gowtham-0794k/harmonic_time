@@ -1,7 +1,7 @@
 import { ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GET_PRODUCT } from '@config/index';
+import { PRODUCT } from '@config/index';
 import { GenericService } from '@shared/services/generic.service';
 import { UserService } from '@shared/services/user.service';
 import { ProductService } from 'src/app/shared/services/product.service';
@@ -35,7 +35,7 @@ export class ListComponent {
       next: (data) => {
         this.userData = data;
         if (this.userData) {
-          const url = GET_PRODUCT + `?UserID=${this.userData._id}`;
+          const url = PRODUCT + `?UserID=${this.userData._id}`;
           this.genericService.getObservable(url).subscribe({
             next: (response) => {
               this.orders = response?.data;

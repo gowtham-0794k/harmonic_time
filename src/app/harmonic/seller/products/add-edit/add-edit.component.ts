@@ -13,13 +13,17 @@ import {
   GET_DELIVERY_OPTIONS,
   GET_DIAL_COLOR,
   GET_MOVEMENTS,
+  GET_PRODUCT_BY_ID,
   GET_RECIPIENTS,
   GET_STRAP_MATERIAL,
   GET_WATCH_MARKERS,
   POST_PRODUCT,
-  POST_PRODUCT_DESCRIPTION,
+  PRODUCT_DESCRIPTION,
   POST_PRODUCT_DETAILS,
   POST_PRODUCT_RETURN_POLICY,
+  PRODUCT,
+  UPDATE_PRODUCT,
+  UPDATE_PRODUCT_DETAILS,
 } from 'src/app/config';
 import { GenericService } from 'src/app/shared/services/generic.service';
 import {
@@ -64,7 +68,7 @@ export class AddEditComponent implements OnInit {
   // Component state
   isLinear = true;
   isEditing = false;
-  productId?: number;
+  productId?: string;
   uploadedImages: UploadedImage[] = [];
   errorMessage = '';
 
@@ -91,6 +95,12 @@ export class AddEditComponent implements OnInit {
   readonly minImages = 2;
   currentIndex = 0;
   userData: any;
+
+  CREATE_PRODUCT_URL = POST_PRODUCT;
+  CREATE_PRODUCT_DETAILS_URL = POST_PRODUCT_DETAILS;
+  CREATE_PRODUCT_DESCRIPTION_URL = PRODUCT_DESCRIPTION;
+  CREATE_PRODUCT_RETURN_POLICY_URL = POST_PRODUCT_RETURN_POLICY;
+  productData: any;
 
   constructor(
     private fb: FormBuilder,
@@ -153,9 +163,10 @@ export class AddEditComponent implements OnInit {
 
   private checkForEditMode(): void {
     const id = this.route.snapshot.paramMap.get('id');
+    console.log({ id });
     if (id) {
       this.isEditing = true;
-      this.productId = +id;
+      this.productId = id;
       this.loadProductData();
     }
   }
@@ -203,6 +214,43 @@ export class AddEditComponent implements OnInit {
 
   private async loadProductData(): Promise<void> {
     try {
+      const url = GET_PRODUCT_BY_ID + `${this.productId}`;
+      this.genericService.getObservable(url).subscribe((response) => {
+        const data = response?.data[0];
+        this.productData = response?.data[0];
+        this.basicProductInformation.setValue({
+          productName: data.ProductName,
+          brandId: data.Details.BrandId,
+          categoryId: data.Details.CategoryId,
+          collectionId: data.Details.CollectionId,
+          price: data.Price,
+          recipientId: data.Details.RecipientId,
+        });
+
+        this.productInformation.setValue({
+          dialColorId: data.Details.DialColorId,
+          diameter: data.Details.Diameter,
+          waterResistant: data.Details.WaterResistant,
+          movementId: data.Details.MovementId,
+          strapMaterialId: data.Details.StrapMaterialId,
+          caseMaterialId: data.Details.CaseMaterialId,
+          watchMarkersId: data.Details.WatchMarkerId,
+          manufacturerProductNumber: data.Details.ManufacturerProductNumber,
+          guarantee: data.Details.Guarantee,
+          deliveryOptionId: data.Details.DeliveryOptionID,
+        });
+
+        this.productDescription.setValue({
+          shortTitle: data.Description.Title,
+          detailedDescription: data.Description.Content,
+          additionalDescription: data.Description.AdditionalDetails,
+        });
+
+        this.deliveryAndReturns.setValue({
+          deliveryInfo: data.DeliveryAndReturns.DeliveryInformation,
+          returnsPolicy: data.DeliveryAndReturns.ReturnsPolicy,
+        });
+      });
       // Example of loading product data
       // const product = await this.productService.getProduct(this.productId);
       // this.patchFormValues(product);
@@ -351,114 +399,168 @@ export class AddEditComponent implements OnInit {
       ...this.deliveryAndReturns.value,
     };
 
-    // Append form data
-    // Object.entries(productData).forEach(([key, value]) => {
-    //   formData.append(key, value as string);
-    // });
-
     // Append images
     this.uploadedImages.forEach((image, index) => {
       formData.append(`images`, image.file);
     });
 
-    const CREATE_PRODUCT_URL = POST_PRODUCT;
-    const CREATE_PRODUCT_DETAILS_URL = POST_PRODUCT_DETAILS;
-    const CREATE_PRODUCT_DESCRIPTION_URL = POST_PRODUCT_DESCRIPTION;
-    const CREATE_PRODUCT_RETURN_POLICY_URL = POST_PRODUCT_RETURN_POLICY;
-
     try {
       // Example of submitting the form
       if (this.isEditing) {
-        await this.genericService.postObservable(CREATE_PRODUCT_URL, formData);
+        this.updateProduct(userId, productData);
       } else {
-        const productPayload = {
-          UserID: userId,
-          ProductName: productData.productName,
-          BrandID: productData.brandId,
-          CollectionID: productData.collectionId,
-          CategoryID: productData.categoryId,
-          Price: productData.price,
-          RecipientID: productData.recipientId,
-        };
-
-        this.genericService
-          .postObservable(CREATE_PRODUCT_URL, productPayload) // First API call
-          .pipe(
-            concatMap((response) => {
-              const productId = response?.data?.insertedId;
-
-              // Prepare the payloads for the next calls
-              const productDetailsPayload = {
-                ProductID: productId,
-                DialColorID: productData.dialColorId,
-                Diameter: productData.diameter,
-                WaterResistant: productData.waterResistant,
-                MovementID: productData.movementId,
-                StrapMaterialID: productData.strapMaterialId,
-                CaseMaterialID: productData.caseMaterialId,
-                WatchMarkersID: productData.watchMarkersId,
-                ManufacturerProductNumber:
-                  productData.manufacturerProductNumber,
-                Guarantee: productData.guarantee,
-                DeliveryOptionID: productData.deliveryOptionId,
-              };
-
-              const productDescriptionPayload = {
-                ProductID: productId,
-                Title: productData.shortTitle,
-                Content: productData.detailedDescription,
-                AdditionalDetails: productData.additionalDescription,
-              };
-
-              const productDeliveryReturnPayload = {
-                ProductID: productId,
-                DeliveryInformation: productData.deliveryInfo,
-                ReturnsPolicy: productData.returnsPolicy,
-              };
-
-              const uploadImagesPayload = {};
-
-              // Return each subsequent postObservable as an observable chain
-              return this.genericService
-                .postObservable(
-                  CREATE_PRODUCT_DETAILS_URL,
-                  productDetailsPayload
-                )
-                .pipe(
-                  concatMap(() =>
-                    this.genericService.postObservable(
-                      CREATE_PRODUCT_DESCRIPTION_URL,
-                      productDescriptionPayload
-                    )
-                  ),
-                  concatMap(() =>
-                    this.genericService.postObservable(
-                      CREATE_PRODUCT_RETURN_POLICY_URL,
-                      productDeliveryReturnPayload
-                    )
-                  ),
-                  concatMap(() =>
-                    this.genericService.postObservable(
-                      CREATE_PRODUCT_RETURN_POLICY_URL,
-                      productDeliveryReturnPayload
-                    )
-                  )
-                );
-            })
-          )
-          .subscribe({
-            next: (response) => {},
-            error: (err) => {
-              console.error('Error creating product or related details:', err);
-            },
-          });
+        this.createProduct(userId, productData);
       }
-      // Navigate back to products list
-      // this.router.navigate(['/products']);
     } catch (error) {
       console.error('Error submitting form:', error);
       this.errorMessage =
         'An error occurred while saving the product. Please try again.';
     }
+  }
+
+  createProduct(userId: string, productData: any) {
+    const productPayload = {
+      UserID: userId,
+      ProductName: productData.productName,
+      BrandID: productData.brandId,
+      CollectionID: productData.collectionId,
+      CategoryID: productData.categoryId,
+      Price: productData.price,
+      RecipientID: productData.recipientId,
+    };
+
+    this.genericService
+      .postObservable(this.CREATE_PRODUCT_URL, productPayload) // First API call
+      .pipe(
+        concatMap((response) => {
+          const productId = response?.data?.insertedId;
+
+          // Prepare the payloads for the next calls
+          const productDetailsPayload = {
+            ProductID: productId,
+            DialColorID: productData.dialColorId,
+            Diameter: productData.diameter,
+            WaterResistant: productData.waterResistant,
+            MovementID: productData.movementId,
+            StrapMaterialID: productData.strapMaterialId,
+            CaseMaterialID: productData.caseMaterialId,
+            WatchMarkersID: productData.watchMarkersId,
+            ManufacturerProductNumber: productData.manufacturerProductNumber,
+            Guarantee: productData.guarantee,
+            DeliveryOptionID: productData.deliveryOptionId,
+          };
+
+          const productDescriptionPayload = {
+            ProductID: productId,
+            Title: productData.shortTitle,
+            Content: productData.detailedDescription,
+            AdditionalDetails: productData.additionalDescription,
+          };
+
+          const productDeliveryReturnPayload = {
+            ProductID: productId,
+            DeliveryInformation: productData.deliveryInfo,
+            ReturnsPolicy: productData.returnsPolicy,
+          };
+
+          const uploadImagesPayload = {};
+
+          // Return each subsequent postObservable as an observable chain
+          return this.genericService
+            .postObservable(
+              this.CREATE_PRODUCT_DETAILS_URL,
+              productDetailsPayload
+            )
+            .pipe(
+              concatMap(() =>
+                this.genericService.postObservable(
+                  this.CREATE_PRODUCT_DESCRIPTION_URL,
+                  productDescriptionPayload
+                )
+              ),
+              concatMap(() =>
+                this.genericService.postObservable(
+                  this.CREATE_PRODUCT_RETURN_POLICY_URL,
+                  productDeliveryReturnPayload
+                )
+              )
+            );
+        })
+      )
+      .subscribe({
+        next: (response) => {},
+        error: (err) => {
+          console.error('Error creating product or related details:', err);
+        },
+      });
+  }
+
+  updateProduct(userId: string, productData: any) {
+    const productPayload = {
+      UserID: userId,
+      ProductName: productData.productName,
+      BrandID: productData.brandId,
+      CollectionID: productData.collectionId,
+      CategoryID: productData.categoryId,
+      Price: productData.price,
+      RecipientID: productData.recipientId,
+    };
+    const UPDATE_PRODUCT_URL = UPDATE_PRODUCT + `/${this.productData._id}`;
+    this.genericService
+      .putObservable(UPDATE_PRODUCT_URL, productPayload)
+      .subscribe((response) => {
+        console.log({ response });
+      });
+
+    const productDetailsPayload = {
+      DialColorID: productData.dialColorId,
+      Diameter: productData.diameter,
+      WaterResistant: productData.waterResistant,
+      MovementID: productData.movementId,
+      StrapMaterialID: productData.strapMaterialId,
+      CaseMaterialID: productData.caseMaterialId,
+      WatchMarkersID: productData.watchMarkersId,
+      ManufacturerProductNumber: productData.manufacturerProductNumber,
+      Guarantee: productData.guarantee,
+      DeliveryOptionID: productData.deliveryOptionId,
+    };
+
+    this.genericService
+      .putObservable(
+        UPDATE_PRODUCT_DETAILS + `/${this.productData._id}`,
+        productDetailsPayload
+      )
+      .subscribe((response) => {
+        console.log({ response });
+      });
+
+    const productDescriptionPayload = {
+      Title: productData.shortTitle,
+      Content: productData.detailedDescription,
+      AdditionalDetails: productData.additionalDescription,
+    };
+
+    this.genericService
+      .putObservable(
+        this.CREATE_PRODUCT_DESCRIPTION_URL + `/${this.productData._id}`,
+        productDescriptionPayload
+      )
+      .subscribe((response) => {
+        console.log({ response });
+      });
+
+    const productDeliveryReturnPayload = {
+      DeliveryInformation: productData.deliveryInfo,
+      ReturnsPolicy: productData.returnsPolicy,
+    };
+
+    this.genericService
+      .putObservable(
+        this.CREATE_PRODUCT_RETURN_POLICY_URL + `/${this.productData._id}`,
+        productDeliveryReturnPayload
+      )
+      .subscribe((response) => {
+        console.log({ response });
+      });
   }
 }

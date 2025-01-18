@@ -3,7 +3,7 @@
     <li *ngFor="let item of feature_products" class="mb-20">
       <div class="featires__product-wrapper d-flex">
         <div class="features__product-thumb mr-15">
-          <a [routerLink]="['/buyer/product-details', item.id]">
+          <a [routerLink]="['/buyer/product-details', item._id]">
             <img
               [src]="item.img"
               alt="pro-sm-1"
@@ -13,7 +13,7 @@
         </div>
         <div class="features__product-content">
           <h5>
-            <a [routerLink]="['/buyer/product-details', item.id]">{{
+            <a [routerLink]="['/buyer/product-details', item._id]">{{
               item.title
             }}</a>
           </h5>
