@@ -56,6 +56,7 @@ export class LoginComponent {
       };
       this.store.dispatch(loginUser({ url, payload }));
       this.store.select(selectUserData).subscribe((state: any) => {
+        console.log({ state });
         localStorage.setItem('token', JSON.stringify(state?.data?.token));
         this.toastrService.success('Registration successful!');
         this.loginForm.reset();

@@ -41,6 +41,7 @@ import { BuyerLayoutComponent } from './layout/buyer-layout/buyer-layout.compone
 import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
 import { BreadcrumbTwoComponent } from './components/breadcrumb/breadcrumb-two/breadcrumb-two.component';
 import { ProductDetailsUpperSellerComponent } from './components/product-details-upper-seller/product-details-upper-seller.component';
+import { ProductDetailsUpperBuyerComponent } from './components/product-details-upper-buyer/product-details-upper-buyer.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { ProductDetailsUpperSellerComponent } from './components/product-details
     AdminLayoutComponent,
     BreadcrumbTwoComponent,
     ProductDetailsUpperSellerComponent,
+    ProductDetailsUpperBuyerComponent,
   ],
   imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
   exports: [
@@ -116,6 +118,7 @@ import { ProductDetailsUpperSellerComponent } from './components/product-details
     AdminLayoutComponent,
     BreadcrumbTwoComponent,
     ProductDetailsUpperSellerComponent,
+    ProductDetailsUpperBuyerComponent,
   ],
 })
 export class SharedModule {}
