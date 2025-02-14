@@ -1,11 +1,19 @@
 <header>
-  <div id="header-sticky" class="header__area header__transparent header__transparent-2 pt-15 pb-15 box-25" [class.sticky]="sticky">
+  <div
+    id="header-sticky"
+    class="header__area header__transparent header__transparent-2 pt-15 pb-15 box-25"
+    [class.sticky]="sticky"
+  >
     <div class="container-fluid">
       <div class="row align-items-center">
         <div class="col-xl-2 col-lg-2 col-md-4 col-sm-3">
           <div class="logo">
             <a routerLink="/home/home-style-1">
-              <img src="/assets/img/logo/log-3.webp" alt="logo">
+              <img
+                src="/assets/logo/harmonic-time-high-resolution-logo-transparent.png"
+                alt="logo"
+                width="80%"
+              />
             </a>
           </div>
         </div>
@@ -17,14 +25,23 @@
           </div>
         </div>
         <div class="col-xl-3 col-lg-4 col-md-7 col-sm-8">
-          <div class="header__right p-relative d-flex justify-content-between justify-content-sm-end align-items-center">
+          <div
+            class="header__right p-relative d-flex justify-content-between justify-content-sm-end align-items-center"
+          >
             <div class="mobile-menu-btn d-lg-none">
-              <a (click)="utilsService.handleOpenMobileMenu()" class="mobile-menu-toggle cursor-pointer"><i class="fas fa-bars"></i></a>
+              <a
+                (click)="utilsService.handleOpenMobileMenu()"
+                class="mobile-menu-toggle cursor-pointer"
+                ><i class="fas fa-bars"></i
+              ></a>
             </div>
             <div class="header__action">
               <ul>
                 <li>
-                  <a (click)="utilsService.handleSearchOpen()" class="search-toggle cursor-pointer">
+                  <a
+                    (click)="utilsService.handleSearchOpen()"
+                    class="search-toggle cursor-pointer"
+                  >
                     <i class="fas fa-search"></i>
                   </a>
                 </li>
@@ -37,10 +54,12 @@
                 <li>
                   <a class="cart cursor-pointer">
                     <i class="fas fa-cart-plus"></i>
-                    <span class="cart-number-2">{{cartService.totalPriceQuantity().quantity}}</span>
+                    <span class="cart-number-2">{{
+                      cartService.totalPriceQuantity().quantity
+                    }}</span>
                   </a>
                   <!-- mini cart start -->
-                  <app-mini-cart></app-mini-cart>
+                  <!-- <app-mini-cart></app-mini-cart> -->
                   <!-- mini cart end -->
                 </li>
               </ul>

@@ -11,7 +11,6 @@ import { HomeFiveComponent } from './home-five/home-five.component';
 import { HomeSixComponent } from './home-six/home-six.component';
 import { HomeSevenComponent } from './home-seven/home-seven.component';
 
-
 @NgModule({
   declarations: [
     HomeOneComponent,
@@ -22,11 +21,6 @@ import { HomeSevenComponent } from './home-seven/home-seven.component';
     HomeSixComponent,
     HomeSevenComponent,
   ],
-  imports: [
-    CommonModule,
-    HomeRoutingModule,
-    SharedModule,
-    ShopModule,
-  ]
+  imports: [CommonModule, HomeRoutingModule, SharedModule, ShopModule],
 })
-export class HomeModule { }
+export class HomeModule {}

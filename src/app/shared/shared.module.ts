@@ -35,7 +35,13 @@ import { BlogReplyFormComponent } from './components/forms/blog-reply-form/blog-
 import { ProductModalComponent } from './components/modals/product-modal/product-modal.component';
 import { ContactFormComponent } from './components/forms/contact-form/contact-form.component';
 import { OffcanvasComponent } from './components/offcanvas/offcanvas.component';
-
+import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
+import { SellerLayoutComponent } from './layout/seller-layout/seller-layout.component';
+import { BuyerLayoutComponent } from './layout/buyer-layout/buyer-layout.component';
+import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
+import { BreadcrumbTwoComponent } from './components/breadcrumb/breadcrumb-two/breadcrumb-two.component';
+import { ProductDetailsUpperSellerComponent } from './components/product-details-upper-seller/product-details-upper-seller.component';
+import { ProductDetailsUpperBuyerComponent } from './components/product-details-upper-buyer/product-details-upper-buyer.component';
 
 @NgModule({
   declarations: [
@@ -71,14 +77,16 @@ import { OffcanvasComponent } from './components/offcanvas/offcanvas.component';
     ProductModalComponent,
     ContactFormComponent,
     OffcanvasComponent,
+    AuthLayoutComponent,
+    SellerLayoutComponent,
+    BuyerLayoutComponent,
+    AdminLayoutComponent,
+    BreadcrumbTwoComponent,
+    ProductDetailsUpperSellerComponent,
+    ProductDetailsUpperBuyerComponent,
   ],
-  imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
-  exports:[
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
+  exports: [
     HeaderOneComponent,
     BlogItemComponent,
     SubscribeAreaComponent,
@@ -106,6 +114,11 @@ import { OffcanvasComponent } from './components/offcanvas/offcanvas.component';
     ProductModalComponent,
     ContactFormComponent,
     OffcanvasComponent,
-  ]
+    BuyerLayoutComponent,
+    AdminLayoutComponent,
+    BreadcrumbTwoComponent,
+    ProductDetailsUpperSellerComponent,
+    ProductDetailsUpperBuyerComponent,
+  ],
 })
-export class SharedModule { }
+export class SharedModule {}

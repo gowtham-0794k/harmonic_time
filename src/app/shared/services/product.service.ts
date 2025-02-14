@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
-import { of,Observable } from 'rxjs';
+import { of, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import product_data from '../data/product-data';
 import { IProduct } from '../types/product-d-t';
-import blog_data from '../data/blog-data';
-import IBlogType from '../types/blog-d-t';
 
 const all_products = product_data;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
   public filter_offcanvas: boolean = false;
@@ -20,7 +18,7 @@ export class ProductService {
     return of(product_data);
   }
 
-  constructor() { }
+  constructor() {}
 
   activeImg: string | undefined;
 
@@ -30,31 +28,40 @@ export class ProductService {
 
   // Get Products By id
   public getProductById(id: string): Observable<IProduct | undefined> {
-    return this.products.pipe(map(items => {
-      const product = items.find(p => Number(p.id) === Number(id));
-      if(product){
-        this.handleImageActive(product.img)
-      }
-      return product;
-    }));
+    return this.products.pipe(
+      map((items) => {
+        const product = items.find((p) => Number(p.id) === Number(id));
+        if (product) {
+          this.handleImageActive(product.img);
+        }
+        return product;
+      })
+    );
   }
-   // Get related Products
-   public getRelatedProducts(productId: number,brand:string): Observable<IProduct[]> {
-    return this.products.pipe(map(items => {
-      return items.filter(
-        (p) => p.brand.toLowerCase().includes(brand.toLowerCase()) &&
-          p.id !== Number(productId)
-      )
-    }));
+  // Get related Products
+  public getRelatedProducts(
+    productId: number,
+    brand: string
+  ): Observable<IProduct[]> {
+    return this.products.pipe(
+      map((items) => {
+        return items.filter(
+          (p) =>
+            p.brand.toLowerCase().includes(brand.toLowerCase()) &&
+            p.id !== Number(productId)
+        );
+      })
+    );
   }
   // Get max price
-  public get maxPrice(): number {
-    const max_price = all_products.reduce((max, product) => {
-      return product.price > max ? product.price : max;
+  public maxPrice(all_data: any): number {
+    const max_price = all_data.reduce((max: number, product: any) => {
+      return product.Price > max ? product.Price : max;
     }, 0);
-    return max_price
+    console.log({ max_price });
+    return max_price;
   }
-// shop filterSelect
+  // shop filterSelect
   public filterSelect = [
     { value: 'asc', text: 'Default Sorting' },
     { value: 'low', text: 'Low to Hight' },
@@ -62,18 +69,18 @@ export class ProductService {
     { value: 'on-sale', text: 'On Sale' },
   ];
 
-    // Get Product Filter
-    public filterProducts(): Observable<IProduct[]> {
-      return this.products.pipe(map(product => {
+  // Get Product Filter
+  public filterProducts(): Observable<IProduct[]> {
+    return this.products.pipe(
+      map((product) => {
         return product;
-      }));
-    }
+      })
+    );
+  }
 
-
-      // Sorting Filter
+  // Sorting Filter
   public sortProducts(products: IProduct[], payload: string): any {
-
-    if(payload === 'asc') {
+    if (payload === 'asc') {
       return products.sort((a, b) => {
         if (a.id < b.id) {
           return -1;
@@ -81,9 +88,9 @@ export class ProductService {
           return 1;
         }
         return 0;
-      })
+      });
     } else if (payload === 'sale') {
-      return products.filter((p) => p.discount! > 0)
+      return products.filter((p) => p.discount! > 0);
     } else if (payload === 'low') {
       return products.sort((a, b) => {
         if (a.price < b.price) {
@@ -92,7 +99,7 @@ export class ProductService {
           return 1;
         }
         return 0;
-      })
+      });
     } else if (payload === 'high') {
       return products.sort((a, b) => {
         if (a.price > b.price) {
@@ -101,7 +108,7 @@ export class ProductService {
           return 1;
         }
         return 0;
-      })
+      });
     }
   }
 
@@ -110,7 +117,11 @@ export class ProductService {
     ------------- Product Pagination  -----------
     ---------------------------------------------
   */
-  public getPager(totalItems: number, currentPage: number = 1, pageSize: number = 9) {
+  public getPager(
+    totalItems: number,
+    currentPage: number = 1,
+    pageSize: number = 9
+  ) {
     // calculate total pages
     let totalPages = Math.ceil(totalItems / pageSize);
 
@@ -128,12 +139,12 @@ export class ProductService {
     if (totalPages <= 5) {
       startPage = 1;
       endPage = totalPages;
-    } else if(currentPage < paginateRange - 1){
+    } else if (currentPage < paginateRange - 1) {
       startPage = 1;
       endPage = startPage + paginateRange - 1;
     } else {
       startPage = currentPage - 1;
-      endPage =  currentPage + 1;
+      endPage = currentPage + 1;
     }
 
     // calculate start and end item indexes
@@ -141,7 +152,9 @@ export class ProductService {
     let endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
 
     // create an array of pages to ng-repeat in the pager control
-    let pages = Array.from(Array((endPage + 1) - startPage).keys()).map(i => startPage + i);
+    let pages = Array.from(Array(endPage + 1 - startPage).keys()).map(
+      (i) => startPage + i
+    );
 
     // return object with all pager properties required by the view
     return {
@@ -153,7 +166,7 @@ export class ProductService {
       endPage: endPage,
       startIndex: startIndex,
       endIndex: endIndex,
-      pages: pages
+      pages: pages,
     };
   }
 }

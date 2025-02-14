@@ -29,12 +29,9 @@ import { ShopDetailsComponent } from './pages/shop-details/shop-details.componen
 import { ProductDetailsAreaComponent } from './product-details-area/product-details-area.component';
 import { RelatedProductsComponent } from './related-products/related-products.component';
 import { DynamicShopDetailsComponent } from './pages/dynamic-shop-details/dynamic-shop-details.component';
-import { CartComponent } from './pages/cart/cart.component';
-import { WishlistComponent } from './pages/wishlist/wishlist.component';
 import { CompareComponent } from './pages/compare/compare.component';
 import { SearchComponent } from './pages/search/search.component';
-
-
+import { ProductDetailsAreaSellerComponent } from './product-details-area-seller/product-details-area-seller.component';
 
 @NgModule({
   declarations: [
@@ -61,10 +58,9 @@ import { SearchComponent } from './pages/search/search.component';
     ProductDetailsAreaComponent,
     RelatedProductsComponent,
     DynamicShopDetailsComponent,
-    CartComponent,
-    WishlistComponent,
     CompareComponent,
     SearchComponent,
+    ProductDetailsAreaSellerComponent,
   ],
   imports: [
     CommonModule,
@@ -74,7 +70,7 @@ import { SearchComponent } from './pages/search/search.component';
     NgxSliderModule,
     FormsModule,
   ],
-  exports:[
+  exports: [
     ProductItemComponent,
     ProductBannerComponent,
     ShopCategoryComponent,
@@ -83,6 +79,10 @@ import { SearchComponent } from './pages/search/search.component';
     SaleOfProductsComponent,
     ProductItemTwoComponent,
     ShopComponent,
-  ]
+    ProductDetailsAreaComponent,
+    ProductDetailsAreaSellerComponent,
+    ShopAreaComponent,
+    RelatedProductsComponent,
+  ],
 })
-export class ShopModule { }
+export class ShopModule {}

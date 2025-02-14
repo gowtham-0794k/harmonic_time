@@ -7,12 +7,7 @@ import { BlogTwoColComponent } from './blog-two-col/blog-two-col.component';
 import { BlogThreeColComponent } from './blog-three-col/blog-three-col.component';
 import { BlogDetailsComponent } from './blog-details/blog-details.component';
 import { BlogDynamicDetailsComponent } from './blog-dynamic-details/blog-dynamic-details.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { CheckoutComponent } from './checkout/checkout.component';
 import { ContactComponent } from './contact/contact.component';
-import { AccountComponent } from './account/account.component';
-
 
 const routes: Routes = [
   {
@@ -51,29 +46,9 @@ const routes: Routes = [
     title: 'Blog Details Page',
   },
   {
-    path: 'login',
-    component: LoginComponent,
-    title: 'Login Page',
-  },
-  {
-    path: 'register',
-    component: RegisterComponent,
-    title: 'Register Page',
-  },
-  {
-    path: 'checkout',
-    component: CheckoutComponent,
-    title: 'Checkout Page',
-  },
-  {
     path: 'contact',
     component: ContactComponent,
     title: 'Contact Page',
-  },
-  {
-    path: 'account',
-    component: AccountComponent,
-    title: 'Account Page',
   },
 ];
 
@@ -81,5 +56,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-
 export class PagesRoutingModule {}

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IProduct } from '../../types/product-d-t';
+import { IProduct, Product } from '../../types/product-d-t';
 import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 
@@ -9,7 +9,7 @@ import { CartService } from '../../services/cart.service';
   styleUrls: ['./product-details-upper.component.scss'],
 })
 export class ProductDetailsUpperComponent {
-  @Input() product!: IProduct;
+  @Input() product!: any;
   @Input() bottomShow: boolean = true;
   @Input() style_2: boolean = false;
 
@@ -20,7 +20,7 @@ export class ProductDetailsUpperComponent {
 
   ngOnInit() {
     if (this.product) {
-      this.productService.activeImg = this.product.img;
+      this.productService.activeImg = this.product.Images[0].ImageURL;
     }
   }
 }

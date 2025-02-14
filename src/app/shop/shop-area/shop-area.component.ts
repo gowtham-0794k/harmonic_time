@@ -1,14 +1,16 @@
-import { Component,Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ViewportScroller } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from 'src/app/shared/services/product.service';
 import { UtilsService } from 'src/app/shared/services/utils.service';
 import { IProduct } from 'src/app/shared/types/product-d-t';
+import { GenericService } from '@shared/services/generic.service';
+import { PRODUCT } from '@config/index';
 
 @Component({
   selector: 'app-shop-area',
   templateUrl: './shop-area.component.html',
-  styleUrls: ['./shop-area.component.scss']
+  styleUrls: ['./shop-area.component.scss'],
 })
 export class ShopAreaComponent {
   @Input() shop_right = false;
@@ -17,7 +19,7 @@ export class ShopAreaComponent {
 
   public products: IProduct[] = [];
   public minPrice: number = 0;
-  public maxPrice: number = this.productService.maxPrice;
+  public maxPrice: number = 0;
   public niceSelectOptions = this.productService.filterSelect;
   public brands: string[] = [];
   public category: string | null = null;
@@ -35,10 +37,10 @@ export class ShopAreaComponent {
     public utilsService: UtilsService,
     private route: ActivatedRoute,
     private router: Router,
-    private viewScroller: ViewportScroller
+    private viewScroller: ViewportScroller,
+    private genericService: GenericService
   ) {
     this.route.queryParams.subscribe((params) => {
-      // console.log('params', params);
       this.minPrice = params['minPrice'] ? params['minPrice'] : this.minPrice;
       this.maxPrice = params['maxPrice'] ? params['maxPrice'] : this.maxPrice;
       this.brand = params['brand'] ? params['brand'] : null;
@@ -51,74 +53,109 @@ export class ShopAreaComponent {
 
       // Get Filtered Products..
       this.productService.filterProducts().subscribe((response) => {
+        console.log({ response });
         // Sorting Filter
-        this.products = this.productService.sortProducts(response, this.sortBy);
+        // this.products = this.productService.sortProducts(response, this.sortBy);
         // Category Filter
-        if (this.category){
-          this.products = this.products.filter(
-            (p) => this.utilsService.convertToURL(p.parentCategory) === this.category
-          );
-        }
+        // if (this.category) {
+        //   this.products = this.products.filter(
+        //     (p) =>
+        //       this.utilsService.convertToURL(p.parentCategory) === this.category
+        //   );
+        // }
         // sub category Filter
-        if (this.subcategory){
-          this.products = this.products.filter(
-            (p) => this.utilsService.convertToURL(p.category) === this.subcategory
-          );
-        }
+        // if (this.subcategory) {
+        //   this.products = this.products.filter(
+        //     (p) =>
+        //       this.utilsService.convertToURL(p.category) === this.subcategory
+        //   );
+        // }
         // size Filter
-        if (this.size){
-          this.products = this.products.filter((product) => {
-            return (
-              product.sizes &&
-              product.sizes.some((size) => size.toLowerCase() === this.size)
-            );
-          });
-        }
+        // if (this.size) {
+        //   this.products = this.products.filter((product) => {
+        //     return (
+        //       product.sizes &&
+        //       product.sizes.some((size) => size.toLowerCase() === this.size)
+        //     );
+        //   });
+        // }
         // color Filter
-        if (this.color){
-          this.products = this.products.filter((product) => {
-            return (
-              product.colors &&
-              product.colors.some((c) => c.split(' ').join('-').toLowerCase() === this.color)
-            );
-          });
-        }
+        // if (this.color) {
+        //   this.products = this.products.filter((product) => {
+        //     return (
+        //       product.colors &&
+        //       product.colors.some(
+        //         (c) => c.split(' ').join('-').toLowerCase() === this.color
+        //       )
+        //     );
+        //   });
+        // }
         // brand Filter
-        if (this.brand){
-          this.products = this.products.filter((p) => p.brand.toLowerCase() === this.brand);
-        }
-
+        // if (this.brand) {
+        //   this.products = this.products.filter(
+        //     (p) => p.brand.toLowerCase() === this.brand
+        //   );
+        // }
         // Price Filter
-        this.products = this.products.filter(
-          (p) => p.price >= Number(this.minPrice) && p.price <= Number(this.maxPrice)
-        );
+        // this.products = this.products.filter(
+        //   (p) =>
+        //     p.price >= Number(this.minPrice) && p.price <= Number(this.maxPrice)
+        // );
         // Paginate Products
-        this.paginate = this.productService.getPager(this.products.length,Number(+this.pageNo),this.pageSize);
-        this.products = this.products.slice(this.paginate.startIndex,this.paginate.endIndex + 1);
+        // this.paginate = this.productService.getPager(
+        //   this.products.length,
+        //   Number(+this.pageNo),
+        //   this.pageSize
+        // );
+        // this.products = this.products.slice(
+        //   this.paginate.startIndex,
+        //   this.paginate.endIndex + 1
+        // );
       });
     });
   }
 
-  ngOnInit(){}
-  // Append filter value to Url
-  updateFilter(tags: any) {
-    console.log('tags', tags);
+  ngOnInit() {
+    const url = PRODUCT;
+    this.genericService.getObservable(url).subscribe({
+      next: (response) => {
+        console.log({ response });
+        this.products = response?.data;
+        this.maxPrice = this.productService.maxPrice(this.products);
+        this.paginate = this.productService.getPager(
+          this.products.length,
+          Number(+this.pageNo),
+          this.pageSize
+        );
+        this.products = this.products.slice(
+          this.paginate.startIndex,
+          this.paginate.endIndex + 1
+        );
+      },
+      error: (err) => {
+        console.error(`Error fetching data for :`, err);
+      },
+    });
   }
+  // Append filter value to Url
+  updateFilter(tags: any) {}
 
   onSortingChange(value: string) {
     this.sortByFilter(value);
   }
   // SortBy Filter
-  sortByFilter(value:string) {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { sortBy: value ? value : null},
-      queryParamsHandling: 'merge', // preserve the existing query params in the route
-      skipLocationChange: false  // do trigger navigation
-    }).finally(() => {
-      this.viewScroller.setOffset([120, 120]);
-      this.viewScroller.scrollToAnchor('products'); // Anchore Link
-    });
+  sortByFilter(value: string) {
+    this.router
+      .navigate([], {
+        relativeTo: this.route,
+        queryParams: { sortBy: value ? value : null },
+        queryParamsHandling: 'merge', // preserve the existing query params in the route
+        skipLocationChange: false, // do trigger navigation
+      })
+      .finally(() => {
+        this.viewScroller.setOffset([120, 120]);
+        this.viewScroller.scrollToAnchor('products'); // Anchore Link
+      });
   }
 
   // product Pagination
@@ -136,9 +173,9 @@ export class ShopAreaComponent {
       });
   }
 
-  handleResetFilter () {
+  handleResetFilter() {
     this.minPrice = 0;
-    this.maxPrice = this.productService.maxPrice;
+    this.maxPrice = this.productService.maxPrice(this.products);
     this.router.navigate(['/shop']);
   }
 }

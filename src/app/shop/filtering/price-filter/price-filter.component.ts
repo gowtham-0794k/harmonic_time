@@ -1,5 +1,14 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import {Component,Output,Input,EventEmitter,Inject,PLATFORM_ID} from '@angular/core';
+import {
+  Component,
+  Output,
+  Input,
+  EventEmitter,
+  Inject,
+  PLATFORM_ID,
+  SimpleChanges,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Options } from 'ngx-slider-v2';
 import { ViewportScroller } from '@angular/common';
@@ -8,62 +17,82 @@ import { ProductService } from 'src/app/shared/services/product.service';
 @Component({
   selector: 'app-price-filter',
   templateUrl: './price-filter.component.html',
-  styleUrls: ['./price-filter.component.scss']
+  styleUrls: ['./price-filter.component.scss'],
 })
 export class PriceFilterComponent {
-   // Using Output EventEmitter
-   @Output() priceFilter: EventEmitter<any> = new EventEmitter<any>();
+  // Using Output EventEmitter
+  @Output() priceFilter: EventEmitter<any> = new EventEmitter<any>();
 
-   // define min, max and range
-   @Input() min!: number;
-   @Input() max!: number;
+  // define min, max and range
+  @Input() min!: number;
+  @Input() max!: number;
 
-   public collapse: boolean = true;
-   public isBrowser: boolean = false;
+  maxValue: number = 0;
 
-   public price: { minPrice: number; maxPrice: number } = {
-     minPrice: 0,
-     maxPrice: this.productService.maxPrice,
-   };
+  public collapse: boolean = true;
+  public isBrowser: boolean = false;
 
-   options: Options = {
-     floor: 0,
-     ceil: this.productService.maxPrice,
-     hidePointerLabels: true,
-   };
+  public price: { minPrice: number; maxPrice: number } = {
+    minPrice: 0,
+    maxPrice: 0,
+  };
 
-   constructor(
-     @Inject(PLATFORM_ID) private platformId: Object,
-     public productService: ProductService,
-     private route: ActivatedRoute,
-     private router: Router,
-     private viewScroller: ViewportScroller,
-   ) {
-     if (isPlatformBrowser(this.platformId)) {
-       this.isBrowser = true; // for ssr
-     }
-   }
+  options: Options = {
+    floor: 0,
+    ceil: 0,
+    hidePointerLabels: true,
+  };
 
-   ngOnInit(): void {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    public productService: ProductService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private viewScroller: ViewportScroller,
+    private cdr: ChangeDetectorRef
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.isBrowser = true; // for ssr
+    }
+  }
 
-   // Range Changed
-   appliedFilter(event: any) {
-     this.price = { minPrice: event.value, maxPrice: event.highValue };
-     this.priceFilter.emit(this.price);
-   }
+  ngOnInit(): void {
+    console.log(this.maxValue);
+  }
 
-    // handle price filtering
-    handlePriceRoute () {
-     this.router
-       .navigate([], {
-         relativeTo: this.route,
-         queryParams: this.price,
-         queryParamsHandling: 'merge', // preserve the existing query params in the route
-         skipLocationChange: false, // do trigger navigation
-       })
-       .finally(() => {
-         this.viewScroller.setOffset([120, 120]);
-         this.viewScroller.scrollToAnchor('products')
-       });
-   }
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['max']) {
+      this.cdr.detectChanges();
+      console.log('Data changed:', this.max);
+      this.maxValue = this.max;
+      this.price = { minPrice: 0, maxPrice: this.max };
+      // this.options = {
+      //   floor: 0,
+      //   ceil: this.max,
+      //   hidePointerLabels: true,
+      // };
+      // this.priceFilter.emit(this.price);
+    }
+  }
+
+  // Range Changed
+  appliedFilter(event: any) {
+    // this.price = { minPrice: event.value, maxPrice: event.highValue };
+    // this.priceFilter.emit(this.price);
+  }
+
+  // handle price filtering
+  handlePriceRoute() {
+    // this.router
+    //   .navigate([], {
+    //     relativeTo: this.route,
+    //     queryParams: this.price,
+    //     queryParamsHandling: 'merge', // preserve the existing query params in the route
+    //     skipLocationChange: false, // do trigger navigation
+    //   })
+    //   .finally(() => {
+    //     this.viewScroller.setOffset([120, 120]);
+    //     this.viewScroller.scrollToAnchor('products');
+    //   });
+  }
 }

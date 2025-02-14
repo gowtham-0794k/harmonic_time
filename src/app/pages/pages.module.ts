@@ -11,14 +11,8 @@ import { BlogTwoColComponent } from './blog-two-col/blog-two-col.component';
 import { BlogThreeColComponent } from './blog-three-col/blog-three-col.component';
 import { BlogDetailsComponent } from './blog-details/blog-details.component';
 import { BlogDynamicDetailsComponent } from './blog-dynamic-details/blog-dynamic-details.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { CheckoutComponent } from './checkout/checkout.component';
 import { ContactComponent } from './contact/contact.component';
-import { AccountComponent } from './account/account.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-
-
 
 @NgModule({
   declarations: [
@@ -29,11 +23,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     BlogThreeColComponent,
     BlogDetailsComponent,
     BlogDynamicDetailsComponent,
-    LoginComponent,
-    RegisterComponent,
-    CheckoutComponent,
     ContactComponent,
-    AccountComponent,
     NotFoundComponent,
   ],
   imports: [
@@ -42,6 +32,6 @@ import { NotFoundComponent } from './not-found/not-found.component';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-  ]
+  ],
 })
-export class PagesModule { }
+export class PagesModule {}

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import category_data from 'src/app/shared/data/category-data';
 import { UtilsService } from 'src/app/shared/services/utils.service';
@@ -10,7 +10,8 @@ import { ICategoryType } from 'src/app/shared/types/category-d-t';
   styleUrls: ['./category-filter.component.scss'],
 })
 export class CategoryFilterComponent {
-  public categoryData: ICategoryType[] = category_data;;
+  @Input() products!: any;
+  public categoryData: ICategoryType[] = category_data;
   public category: string | null = null;
   public subcategory: string | null = null;
 
@@ -23,6 +24,14 @@ export class CategoryFilterComponent {
       this.category = params['category'] ? params['category'] : null;
       this.subcategory = params['subcategory'] ? params['subcategory'] : null;
     });
+  }
+
+  ngOnInit(): void {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['products']) {
+      console.log('Data changed:', this.products);
+    }
   }
 
   public handleParentCategory(categoryValue: string): void {
