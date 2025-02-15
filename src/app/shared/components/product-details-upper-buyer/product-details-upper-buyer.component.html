@@ -29,19 +29,7 @@
           </div>
         </nav>
       </div>
-      <!-- <div class="mb-20">
-          <div class="product__modal-img product__thumb w-img">
-            <img [src]="productService.activeImg" alt="product-img" />
-            <div *ngIf="product.discount || product.new" class="product__sale">
-              <span *ngIf="product.new || product.discount" class="new">new</span>
-              <span *ngIf="product.discount" class="percent"
-                >-{{ product.discount }}%</span
-              >
-            </div>
-          </div>
-        </div> -->
     </div>
-    <!-- {{ productService.activeImg | json }} -->
     <div *ngIf="style_2" class="product__modal-box">
       <div class="mb-20">
         <div class="product__modal-img w-img">
@@ -112,12 +100,12 @@
         </div>
       </div>
 
-      <div class="pro-cart-btn mt-30">
+      <div class="pro-cart-btn">
         <a
-          (click)="editProduct(product)"
+          (click)="cartService.addCartProduct(product)"
           class="add-cart-btn mb-20 cursor-pointer"
         >
-          Edit
+          + Add to Cart
         </a>
       </div>
     </div>

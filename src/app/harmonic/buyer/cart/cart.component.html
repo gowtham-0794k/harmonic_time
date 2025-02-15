@@ -1,7 +1,4 @@
 <app-breadcrumb-two title="Cart" subtitle="Cart"></app-breadcrumb-two>
-<!-- breadcrumb end -->
-
-<!-- Cart Area Strat-->
 <section class="cart-area pt-100 pb-100">
   <div class="container">
     <div
@@ -22,46 +19,30 @@
                 <th class="cart-product-name">Product</th>
                 <th class="product-price">Unit Price</th>
                 <th class="product-quantity">Quantity</th>
-                <th class="product-subtotal">Total</th>
                 <th class="product-remove">Remove</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let item of cartService.getCartProducts()">
                 <td class="product-thumbnail">
-                  <a [routerLink]="['/shop/shop-details', item.id]">
-                    <img [src]="item.img" alt="product-img" />
+                  <a [routerLink]="['/shop/shop-details', item._id]">
+                    <img [src]="item.Images[0]?.ImageURL" alt="product-img" />
                   </a>
                 </td>
                 <td class="product-name">
-                  <a [routerLink]="['/shop/shop-details', item.id]">{{
-                    item.title
+                  <a [routerLink]="['/shop/shop-details', item._id]">{{
+                    item.ProductName
                   }}</a>
                 </td>
                 <td class="product-price">
-                  <span class="amount">${{ item.price.toFixed(2) }}</span>
+                  <span class="amount">{{
+                    item.Price | currency : "INR"
+                  }}</span>
                 </td>
                 <td class="product-quantity">
                   <div class="cart-plus-minus">
-                    <input type="text" [value]="item.orderQuantity" readonly />
-                    <div
-                      (click)="cartService.quantityDecrement(item)"
-                      class="dec qtybutton"
-                    >
-                      -
-                    </div>
-                    <div
-                      (click)="cartService.addCartProduct(item)"
-                      class="inc qtybutton"
-                    >
-                      +
-                    </div>
+                    <span class="amount">1</span>
                   </div>
-                </td>
-                <td class="product-subtotal">
-                  <span class="amount">
-                    ${{ (item.price * item.orderQuantity!).toFixed(2) }}
-                  </span>
                 </td>
                 <td class="product-remove">
                   <a
@@ -75,7 +56,7 @@
             </tbody>
           </table>
         </div>
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-12">
             <div class="coupon-all">
               <form (ngSubmit)="handleCouponSubmit()">
@@ -97,19 +78,9 @@
                   </button>
                 </div>
               </form>
-              <div class="coupon2">
-                <button
-                  (click)="cartService.clear_cart()"
-                  class="os-btn os-btn-black"
-                  name="update_cart"
-                  type="submit"
-                >
-                  Clear cart
-                </button>
-              </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="row">
           <div class="col-md-5 ml-auto">
             <div class="cart-page-total">
@@ -117,22 +88,20 @@
               <ul class="mb-20">
                 <li>
                   Subtotal
-                  <span
-                    >${{
-                      cartService.totalPriceQuantity().total.toFixed(2)
-                    }}</span
-                  >
+                  <span>{{
+                    cartService.computeCartTotal(cartService.getCartProducts())
+                      .total | currency : "INR"
+                  }}</span>
                 </li>
                 <li>
                   Total
-                  <span
-                    >${{
-                      cartService.totalPriceQuantity().total.toFixed(2)
-                    }}</span
-                  >
+                  <span>{{
+                    cartService.computeCartTotal(cartService.getCartProducts())
+                      .total | currency : "INR"
+                  }}</span>
                 </li>
               </ul>
-              <a class="os-btn" routerLink="/pages/checkout"
+              <a class="os-btn" routerLink="/buyer/checkout"
                 >Proceed to checkout</a
               >
             </div>

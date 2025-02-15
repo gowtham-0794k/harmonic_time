@@ -8,7 +8,7 @@ import { IProduct } from 'src/app/shared/types/product-d-t';
   styleUrls: ['./product-details-area-seller.component.scss'],
 })
 export class ProductDetailsAreaSellerComponent {
-  @Input() product: any; // IProduct | undefined;
+  @Input() product: any;
 
   constructor(private router: Router) {}
 

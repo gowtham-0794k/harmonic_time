@@ -11,7 +11,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class CheckoutComponent {
   public isOpenLogin = false;
   public isOpenCoupon = false;
-  public shipCost: number = 0;
   public couponCode: string = '';
   public payment_name: string = '';
 
@@ -25,14 +24,6 @@ export class CheckoutComponent {
   }
   handleOpenCoupon() {
     this.isOpenCoupon = !this.isOpenCoupon;
-  }
-
-  handleShippingCost(value: number | string) {
-    if (value === 'free') {
-      this.shipCost = 0;
-    } else {
-      this.shipCost = value as number;
-    }
   }
 
   handleCouponSubmit() {

@@ -58,7 +58,6 @@ export class ProductService {
     const max_price = all_data.reduce((max: number, product: any) => {
       return product.Price > max ? product.Price : max;
     }, 0);
-    console.log({ max_price });
     return max_price;
   }
   // shop filterSelect

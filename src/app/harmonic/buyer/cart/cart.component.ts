@@ -9,8 +9,13 @@ import { CartService } from 'src/app/shared/services/cart.service';
 export class CartComponent {
   couponCode: string = '';
   shipCost: number = 0;
+  cartProducts$: any = this.cartService.getCartProducts();
 
   constructor(public cartService: CartService) {}
+
+  ngOnInit(): void {
+    this.cartService.loadCartProducts();
+  }
 
   handleCouponSubmit() {
     if (this.couponCode) {

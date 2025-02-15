@@ -41,6 +41,7 @@ import {
 import { AppState } from 'src/app/store/app.state';
 import { selectUserData } from 'src/app/store/selectors/user.selectors';
 import { concatMap } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 interface SelectOption {
   id: number;
@@ -106,7 +107,8 @@ export class AddEditComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private genericService: GenericService,
-    private userService: UserService
+    private userService: UserService,
+    private toastrService: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -163,7 +165,6 @@ export class AddEditComponent implements OnInit {
 
   private checkForEditMode(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    console.log({ id });
     if (id) {
       this.isEditing = true;
       this.productId = id;
@@ -488,7 +489,9 @@ export class AddEditComponent implements OnInit {
         })
       )
       .subscribe({
-        next: (response) => {},
+        next: (response) => {
+          this.toastrService.success('Product created successfully !');
+        },
         error: (err) => {
           console.error('Error creating product or related details:', err);
         },
@@ -508,9 +511,7 @@ export class AddEditComponent implements OnInit {
     const UPDATE_PRODUCT_URL = UPDATE_PRODUCT + `/${this.productData._id}`;
     this.genericService
       .putObservable(UPDATE_PRODUCT_URL, productPayload)
-      .subscribe((response) => {
-        console.log({ response });
-      });
+      .subscribe((response) => {});
 
     const productDetailsPayload = {
       DialColorID: productData.dialColorId,
@@ -530,9 +531,7 @@ export class AddEditComponent implements OnInit {
         UPDATE_PRODUCT_DETAILS + `/${this.productData._id}`,
         productDetailsPayload
       )
-      .subscribe((response) => {
-        console.log({ response });
-      });
+      .subscribe((response) => {});
 
     const productDescriptionPayload = {
       Title: productData.shortTitle,
@@ -545,9 +544,7 @@ export class AddEditComponent implements OnInit {
         this.CREATE_PRODUCT_DESCRIPTION_URL + `/${this.productData._id}`,
         productDescriptionPayload
       )
-      .subscribe((response) => {
-        console.log({ response });
-      });
+      .subscribe((response) => {});
 
     const productDeliveryReturnPayload = {
       DeliveryInformation: productData.deliveryInfo,
@@ -559,8 +556,6 @@ export class AddEditComponent implements OnInit {
         this.CREATE_PRODUCT_RETURN_POLICY_URL + `/${this.productData._id}`,
         productDeliveryReturnPayload
       )
-      .subscribe((response) => {
-        console.log({ response });
-      });
+      .subscribe((response) => {});
   }
 }

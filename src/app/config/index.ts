@@ -34,3 +34,7 @@ export const GET_PRODUCT_BY_ID = baseUrl + '/api/products/getAllProduct/';
 
 export const UPDATE_PRODUCT = baseUrl + '/api/products/getAllProduct';
 export const UPDATE_PRODUCT_DETAILS = baseUrl + '/api/products/productDetails';
+
+export const USER_CART = baseUrl + '/api/cart/user/';
+export const ADD_TO_CART = baseUrl + '/api/cart';
+export const DELETE_CART_ITEM = baseUrl + '/api/cart/';

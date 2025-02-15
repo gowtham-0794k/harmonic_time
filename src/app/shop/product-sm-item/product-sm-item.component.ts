@@ -18,9 +18,9 @@ export class ProductSmItemComponent {
   }
 
   // Function to check if an item is in the cart
-  isItemInCart(item: IProduct): boolean {
+  isItemInCart(item: any): boolean {
     return this.cartService
       .getCartProducts()
-      .some((prd: IProduct) => prd.id === item.id);
+      .some((prd: any) => prd.ProductID === item._id);
   }
 }

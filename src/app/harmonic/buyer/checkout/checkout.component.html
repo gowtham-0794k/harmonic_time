@@ -1,8 +1,4 @@
-<!-- breadcrumb start -->
-<app-breadcrumb-one title="Checkout" subtitle="Checkout"></app-breadcrumb-one>
-<!-- breadcrumb end -->
-
-<!-- coupon-area start -->
+<app-breadcrumb-two title="Checkout" subtitle="Checkout"></app-breadcrumb-two>
 <section
   class="coupon-area pt-100 pb-30"
   *ngIf="cartService.getCartProducts().length > 0"
@@ -11,7 +7,6 @@
     <div class="row">
       <div class="col-md-6">
         <div class="coupon-accordion">
-          <!-- ACCORDION START -->
           <h3>
             Returning customer?
             <span id="showlogin" (click)="handleOpenLogin()"
@@ -50,12 +45,10 @@
               </form>
             </div>
           </div>
-          <!-- ACCORDION END -->
         </div>
       </div>
-      <div class="col-md-6">
+      <!-- <div class="col-md-6">
         <div class="coupon-accordion">
-          <!-- ACCORDION START -->
           <h3>
             Have a coupon?
             <span id="showcoupon" (click)="handleOpenCoupon()"
@@ -78,15 +71,11 @@
               </form>
             </div>
           </div>
-          <!-- ACCORDION END -->
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </section>
-<!-- coupon-area end -->
-
-<!-- checkout-area start -->
 <section class="checkout-area pb-70">
   <div class="container">
     <div
@@ -119,7 +108,6 @@
                         Dominican Republic
                       </option>
                     </select>
-                    <!-- error message -->
                     <span
                       *ngIf="
                         country?.hasError('required') &&
@@ -129,7 +117,6 @@
                     >
                       Country is required
                     </span>
-                    <!-- error message -->
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -141,7 +128,6 @@
                       placeholder=""
                       formControlName="firstName"
                     />
-                    <!-- error message -->
                     <span
                       *ngIf="
                         firstName?.hasError('required') &&
@@ -151,7 +137,6 @@
                     >
                       First Name is required
                     </span>
-                    <!-- error message -->
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -163,7 +148,6 @@
                       placeholder=""
                       formControlName="lastName"
                     />
-                    <!-- error message -->
                     <span
                       *ngIf="
                         lastName?.hasError('required') &&
@@ -173,7 +157,6 @@
                     >
                       Last Name is required
                     </span>
-                    <!-- error message -->
                   </div>
                 </div>
                 <div class="col-md-12">
@@ -196,7 +179,6 @@
                       placeholder="Street address"
                       formControlName="address"
                     />
-                    <!-- error message -->
                     <span
                       *ngIf="
                         address?.hasError('required') &&
@@ -206,7 +188,6 @@
                     >
                       Address is required
                     </span>
-                    <!-- error message -->
                   </div>
                 </div>
                 <div class="col-md-12">
@@ -228,7 +209,6 @@
                       placeholder="Town / City"
                       formControlName="city"
                     />
-                    <!-- error message -->
                     <span
                       *ngIf="
                         city?.hasError('required') &&
@@ -238,7 +218,6 @@
                     >
                       City is required
                     </span>
-                    <!-- error message -->
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -252,7 +231,6 @@
                       placeholder=""
                       formControlName="state"
                     />
-                    <!-- error message -->
                     <span
                       *ngIf="
                         state?.hasError('required') &&
@@ -262,7 +240,6 @@
                     >
                       State is required
                     </span>
-                    <!-- error message -->
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -276,7 +253,6 @@
                       placeholder="Postcode / Zip"
                       formControlName="zipCode"
                     />
-                    <!-- error message -->
                     <span
                       *ngIf="
                         zipCode?.hasError('required') &&
@@ -286,7 +262,6 @@
                     >
                       ZipCode is required
                     </span>
-                    <!-- error message -->
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -298,7 +273,6 @@
                       id="email"
                       formControlName="email"
                     />
-                    <!-- error msg start -->
                     <span
                       *ngIf="
                         (email?.hasError('required') && email?.touched) ||
@@ -309,7 +283,6 @@
                     >
                       Email is required and must be a valid email address
                     </span>
-                    <!-- error msg end -->
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -321,7 +294,6 @@
                       id="phone"
                       formControlName="phone"
                     />
-                    <!-- error message -->
                     <span
                       *ngIf="
                         phone?.hasError('required') &&
@@ -331,7 +303,6 @@
                     >
                       Last Name is required
                     </span>
-                    <!-- error message -->
                   </div>
                 </div>
               </div>
@@ -368,13 +339,12 @@
                       class="cart_item"
                     >
                       <td class="product-name">
-                        {{ item.title }}
-                        <strong class="product-quantity">
-                          × {{ item.orderQuantity }}</strong
-                        >
+                        {{ item.ProductName }}
                       </td>
                       <td class="product-total">
-                        <span class="amount">${{ item.price.toFixed(2) }}</span>
+                        <span class="amount">{{
+                          item.Price | currency : "INR"
+                        }}</span>
                       </td>
                     </tr>
                   </tbody>
@@ -382,30 +352,11 @@
                     <tr class="cart-subtotal">
                       <th>Cart Subtotal</th>
                       <td>
-                        <span class="amount"
-                          >${{
-                            cartService.totalPriceQuantity().total.toFixed(2)
-                          }}</span
-                        >
-                      </td>
-                    </tr>
-                    <tr class="shipping">
-                      <th>Shipping</th>
-                      <td>
-                        <ul>
-                          <li>
-                            <input type="radio" />
-                            <label (click)="handleShippingCost(7.0)">
-                              Flat Rate: <span class="amount">$7.00</span>
-                            </label>
-                          </li>
-                          <li>
-                            <input type="radio" />
-                            <label (click)="handleShippingCost('free')"
-                              >Free Shipping:</label
-                            >
-                          </li>
-                        </ul>
+                        <span class="amount">{{
+                          cartService.computeCartTotal(
+                            cartService.getCartProducts()
+                          ).total | currency : "INR"
+                        }}</span>
                       </td>
                     </tr>
                     <tr class="order-total">
@@ -413,11 +364,10 @@
                       <td>
                         <strong
                           ><span class="amount">
-                            ${{
-                              (
-                                cartService.totalPriceQuantity().total +
-                                shipCost
-                              ).toFixed(2)
+                            {{
+                              cartService.computeCartTotal(
+                                cartService.getCartProducts()
+                              ).total | currency : "INR"
                             }}
                           </span></strong
                         >
@@ -429,35 +379,6 @@
 
               <div class="payment-method">
                 <div class="accordion" id="accordionExample">
-                  <div class="card">
-                    <div class="card-header" id="headingOne">
-                      <h5 class="mb-0">
-                        <button
-                          class="btn-link"
-                          type="button"
-                          data-bs-toggle="collapse"
-                          data-bs-target="#collapseOne"
-                          aria-expanded="true"
-                          aria-controls="collapseOne"
-                        >
-                          Direct Bank Transfer
-                        </button>
-                      </h5>
-                    </div>
-                    <div
-                      id="collapseOne"
-                      class="collapse show"
-                      aria-labelledby="headingOne"
-                      data-bs-parent="#accordionExample"
-                    >
-                      <div class="card-body">
-                        Make your payment directly into our bank account. Please
-                        use your Order ID as the payment reference. Your order
-                        won’t be shipped until the funds have cleared in our
-                        account.
-                      </div>
-                    </div>
-                  </div>
                   <div class="card">
                     <div class="card-header" id="headingThree">
                       <h5 class="mb-0">

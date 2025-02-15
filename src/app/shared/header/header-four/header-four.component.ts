@@ -5,16 +5,19 @@ import { UtilsService } from '../../services/utils.service';
 @Component({
   selector: 'app-header-four',
   templateUrl: './header-four.component.html',
-  styleUrls: ['./header-four.component.scss']
+  styleUrls: ['./header-four.component.scss'],
 })
 export class HeaderFourComponent {
-
   public sticky: boolean = false;
 
   constructor(
     public cartService: CartService,
-    public utilsService: UtilsService,
-  ) { }
+    public utilsService: UtilsService
+  ) {}
+
+  ngOnInit(): void {
+    this.cartService.loadCartProducts();
+  }
 
   // sticky nav
   @HostListener('window:scroll', ['$event']) onscroll() {

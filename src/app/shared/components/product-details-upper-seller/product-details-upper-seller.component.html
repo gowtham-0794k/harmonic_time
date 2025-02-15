@@ -29,17 +29,6 @@
           </div>
         </nav>
       </div>
-      <!-- <div class="mb-20">
-        <div class="product__modal-img product__thumb w-img">
-          <img [src]="productService.activeImg" alt="product-img" />
-          <div *ngIf="product.discount || product.new" class="product__sale">
-            <span *ngIf="product.new || product.discount" class="new">new</span>
-            <span *ngIf="product.discount" class="percent"
-              >-{{ product.discount }}%</span
-            >
-          </div>
-        </div>
-      </div> -->
     </div>
 
     <div *ngIf="style_2" class="product__modal-box">
@@ -48,26 +37,6 @@
           <img [src]="productService.activeImg" alt="product-img" />
         </div>
       </div>
-      <!-- <nav>
-        <div class="nav nav-tabs" id="product-details" role="tablist">
-          <a
-            *ngFor="let img of product.related_images"
-            class="nav-item nav-link cursor-pointer me-2"
-            [class.active]="img === productService.activeImg"
-          >
-            <div
-              class="product__nav-img w-img"
-              (click)="productService.handleImageActive(img)"
-            >
-              <img
-                [src]="img"
-                alt="product-img"
-                style="width: 92px; height: 117px"
-              />
-            </div>
-          </a>
-        </div>
-      </nav> -->
     </div>
   </div>
 
@@ -111,30 +80,6 @@
           </span>
         </div>
       </div>
-
-      <!-- <div *ngIf="bottomShow">
-        <div class="product__share">
-          <span>Share :</span>
-          <ul>
-            <li>
-              <a href="#"><i class="fab fa-facebook-f"></i></a>
-            </li>
-            <li>
-              <a href="#"><i class="fab fa-twitter"></i></a>
-            </li>
-            <li>
-              <a href="#"><i class="fab fa-behance"></i></a>
-            </li>
-            <li>
-              <a href="#"><i class="fab fa-linkedin-in"></i></a>
-            </li>
-            <li>
-              <a href="#"><i class="fab fa-youtube"></i></a>
-            </li>
-          </ul>
-        </div>
-      </div> -->
-
       <div class="pro-cart-btn mt-30">
         <a
           (click)="editProduct(product)"

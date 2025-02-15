@@ -941,6 +941,11 @@
           width: 50%;
           float: left;
         }
+        
+        .value {
+           font-weight: normal !important;
+           font-size: 14px;
+         }
       }
     }
 
@@ -1927,6 +1932,7 @@ p.checkout-coupon input[type="text"] {
 
 .your-order-table table .shipping ul li label {
   color: #6f7172;
+  margin-left: 4px;
 }
 
 .your-order-table table .shipping th {

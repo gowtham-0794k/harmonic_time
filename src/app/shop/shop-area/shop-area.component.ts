@@ -6,6 +6,7 @@ import { UtilsService } from 'src/app/shared/services/utils.service';
 import { IProduct } from 'src/app/shared/types/product-d-t';
 import { GenericService } from '@shared/services/generic.service';
 import { PRODUCT } from '@config/index';
+import { CartService } from '@shared/services/cart.service';
 
 @Component({
   selector: 'app-shop-area',
@@ -38,7 +39,8 @@ export class ShopAreaComponent {
     private route: ActivatedRoute,
     private router: Router,
     private viewScroller: ViewportScroller,
-    private genericService: GenericService
+    private genericService: GenericService,
+    public cartService: CartService
   ) {
     this.route.queryParams.subscribe((params) => {
       this.minPrice = params['minPrice'] ? params['minPrice'] : this.minPrice;
@@ -53,7 +55,6 @@ export class ShopAreaComponent {
 
       // Get Filtered Products..
       this.productService.filterProducts().subscribe((response) => {
-        console.log({ response });
         // Sorting Filter
         // this.products = this.productService.sortProducts(response, this.sortBy);
         // Category Filter
@@ -116,10 +117,10 @@ export class ShopAreaComponent {
   }
 
   ngOnInit() {
+    this.cartService.loadCartProducts();
     const url = PRODUCT;
     this.genericService.getObservable(url).subscribe({
       next: (response) => {
-        console.log({ response });
         this.products = response?.data;
         this.maxPrice = this.productService.maxPrice(this.products);
         this.paginate = this.productService.getPager(

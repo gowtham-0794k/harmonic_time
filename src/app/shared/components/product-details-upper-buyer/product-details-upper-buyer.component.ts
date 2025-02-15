@@ -29,12 +29,7 @@ export class ProductDetailsUpperBuyerComponent {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.product) {
-      console.log(this.product.Images[0].ImageURL);
       this.productService.activeImg = this.product.Images[0].ImageURL;
     }
-  }
-
-  editProduct(item: any) {
-    this.itemDetails.emit(item); // Set Page Number
   }
 }

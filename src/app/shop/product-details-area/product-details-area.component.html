@@ -6,7 +6,7 @@
       ></app-product-details-upper-buyer>
     </div>
   </div>
-  <!-- <div class="shop__bottom">
+  <div class="shop__bottom">
     <div class="container">
       <div class="row">
         <div class="col-xl-12">
@@ -20,143 +20,145 @@
                 >
                   <a
                     class="nav-item nav-link active"
-                    id="des-tab"
-                    data-bs-toggle="tab"
-                    href="#des"
-                    role="tab"
-                    aria-controls="des"
-                    aria-selected="true"
-                    >Description</a
-                  >
-                  <a
-                    class="nav-item nav-link"
                     id="add-tab"
                     data-bs-toggle="tab"
                     href="#add"
                     role="tab"
                     aria-controls="add"
-                    aria-selected="false"
-                    >Additional Information</a
+                    aria-selected="true"
+                    >Specification</a
                   >
                   <a
                     class="nav-item nav-link"
-                    id="review-tab"
+                    id="des-tab"
                     data-bs-toggle="tab"
-                    href="#review"
+                    href="#des"
                     role="tab"
-                    aria-controls="review"
+                    aria-controls="des"
                     aria-selected="false"
-                    >Reviews ({{ product?.reviews?.length }})</a
+                    >Description</a
+                  >
+                  <a
+                    class="nav-item nav-link"
+                    id="des-tab"
+                    data-bs-toggle="tab"
+                    href="#del"
+                    role="tab"
+                    aria-controls="des"
+                    aria-selected="false"
+                    >Delivery & Returns</a
                   >
                 </div>
               </nav>
             </div>
             <div class="tab-content" id="pro-detailsContent">
-              <div class="tab-pane fade show active" id="des" role="tabpanel">
+              <div class="tab-pane fade show active" id="add" role="tabpanel">
+                <div class="product__details-add">
+                  <div class="row">
+                    <div class="col-lg-6 col-12">
+                      <ul>
+                        <li><span>Category</span></li>
+                        <li class="value">
+                          <span>{{ product.Details.CategoryName }}</span>
+                        </li>
+
+                        <li><span>Watch Markers</span></li>
+                        <li class="value">
+                          <span>{{ product.Details.WatchMarkerName }}</span>
+                        </li>
+
+                        <li><span>Recipient</span></li>
+                        <li class="value">
+                          <span>{{ product.Details.RecipientName }}</span>
+                        </li>
+
+                        <li><span>Case Material</span></li>
+                        <li class="value">
+                          <span>{{ product.Details.CaseMaterialName }}</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12">
+                      <ul>
+                        <li><span>Strap Material</span></li>
+                        <li class="value">
+                          <span>{{ product.Details.StrapMaterialName }}</span>
+                        </li>
+
+                        <li><span>Brand Collections</span></li>
+                        <li class="value">
+                          <span>{{ product.Details.CollectionName }}</span>
+                        </li>
+
+                        <li><span>Water Resistant</span></li>
+                        <li class="value">
+                          <span>{{ product.Details.WaterResistant }}</span>
+                        </li>
+
+                        <li><span>Manufacturer Product Number</span></li>
+                        <li class="value">
+                          <span>{{
+                            product.Details.ManufacturerProductNumber
+                          }}</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div class="col-lg-6 col-12">
+                      <ul>
+                        <li><span>Movement</span></li>
+                        <li class="value">
+                          <span>{{ product.Details.MovementName }}</span>
+                        </li>
+
+                        <li><span>Dial Color</span></li>
+                        <li class="value">
+                          <span>{{ product.Details.DialColorName }}</span>
+                        </li>
+
+                        <li><span>Diameter</span></li>
+                        <li class="value">
+                          <span>{{ product.Details.Diameter }}</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="des" role="tabpanel">
                 <div class="product__details-des">
-                  <p>{{ product?.details?.details_text }}</p>
+                  <p>{{ product?.Description?.Title }}</p>
                   <div class="product__details-des-list mb-20">
                     <ul>
-                      >
-                      <li *ngFor="let list of product?.details?.details_list">
-                        <span>{{ list }}</span>
+                      <li>
+                        <span>{{ product?.Description?.Content }}</span>
+                      </li>
+                      <li>
+                        <span>{{
+                          product?.Description?.AdditionalDetails
+                        }}</span>
                       </li>
                     </ul>
                   </div>
                   <p>{{ product?.details?.details_text_2 }}</p>
                 </div>
               </div>
-              <div class="tab-pane fade" id="add" role="tabpanel">
-                <div class="product__details-add">
-                  <ul>
-                    <li><span>Weight</span></li>
-                    <li><span>.25 KG</span></li>
-                    <li><span>Dimention</span></li>
-                    <li><span>62 × 56 × 12 cm</span></li>
-                    <li><span>Size</span></li>
-                    <li><span>XL, XXL, LG, SM, MD</span></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="review" role="tabpanel">
-                <div class="product__details-review">
-                  <div class="postbox__comments">
-                    <div class="postbox__comment-title mb-30">
-                      <h3>Reviews ({{ product?.reviews?.length }})</h3>
-                    </div>
-                    <div class="latest-comments mb-30">
-                      <ul>
-                        <li *ngFor="let r of product?.reviews">
-                          <div class="comments-box">
-                            <div class="comments-avatar">
-                              <img [src]="r.img" alt="user" />
-                            </div>
-                            <div class="comments-text">
-                              <div class="avatar-name">
-                                <h5>{{ r.name }}</h5>
-                                <span> - {{ r.time }} </span>
-                              </div>
-                              <div class="user-rating">
-                                <ul>
-                                  <li>
-                                    <a href="#"><i class="fas fa-star"></i></a>
-                                  </li>
-                                  <li>
-                                    <a href="#"><i class="fas fa-star"></i></a>
-                                  </li>
-                                  <li>
-                                    <a href="#"><i class="fas fa-star"></i></a>
-                                  </li>
-                                  <li>
-                                    <a href="#"><i class="fas fa-star"></i></a>
-                                  </li>
-                                  <li>
-                                    <a href="#"><i class="fal fa-star"></i></a>
-                                  </li>
-                                </ul>
-                              </div>
-                              <p>{{ r.review_desc }}</p>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="post-comments-form mb-100">
-                    <div class="post-comments-title mb-30">
-                      <h3>Your Review</h3>
-                      <div class="post-rating">
-                        <span>Your Rating :</span>
-                        <ul>
-                          <li>
-                            <a href="#">
-                              <i class="fal fa-star"></i>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#">
-                              <i class="fal fa-star"></i>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#">
-                              <i class="fal fa-star"></i>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#">
-                              <i class="fal fa-star"></i>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#">
-                              <i class="fal fa-star"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    <app-review-form></app-review-form>
+              <div class="tab-pane fade" id="del" role="tabpanel">
+                <div class="product__details-des">
+                  <div class="product__details-des-list mb-20">
+                    <ul>
+                      <li>
+                        <span>{{
+                          product?.DeliveryAndReturns?.DeliveryInformation
+                        }}</span>
+                      </li>
+                      <li>
+                        <span>{{
+                          product?.DeliveryAndReturns?.ReturnsPolicy
+                        }}</span>
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>
@@ -165,5 +167,5 @@
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
 </section>
