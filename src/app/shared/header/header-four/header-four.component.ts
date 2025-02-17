@@ -9,6 +9,7 @@ import { UtilsService } from '../../services/utils.service';
 })
 export class HeaderFourComponent {
   public sticky: boolean = false;
+  public token: string = '';
 
   constructor(
     public cartService: CartService,
@@ -17,6 +18,7 @@ export class HeaderFourComponent {
 
   ngOnInit(): void {
     this.cartService.loadCartProducts();
+    this.token = localStorage.getItem('token') || '';
   }
 
   // sticky nav

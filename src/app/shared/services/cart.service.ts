@@ -216,13 +216,23 @@ export class CartService {
         state.cart_products = state.cart_products.filter(
           (p: any) => p._id !== payload._id
         );
-        this.toastrService.error(`${payload.ProductName} removed from cart`);
+        this.toastrService.success(`${payload.ProductName} removed from cart`);
         localStorage.setItem(
           'cart_products',
           JSON.stringify(state.cart_products)
         );
       },
     });
+    if (state.cart_products.length) {
+      state.cart_products = state.cart_products.filter(
+        (p: any) => p._id !== payload._id
+      );
+      this.toastrService.success(`${payload.ProductName} removed from cart`);
+      localStorage.setItem(
+        'cart_products',
+        JSON.stringify(state.cart_products)
+      );
+    }
   }
 
   // clear cart

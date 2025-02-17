@@ -18,10 +18,7 @@ export class ProductItemComponent {
     public wishlistService: WishlistService,
     public compareService: CompareService,
     public utilsService: UtilsService
-  ) {
-    const items = this.cartService.getCartProducts();
-    console.log({ items });
-  }
+  ) {}
 
   // add to cart
   addToCart(item: IProduct) {

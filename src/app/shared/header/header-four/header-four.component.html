@@ -37,19 +37,26 @@
             </div>
             <div class="header__action">
               <ul>
-                <li>
+                <!-- <li>
                   <a
                     (click)="utilsService.handleSearchOpen()"
                     class="search-toggle cursor-pointer"
                   >
                     <i class="fas fa-search"></i>
                   </a>
+                </li> -->
+                <li *ngIf="!token">
+                  <button
+                    class="profile__info-btn"
+                    type="button"
+                    routerLink="/auth/login"
+                  >
+                    <i class="fa-regular fa-pen-to-square"></i> Login
+                  </button>
                 </li>
                 <li>
                   <a class="cursor-pointer"><i class="fas fa-user"></i></a>
-                  <!-- extra info start -->
                   <app-extra-info></app-extra-info>
-                  <!-- extra info end -->
                 </li>
                 <li>
                   <a class="cart cursor-pointer" routerLink="/buyer/cart">
@@ -58,9 +65,7 @@
                       cartService.getCartProducts().length
                     }}</span>
                   </a>
-                  <!-- mini cart start -->
                   <app-mini-cart></app-mini-cart>
-                  <!-- mini cart end -->
                 </li>
               </ul>
             </div>
@@ -71,10 +76,6 @@
   </div>
 </header>
 
-<!-- search popup start -->
 <app-search-popup></app-search-popup>
-<!-- search popup end -->
 
-<!-- mobile offcanvas start -->
 <app-offcanvas></app-offcanvas>
-<!-- mobile offcanvas end -->

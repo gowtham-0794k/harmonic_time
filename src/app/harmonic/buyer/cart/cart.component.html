@@ -6,7 +6,9 @@
       class="text-center pt-50"
     >
       <h3>No Cart Items Found</h3>
-      <a routerLink="/shop" class="os-btn os-btn-black">Continue Shopping</a>
+      <a routerLink="/buyer/products" class="os-btn os-btn-black"
+        >Continue Shopping</a
+      >
     </div>
 
     <div *ngIf="cartService.getCartProducts().length > 0" class="row">
