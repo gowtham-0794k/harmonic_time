@@ -54,22 +54,18 @@
 
     & .sort-wrapper {
       & select {
-        border: none;
-        font-size: 15px;
-        text-transform: capitalize;
-        color: #a3a3a3;
-        appearance: none;
+        -webkit-appearance: none;
         -moz-appearance: none;
-      }
-
-      &::after {
-        position: absolute;
-        content: '\f107';
-        right: 5px;
-        top: 2px;
-        font-family: "Font Awesome 5 Pro";
-        font-size: 16px;
-        color: #a3a3a3;
+        appearance: none;
+        border: 1px solid #eaedff;
+        height: 45px;
+        padding-left: 10px;
+        padding-right: 10px;
+        width: 100%;
+        color: #6f7172;
+        background: none;
+        background-color: #fff;
+      
       }
     }
 

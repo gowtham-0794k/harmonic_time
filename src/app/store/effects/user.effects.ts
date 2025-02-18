@@ -28,7 +28,6 @@ export class UserEffects {
             return registerUserSuccess({ data: result });
           }),
           catchError((err) => {
-            console.error({ err });
             return of(registerUserFailure({ error: err }));
           })
         )
@@ -45,7 +44,6 @@ export class UserEffects {
             return loginUserSuccess({ data: result });
           }),
           catchError((err) => {
-            console.error({ err });
             return of(loginUserFailure({ error: err }));
           })
         )

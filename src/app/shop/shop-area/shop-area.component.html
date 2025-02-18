@@ -45,23 +45,21 @@
             class="shop__header d-sm-flex justify-content-between align-items-center mb-40"
           >
             <div class="shop__header-left">
-              <div class="show-text">
-                <span
-                  >Showing 1–{{ products.length }} of
-                  {{ paginate.totalItems }} results
-                </span>
-              </div>
+              <app-pagination
+                [data]="products"
+                [paginate]="paginate"
+                (setPage)="setPage($event)"
+              >
+              </app-pagination>
             </div>
             <div
               class="shop__header-right d-flex align-items-center justify-content-between justify-content-sm-end"
             >
-              <div class="sort-wrapper mr-30 pr-25 p-relative">
+              <div class="sort-wrapper p-relative">
                 <select
                   [(ngModel)]="sortBy"
                   (ngModelChange)="onSortingChange($event)"
                 >
-                  <option value="asc">Default Sorting</option>
-                  <option value="sale">On Sale</option>
                   <option value="high">Price High To Low</option>
                   <option value="low">Price Low To High</option>
                 </select>

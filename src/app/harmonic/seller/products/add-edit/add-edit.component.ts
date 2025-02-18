@@ -24,6 +24,8 @@ import {
   PRODUCT,
   UPDATE_PRODUCT,
   UPDATE_PRODUCT_DETAILS,
+  POST_UPLOAD_IMAGES,
+  POST_PRODUCT_IMAGES,
 } from 'src/app/config';
 import { GenericService } from 'src/app/shared/services/generic.service';
 import {
@@ -101,6 +103,7 @@ export class AddEditComponent implements OnInit {
   CREATE_PRODUCT_DETAILS_URL = POST_PRODUCT_DETAILS;
   CREATE_PRODUCT_DESCRIPTION_URL = PRODUCT_DESCRIPTION;
   CREATE_PRODUCT_RETURN_POLICY_URL = POST_PRODUCT_RETURN_POLICY;
+  POST_UPLOAD_IMAGES = POST_UPLOAD_IMAGES;
   productData: any;
 
   constructor(
@@ -410,7 +413,7 @@ export class AddEditComponent implements OnInit {
       if (this.isEditing) {
         this.updateProduct(userId, productData);
       } else {
-        this.createProduct(userId, productData);
+        this.createProduct(userId, productData, formData);
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -419,7 +422,7 @@ export class AddEditComponent implements OnInit {
     }
   }
 
-  createProduct(userId: string, productData: any) {
+  createProduct(userId: string, productData: any, formData: any) {
     const productPayload = {
       UserID: userId,
       ProductName: productData.productName,
@@ -464,27 +467,44 @@ export class AddEditComponent implements OnInit {
             ReturnsPolicy: productData.returnsPolicy,
           };
 
-          const uploadImagesPayload = {};
-
           // Return each subsequent postObservable as an observable chain
           return this.genericService
-            .postObservable(
-              this.CREATE_PRODUCT_DETAILS_URL,
-              productDetailsPayload
+            .postObservableImages(
+              `${this.POST_UPLOAD_IMAGES}${userId}/${productId}`,
+              formData
             )
             .pipe(
-              concatMap(() =>
-                this.genericService.postObservable(
-                  this.CREATE_PRODUCT_DESCRIPTION_URL,
-                  productDescriptionPayload
-                )
-              ),
-              concatMap(() =>
-                this.genericService.postObservable(
-                  this.CREATE_PRODUCT_RETURN_POLICY_URL,
-                  productDeliveryReturnPayload
-                )
-              )
+              concatMap((imageResponse) => {
+                const imagesPayload = {
+                  ProductID: productId,
+                  ImageURLs: imageResponse.data,
+                };
+                return this.genericService
+                  .postObservable(
+                    this.CREATE_PRODUCT_DETAILS_URL,
+                    productDetailsPayload
+                  )
+                  .pipe(
+                    concatMap(() =>
+                      this.genericService.postObservable(
+                        this.CREATE_PRODUCT_DESCRIPTION_URL,
+                        productDescriptionPayload
+                      )
+                    ),
+                    concatMap(() =>
+                      this.genericService.postObservable(
+                        this.CREATE_PRODUCT_RETURN_POLICY_URL,
+                        productDeliveryReturnPayload
+                      )
+                    ),
+                    concatMap(() =>
+                      this.genericService.postObservable(
+                        POST_PRODUCT_IMAGES,
+                        imagesPayload
+                      )
+                    )
+                  );
+              })
             );
         })
       )

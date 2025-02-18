@@ -78,32 +78,21 @@ export class ProductService {
   }
 
   // Sorting Filter
-  public sortProducts(products: IProduct[], payload: string): any {
-    if (payload === 'asc') {
+  public sortProducts(products: any[], payload: string): any {
+    if (payload === 'low') {
       return products.sort((a, b) => {
-        if (a.id < b.id) {
+        if (a.Price < b.Price) {
           return -1;
-        } else if (a.id > b.id) {
-          return 1;
-        }
-        return 0;
-      });
-    } else if (payload === 'sale') {
-      return products.filter((p) => p.discount! > 0);
-    } else if (payload === 'low') {
-      return products.sort((a, b) => {
-        if (a.price < b.price) {
-          return -1;
-        } else if (a.price > b.price) {
+        } else if (a.Price > b.Price) {
           return 1;
         }
         return 0;
       });
     } else if (payload === 'high') {
       return products.sort((a, b) => {
-        if (a.price > b.price) {
+        if (a.Price > b.Price) {
           return -1;
-        } else if (a.price < b.price) {
+        } else if (a.Price < b.Price) {
           return 1;
         }
         return 0;

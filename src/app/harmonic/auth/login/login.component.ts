@@ -6,7 +6,10 @@ import { LOGIN_USER } from 'src/app/config';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import { loginUser } from 'src/app/store/actions/user.actions';
-import { selectUserData } from 'src/app/store/selectors/user.selectors';
+import {
+  selectUserData,
+  selectUserError,
+} from 'src/app/store/selectors/user.selectors';
 import { Router } from '@angular/router';
 
 @Component({
@@ -55,12 +58,17 @@ export class LoginComponent {
         password: formValue.password,
       };
       this.store.dispatch(loginUser({ url, payload }));
+      this.store.select(selectUserError).subscribe((state: any) => {
+        this.toastrService.error('Please check email and password !');
+      });
       this.store.select(selectUserData).subscribe((state: any) => {
-        localStorage.setItem('token', JSON.stringify(state?.data?.token));
-        this.toastrService.success('Registration successful!');
-        this.loginForm.reset();
-        this.formSubmitted = false; // Reset the form submission state
-        this.router.navigate(['/buyer/products']);
+        if (state && state?.data?.token) {
+          localStorage.setItem('token', JSON.stringify(state?.data?.token));
+          this.toastrService.success('Registration successful !');
+          this.loginForm.reset();
+          this.formSubmitted = false; // Reset the form submission state
+          this.router.navigate(['/buyer/products']);
+        }
       });
     }
   }

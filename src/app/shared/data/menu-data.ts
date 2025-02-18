@@ -9,6 +9,7 @@ const menuData: IMenuType[] = [
   {
     link: '/seller/product-list',
     title: 'Seller',
+    seller: true,
     hasDropdown: true,
     megamenu: false,
     dropdownItems: [

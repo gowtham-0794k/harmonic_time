@@ -27,7 +27,8 @@ export const PRODUCT_DESCRIPTION =
   baseUrl + '/api/products/productDescriptions';
 export const POST_PRODUCT_RETURN_POLICY =
   baseUrl + '/api/products/deliveryReturns';
-export const POST_UPLOAD_IMAGES = baseUrl + '/api/products/upload-images';
+export const POST_UPLOAD_IMAGES = baseUrl + '/api/upload/upload-images-s3/';
+export const POST_PRODUCT_IMAGES = baseUrl + '/api/products/productImages';
 
 export const PRODUCT = baseUrl + '/api/products/getAllProducts';
 export const GET_PRODUCT_BY_ID = baseUrl + '/api/products/getAllProduct/';
