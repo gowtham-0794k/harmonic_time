@@ -1,26 +1,15 @@
-<div class="sidebar__widget mb-55">
-  <div class="sidebar__widget-title mb-30">
+<div class="sidebar__widget mb-20">
+  <div class="sidebar__widget-title mb-10">
     <h3>Filter By Price</h3>
   </div>
   <div class="sidebar__widget-content">
-    <div class="price__slider">
-      <div id="slider-range">
-        <ngx-slider
-          [(value)]="min"
-          [(highValue)]="maxValue"
-          [options]="options"
-          (userChangeEnd)="appliedFilter($event)"
-          *ngIf="isBrowser"
-        >
-        </ngx-slider>
-      </div>
-      <div>
-        <div>
-          <!-- <button (click)="handlePriceRoute()">Filter</button> -->
-          <label for="amount">Price :</label>
-          <span class="input-range"> {{ min }} - {{ maxValue }} </span>
-        </div>
-      </div>
+    <div class="filter-shop">
+      <select (change)="handlePriceRoute($event)">
+        <option value="" disabled>- Please select -</option>
+        <option *ngFor="let price of prices" [value]="price.value">
+          {{ price.label }}
+        </option>
+      </select>
     </div>
   </div>
 </div>

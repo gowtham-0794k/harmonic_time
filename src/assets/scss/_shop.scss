@@ -1762,6 +1762,57 @@ p.checkout-coupon input[type="text"] {
   /* Prevent blocking the dropdown */
 }
 
+.filter-shop {
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.filter-shop label,
+.checkout-form-list label {
+  color: #6f7172;
+  display: block;
+  margin: 0 0 5px;
+}
+
+.filter-shop label span.required,
+.checkout-form-list label span.required {
+  color: red;
+}
+
+.filter-shop select {
+  -webkit-appearance: none;
+  /* Chrome, Safari, Edge */
+  -moz-appearance: none;
+  /* Firefox */
+  appearance: none;
+  /* Standard */
+  border: 1px solid #eaedff;
+  height: 45px;
+  padding-left: 10px;
+  width: 100%;
+  color: #6f7172;
+  background: none;
+  /* Ensure no background icon */
+  background-color: #fff;
+  /* Maintain background color */
+}
+
+.filter-shop {
+  position: relative;
+}
+
+.filter-shop::before {
+  content: "\f107";
+  right: 15px;
+  top: 12px;
+  position: absolute;
+  color: #6f7172;
+  font-family: "Font Awesome 5 Pro";
+  font-weight: 700;
+  pointer-events: none;
+  /* Prevent blocking the dropdown */
+}
+
 
 .checkout-form-list {
   margin-bottom: 30px;

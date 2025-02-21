@@ -5,32 +5,9 @@
         *ngIf="!shop_right && !shop_4_col && !shop_3_col"
         class="col-xl-3 col-lg-3 col-md-4"
       >
-        <div class="shop__sidebar">
-          <!-- <app-category-filter [products]="products"></app-category-filter> -->
-          <app-price-filter
-            *ngIf="maxPrice"
-            [min]="minPrice"
-            [max]="maxPrice"
-            (priceFilter)="updateFilter($event)"
-          ></app-price-filter>
-
-          <app-size-filtering></app-size-filtering>
-          <app-color-filtering></app-color-filtering>
-          <app-brand-filtering></app-brand-filtering>
-          <div class="reset-button mt-20 mb-30">
-            <button (click)="handleResetFilter()" class="os-btn os-btn-black">
-              Reset Filter
-            </button>
-          </div>
-          <div class="sidebar__widget">
-            <div class="sidebar__widget-title mb-30">
-              <h3>Featured Products</h3>
-            </div>
-            <div class="sidebar__widget-content">
-              <app-feature-products></app-feature-products>
-            </div>
-          </div>
-        </div>
+        <app-shop-area-filters
+          (handleResetFilter)="handleResetFilter($event)"
+        />
       </div>
 
       <div
@@ -94,7 +71,7 @@
           </div>
 
           <div
-            *ngIf="products.length === 0"
+            *ngIf="products?.length === 0"
             class="cartmini__empty text-center mt-80"
           >
             <img src="/assets/img/shop/empty-cart.png" alt="empty-cart-img" />
@@ -158,30 +135,9 @@
       </div>
 
       <div *ngIf="shop_right" class="col-xl-3 col-lg-3 col-md-4">
-        <div class="shop__sidebar">
-          <app-category-filter></app-category-filter>
-          <app-price-filter
-            [min]="minPrice"
-            [max]="maxPrice"
-            (priceFilter)="updateFilter($event)"
-          ></app-price-filter>
-          <app-size-filtering></app-size-filtering>
-          <app-color-filtering></app-color-filtering>
-          <app-brand-filtering></app-brand-filtering>
-          <div class="reset-button mt-20 mb-30">
-            <button (click)="handleResetFilter()" class="os-btn os-btn-black">
-              Reset Filter
-            </button>
-          </div>
-          <div class="sidebar__widget">
-            <div class="sidebar__widget-title mb-30">
-              <h3>Featured Products</h3>
-            </div>
-            <div class="sidebar__widget-content">
-              <app-feature-products></app-feature-products>
-            </div>
-          </div>
-        </div>
+        <app-shop-area-filters
+          (handleResetFilter)="handleResetFilter($event)"
+        />
       </div>
     </div>
   </div>

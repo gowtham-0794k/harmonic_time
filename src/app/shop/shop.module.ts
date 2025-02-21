@@ -32,6 +32,10 @@ import { DynamicShopDetailsComponent } from './pages/dynamic-shop-details/dynami
 import { CompareComponent } from './pages/compare/compare.component';
 import { SearchComponent } from './pages/search/search.component';
 import { ProductDetailsAreaSellerComponent } from './product-details-area-seller/product-details-area-seller.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ShopAreaFiltersComponent } from './shop-area-filters/shop-area-filters.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +65,7 @@ import { ProductDetailsAreaSellerComponent } from './product-details-area-seller
     CompareComponent,
     SearchComponent,
     ProductDetailsAreaSellerComponent,
+    ShopAreaFiltersComponent,
   ],
   imports: [
     CommonModule,
@@ -69,6 +74,9 @@ import { ProductDetailsAreaSellerComponent } from './product-details-area-seller
     ShopRoutingModule,
     NgxSliderModule,
     FormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatCheckboxModule,
   ],
   exports: [
     ProductItemComponent,

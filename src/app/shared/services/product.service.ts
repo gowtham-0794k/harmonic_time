@@ -55,7 +55,7 @@ export class ProductService {
   }
   // Get max price
   public maxPrice(all_data: any): number {
-    const max_price = all_data.reduce((max: number, product: any) => {
+    const max_price = all_data?.reduce((max: number, product: any) => {
       return product.Price > max ? product.Price : max;
     }, 0);
     return max_price;

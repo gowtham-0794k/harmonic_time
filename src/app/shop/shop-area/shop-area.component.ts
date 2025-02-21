@@ -18,7 +18,8 @@ export class ShopAreaComponent {
   @Input() shop_4_col = false;
   @Input() shop_3_col = false;
 
-  public products: IProduct[] = [];
+  public products: any[] = [];
+  public productsInitial: any[] = [];
   public minPrice: number = 0;
   public maxPrice: number = 0;
   public niceSelectOptions = this.productService.filterSelect;
@@ -43,7 +44,6 @@ export class ShopAreaComponent {
     public cartService: CartService
   ) {
     this.route.queryParams.subscribe((params) => {
-      this.minPrice = params['minPrice'] ? params['minPrice'] : this.minPrice;
       this.maxPrice = params['maxPrice'] ? params['maxPrice'] : this.maxPrice;
       this.brand = params['brand'] ? params['brand'] : null;
       this.category = params['category'] ? params['category'] : null;
@@ -51,11 +51,13 @@ export class ShopAreaComponent {
       this.size = params['size'] ? params['size'] : null;
       this.color = params['color'] ? params['color'] : null;
       this.pageNo = params['page'] ? params['page'] : this.pageNo;
-      this.sortBy = params['sortBy'] ? params['sortBy'] : 'asc';
+      this.sortBy = params['sortBy'] ? params['sortBy'] : 'high';
+
+      let filteredProducts: any = [];
 
       // Sorting Filter
-      this.products = this.productService.sortProducts(
-        this.products,
+      filteredProducts = this.productService.sortProducts(
+        this.productsInitial,
         this.sortBy
       );
       // Category Filter
@@ -82,35 +84,36 @@ export class ShopAreaComponent {
       //   });
       // }
       // color Filter
-      // if (this.color) {
-      //   this.products = this.products.filter((product) => {
-      //     return (
-      //       product.colors &&
-      //       product.colors.some(
-      //         (c) => c.split(' ').join('-').toLowerCase() === this.color
-      //       )
-      //     );
-      //   });
-      // }
+      if (this.color) {
+        filteredProducts = filteredProducts.filter((product: any) => {
+          return (
+            product?.Details?.DialColorName &&
+            product?.Details?.DialColorName.toLowerCase() === this.color
+          );
+        });
+      }
       // brand Filter
-      // if (this.brand) {
-      //   this.products = this.products.filter(
-      //     (p) => p.brand.toLowerCase() === this.brand
-      //   );
-      // }
+      if (this.brand) {
+        filteredProducts = filteredProducts.filter((p: any) => {
+          const selectedBrands = this.brand?.toLowerCase();
+          return selectedBrands === p?.Details?.BrandName.toLowerCase(); // Check if product brand is in selected brands
+        });
+      }
       // Price Filter
-      // this.products = this.products.filter(
-      //   (p) =>
-      //     p.price >= Number(this.minPrice) && p.price <= Number(this.maxPrice)
-      // );
+      if (this.minPrice && this.maxPrice) {
+        filteredProducts = filteredProducts?.filter(
+          (p: any) =>
+            p.Price >= Number(this.minPrice) && p.Price <= Number(this.maxPrice)
+        );
+      }
       // Paginate Products
-      this.maxPrice = this.productService.maxPrice(this.products);
+      this.maxPrice = this.productService.maxPrice(filteredProducts);
       this.paginate = this.productService.getPager(
-        this.products.length,
+        filteredProducts.length,
         Number(+this.pageNo),
         this.pageSize
       );
-      this.products = this.products.slice(
+      this.products = filteredProducts.slice(
         this.paginate.startIndex,
         this.paginate.endIndex + 1
       );
@@ -123,7 +126,7 @@ export class ShopAreaComponent {
     this.genericService.getObservable(url).subscribe({
       next: (response) => {
         this.products = response?.data;
-        this.maxPrice = this.productService.maxPrice(this.products);
+        this.productsInitial = response?.data;
         this.paginate = this.productService.getPager(
           this.products.length,
           Number(+this.pageNo),
@@ -139,8 +142,6 @@ export class ShopAreaComponent {
       },
     });
   }
-  // Append filter value to Url
-  updateFilter(tags: any) {}
 
   onSortingChange(value: string) {
     this.sortByFilter(value);
@@ -175,9 +176,10 @@ export class ShopAreaComponent {
       });
   }
 
-  handleResetFilter() {
-    this.minPrice = 0;
-    this.maxPrice = this.productService.maxPrice(this.products);
-    this.router.navigate(['/shop']);
+  handleResetFilter(event: any) {
+    this.router.navigate(['/buyer/products']);
+    setTimeout(() => {
+      this.products = this.productsInitial;
+    }, 10);
   }
 }

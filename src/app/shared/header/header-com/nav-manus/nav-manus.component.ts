@@ -39,7 +39,7 @@ export class NavManusComponent {
   }
 
   checkRole(value: boolean | undefined) {
-    if (value) return this.roles.includes(2);
+    if (value) return this.roles?.includes(2);
     return true;
   }
 }
