@@ -19,16 +19,8 @@
       >
         <div class="shop__content-area">
           <div
-            class="shop__header d-sm-flex justify-content-between align-items-center mb-40"
+            class="shop__header d-sm-flex justify-content-end align-items-center mb-40"
           >
-            <div class="shop__header-left">
-              <app-pagination
-                [data]="products"
-                [paginate]="paginate"
-                (setPage)="setPage($event)"
-              >
-              </app-pagination>
-            </div>
             <div
               class="shop__header-right d-flex align-items-center justify-content-between justify-content-sm-end"
             >
@@ -120,7 +112,7 @@
           <div class="row mt-40">
             <div class="col-xl-12">
               <div
-                class="shop-pagination-wrapper d-md-flex justify-content-between align-items-center"
+                class="shop-pagination-wrapper d-md-flex justify-content-end align-items-center"
               >
                 <app-pagination
                   [data]="products"

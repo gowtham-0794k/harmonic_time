@@ -5,14 +5,6 @@
     class="order-info__header d-flex justify-content-between align-items-center pt-40"
   >
     <h2 class="order-info__title">My Products</h2>
-    <div class="order__info-btn">
-      <app-pagination
-        [data]="orders"
-        [paginate]="paginate"
-        (setPage)="setPage($event)"
-      >
-      </app-pagination>
-    </div>
   </header>
 
   <div class="order-list white-bg table-responsive pt-40">
@@ -38,5 +30,13 @@
         </ng-container>
       </tbody>
     </table>
+  </div>
+  <div class="order__info-btn d-flex justify-content-end mb-20">
+    <app-pagination
+      [data]="orders"
+      [paginate]="paginate"
+      (setPage)="setPage($event)"
+    >
+    </app-pagination>
   </div>
 </section>

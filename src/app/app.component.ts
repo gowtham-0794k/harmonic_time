@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CartService } from '@shared/services/cart.service';
 import { UserService } from '@shared/services/user.service';
 
 @Component({
@@ -7,7 +8,7 @@ import { UserService } from '@shared/services/user.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'Outstock - Clean, Minimal eCommerce Angular Template';
+  title = 'Harmonic Time';
 
   constructor(private userService: UserService) {}
 

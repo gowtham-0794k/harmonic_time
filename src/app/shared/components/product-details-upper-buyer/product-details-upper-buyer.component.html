@@ -29,6 +29,17 @@
           </div>
         </nav>
       </div>
+      <div class="mb-20">
+        <div class="product__modal-img product__thumb w-img">
+          <img [src]="productService.activeImg" alt="product-img" />
+          <!-- <div *ngIf="product.discount || product.new" class="product__sale">
+            <span *ngIf="product.new || product.discount" class="new">new</span>
+            <span *ngIf="product.discount" class="percent"
+              >-{{ product.discount }}%</span
+            >
+          </div> -->
+        </div>
+      </div>
     </div>
     <div *ngIf="style_2" class="product__modal-box">
       <div class="mb-20">
@@ -80,7 +91,7 @@
       <div class="product__price-2 mb-25">
         <span>{{ product.Price | currency : "INR" }}</span>
       </div>
-      <div class="product__modal-des mb-30">
+      <div class="product__modal-des mb-30" *ngIf="product.Description.Content">
         <p>{{ product.Description.Content }}</p>
       </div>
       <div class="product__modal-form mb-30">
@@ -102,10 +113,18 @@
 
       <div class="pro-cart-btn">
         <a
+          *ngIf="!isItemInCart(product)"
           (click)="cartService.addCartProduct(product)"
           class="add-cart-btn mb-20 cursor-pointer"
         >
           + Add to Cart
+        </a>
+        <a
+          *ngIf="isItemInCart(product)"
+          routerLink="/buyer/cart"
+          class="add-cart-btn mb-20 cursor-pointer"
+        >
+          View Cart
         </a>
       </div>
     </div>

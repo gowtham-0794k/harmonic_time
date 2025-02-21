@@ -15,13 +15,11 @@ import { HeroSliderTwoComponent } from './components/slider/hero-slider-two/hero
 import { HomeThreeTestimonialComponent } from './components/testimonial/home-three-testimonial/home-three-testimonial.component';
 import { MiniCartComponent } from './header/header-com/mini-cart/mini-cart.component';
 import { ExtraInfoComponent } from './header/header-com/extra-info/extra-info.component';
-import { FooterTwoComponent } from './footer/footer-two/footer-two.component';
 import { HeaderTwoComponent } from './header/header-two/header-two.component';
 import { HeaderThreeComponent } from './header/header-three/header-three.component';
 import { SearchPopupComponent } from './header/header-com/search-popup/search-popup.component';
 import { HeaderFourComponent } from './header/header-four/header-four.component';
 import { HomeSevenTestimonialComponent } from './components/testimonial/home-seven-testimonial/home-seven-testimonial.component';
-import { FooterThreeComponent } from './footer/footer-three/footer-three.component';
 import { VideoPopupComponent } from './components/modals/video-popup/video-popup.component';
 import { BreadcrumbOneComponent } from './components/breadcrumb/breadcrumb-one/breadcrumb-one.component';
 import { PaginationComponent } from './ui/pagination/pagination.component';
@@ -57,13 +55,11 @@ import { ProductDetailsUpperBuyerComponent } from './components/product-details-
     HomeThreeTestimonialComponent,
     MiniCartComponent,
     ExtraInfoComponent,
-    FooterTwoComponent,
     HeaderTwoComponent,
     HeaderThreeComponent,
     SearchPopupComponent,
     HeaderFourComponent,
     HomeSevenTestimonialComponent,
-    FooterThreeComponent,
     VideoPopupComponent,
     BreadcrumbOneComponent,
     PaginationComponent,
@@ -96,12 +92,10 @@ import { ProductDetailsUpperBuyerComponent } from './components/product-details-
     BlogSliderComponent,
     HeroSliderTwoComponent,
     HomeThreeTestimonialComponent,
-    FooterTwoComponent,
     HeaderTwoComponent,
     HeaderThreeComponent,
     HeaderFourComponent,
     HomeSevenTestimonialComponent,
-    FooterThreeComponent,
     VideoPopupComponent,
     BreadcrumbOneComponent,
     PaginationComponent,

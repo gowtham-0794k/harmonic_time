@@ -25,9 +25,9 @@ export class ColorFilteringComponent {
   ngOnInit(): void {
     this.genericService.getObservable(GET_DIAL_COLOR).subscribe({
       next: (response) => {
-        const productColors = response.data?.map(
-          (el: any) => el?.DialColorName
-        );
+        const productColors = response.data
+          ?.map((el: any) => el?.DialColorName)
+          .sort((a: string, b: string) => a.localeCompare(b));
         this.all_colors = [...new Set(productColors)];
       },
       error: (err) => {

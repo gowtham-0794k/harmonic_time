@@ -6,6 +6,7 @@ import { GenericService } from './generic.service';
 import { USER } from '@config/index';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { CartService } from './cart.service';
 
 @Injectable({
   providedIn: 'root',
@@ -38,7 +39,7 @@ export class UserService {
     const url = USER;
     this.genericService.getObservableToken(url).subscribe({
       next: (response) => {
-        this.userDataSubject.next(response.data); // If the type is fully known, this cast might not even be necessary
+        this.userDataSubject.next(response.data);
       },
       error: (err) => {
         console.error(`Error fetching data : `, err);

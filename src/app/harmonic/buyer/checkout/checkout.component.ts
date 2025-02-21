@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CartService } from 'src/app/shared/services/cart.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { countries } from '@shared/constants/countries';
 
 @Component({
   selector: 'app-checkout',
@@ -13,6 +14,7 @@ export class CheckoutComponent {
   public isOpenCoupon = false;
   public couponCode: string = '';
   public payment_name: string = '';
+  public countries = countries;
 
   constructor(
     public cartService: CartService,
@@ -48,12 +50,11 @@ export class CheckoutComponent {
     this.checkoutForm = new FormGroup({
       firstName: new FormControl(null, Validators.required),
       lastName: new FormControl(null, Validators.required),
-      company: new FormControl(null),
-      country: new FormControl('bangladesh', Validators.required),
+      country: new FormControl('India', Validators.required),
       address: new FormControl(null, Validators.required),
       city: new FormControl(null, Validators.required),
       state: new FormControl(null, Validators.required),
-      apartment: new FormControl(null, Validators.required),
+      apartment: new FormControl(null),
       zipCode: new FormControl(null, Validators.required),
       phone: new FormControl(null, Validators.required),
       orderNote: new FormControl(null),
@@ -63,6 +64,8 @@ export class CheckoutComponent {
 
   onSubmit() {
     this.formSubmitted = true;
+    console.log(this.checkoutForm.valid);
+    console.log(this.checkoutForm.value);
     if (this.checkoutForm.valid) {
       this.toastrService.success(`Order successfully`);
 

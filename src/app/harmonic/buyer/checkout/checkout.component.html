@@ -83,7 +83,9 @@
       class="text-center pt-80 pb-30"
     >
       <h3 class="py-2">No items found in cart to checkout</h3>
-      <a routerLink="/shop" class="os-btn os-btn-black"> Return to shop </a>
+      <a routerLink="/buyer/products" class="os-btn os-btn-black">
+        Return to shop
+      </a>
     </div>
 
     <ng-template #checkoutBlock>
@@ -97,15 +99,11 @@
                   <div class="country-select">
                     <label>Country <span class="required">*</span></label>
                     <select formControlName="country">
-                      <option value="bangladesh">Bangladesh</option>
-                      <option value="algeria">Algeria</option>
-                      <option value="afghanistan">Afghanistan</option>
-                      <option value="ghana">Ghana</option>
-                      <option value="albania">Albania</option>
-                      <option value="bahrain">Bahrain</option>
-                      <option value="colombia">Colombia</option>
-                      <option value="dominican-republic">
-                        Dominican Republic
+                      <option
+                        *ngFor="let country of countries"
+                        [value]="country"
+                      >
+                        {{ country }}
                       </option>
                     </select>
                     <span
@@ -157,17 +155,6 @@
                     >
                       Last Name is required
                     </span>
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <div class="checkout-form-list">
-                    <label>Company Name</label>
-                    <input
-                      type="text"
-                      id="company"
-                      placeholder=""
-                      formControlName="company"
-                    />
                   </div>
                 </div>
                 <div class="col-md-12">

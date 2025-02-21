@@ -105,26 +105,29 @@ const hero_slider_five: IHeroSlider[] = [
 const hero_slider_seven: IHeroSlider[] = [
   {
     id: 1,
-    bgImg: '/assets/img/slider/05/slide111.webp',
-    sm_title:'up to 50% off',
-    meta:true,
-    title: "Life style that you <br/>need, Yo.",
-    subtitle: "Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum.",
+    bgImg: '/assets/img/slider/06/e-01.webp',
+    sm_title: '',
+    meta: true,
+    title: 'Charm of the HMT Janata',
+    subtitle:
+      'The Janata is HMT’s most storied, emblematic and charming watch for good reason. Significantly, it begins with the name itself. “Janata” in Hindi means the public; and making a watch dedicated to the people of India is how the Janata got its name. At a time when we were finding our feet as an independent nation, this humble object came along and offered something representative of collective national dreams, as well as a means to unite people through pride in a locally made item.',
   },
   {
     id: 2,
     bgImg: '/assets/img/slider/05/slide112.webp',
-    sm_title:'Quick parcel delivery',
-    title: "Creative theme <br/>Awesome.",
-    subtitle: "Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum.",
+    sm_title: 'Quick parcel delivery',
+    title: 'Creative theme <br/>Awesome.',
+    subtitle:
+      'Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum.',
   },
   {
     id: 3,
     bgImg: '/assets/img/slider/05/slide113.webp',
-    sm_title:'Quick parcel delivery',
-    title: "The world is<br/>make all.",
-    subtitle: "Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum.",
-  }
+    sm_title: 'Quick parcel delivery',
+    title: 'The world is<br/>make all.',
+    subtitle:
+      'Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum.',
+  },
 ];
 
 export const HeroSliderData = {

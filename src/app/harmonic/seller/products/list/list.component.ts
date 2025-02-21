@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PRODUCT } from '@config/index';
 import { GenericService } from '@shared/services/generic.service';
 import { UserService } from '@shared/services/user.service';
+import { UtilsService } from '@shared/services/utils.service';
 import { ProductService } from 'src/app/shared/services/product.service';
 
 @Component({
@@ -26,10 +27,12 @@ export class ListComponent {
     private route: ActivatedRoute,
     private viewScroller: ViewportScroller,
     private genericService: GenericService,
-    private userService: UserService
+    private userService: UserService,
+    public utilsService: UtilsService
   ) {}
 
   ngOnInit(): void {
+    console.log(this.utilsService.openMobileMenus);
     this.userService.getUserData();
     this.userService.userData$.subscribe({
       next: (data) => {

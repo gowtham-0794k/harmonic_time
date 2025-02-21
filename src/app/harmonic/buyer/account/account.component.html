@@ -11,13 +11,7 @@
               <img src="/assets/img/testimonial/person-1.jpg" alt="" />
             </div>
             <div class="profile__basic-content">
-              <h3 class="profile__basic-title">
-                Welcome Back <span>Admin</span>
-              </h3>
-              <p>
-                2 Running Courses
-                <a routerLink="/home/home-style-1">View Course</a>
-              </p>
+              <h3 class="profile__basic-title">Welcome Back</h3>
             </div>
           </div>
         </div>
@@ -31,7 +25,9 @@
             <div class="cart-item">
               <a routerLink="/buyer/cart">
                 <i class="fa-regular fa-basket-shopping"></i>
-                <span class="cart-quantity">2</span>
+                <span class="cart-quantity">{{
+                  cartService.getCartProducts().length
+                }}</span>
               </a>
             </div>
           </div>
@@ -83,7 +79,7 @@
                 <i class="fa fa-file"></i> Orders
               </button>
 
-              <button
+              <!-- <button
                 class="nav-link"
                 id="nav-password-tab"
                 data-bs-toggle="tab"
@@ -94,11 +90,11 @@
                 aria-selected="false"
               >
                 <i class="fa fa-lock"></i>Change Password
-              </button>
+              </button> -->
 
-              <button class="nav-link">
+              <!-- <button class="nav-link">
                 <i class="fa fa-sign-out"></i> Logout
-              </button>
+              </button> -->
             </div>
           </div>
         </div>
@@ -117,39 +113,35 @@
                   class="profile__info-top d-flex justify-content-between align-items-center"
                 >
                   <h3 class="profile__info-title">Profile Information</h3>
-                  <button
+                  <!-- <button
                     class="profile__info-btn"
                     type="button"
                     data-bs-toggle="modal"
                     data-bs-target="#profile_edit_modal"
                   >
                     <i class="fa-regular fa-pen-to-square"></i> Edit Profile
-                  </button>
+                  </button> -->
                 </div>
 
                 <div class="profile__info-wrapper white-bg">
-                  <div class="profile__info-item">
+                  <div class="profile__info-item" *ngIf="userData?.name">
                     <p>Name</p>
-                    <h4>John Smith</h4>
+                    <h4>{{ userData?.name }}</h4>
                   </div>
                   <div class="profile__info-item">
                     <p>Email</p>
                     <h4>
                       <a
-                        href="mailt:outstock@hotmail.com"
+                        href="{{ mail }}"
                         class="__cf_email__"
                         data-cfemail="94fdfaf2fbd4f1f0e1fff1e6baf7fbf9"
-                        >outstock</a
+                        >{{ userData?.email }}</a
                       >
                     </h4>
                   </div>
-                  <div class="profile__info-item">
+                  <div class="profile__info-item" *ngIf="userData?.phone">
                     <p>Phone</p>
-                    <h4>(325) 463-5693</h4>
-                  </div>
-                  <div class="profile__info-item">
-                    <p>Address</p>
-                    <h4>Abingdon, Maryland(MD), 21009</h4>
+                    <h4>{{ userData?.phone }}</h4>
                   </div>
                 </div>
               </div>

@@ -8,7 +8,7 @@
         alt="product-img"
       />
     </a>
-    <div class="product__action transition-3">
+    <!-- <div class="product__action transition-3">
       <a
         (click)="addToWishlist(product)"
         class="cursor-pointer"
@@ -29,7 +29,6 @@
       >
         <i class="fal fa-sliders-h"></i>
       </a>
-      <!-- Button trigger modal -->
       <a
         class="cursor-pointer"
         data-bs-toggle="modal"
@@ -40,7 +39,7 @@
       >
         <i class="fal fa-search"></i>
       </a>
-    </div>
+    </div> -->
     <div *ngIf="product.discount || product.new" class="product__sale">
       <span *ngIf="product.new || product.discount" class="new">new</span>
       <span *ngIf="product.discount" class="percent"
