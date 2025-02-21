@@ -18,7 +18,7 @@ const category_data: ICategoryType[] = [
   {
     id: 3,
     img: '/assets/img/shop/banner/pilot.jpg',
-    parentTitle: 'FASHION FOR BABY',
+    parentTitle: 'PILOT',
     children: ['Watch'],
     smDesc: '',
   },

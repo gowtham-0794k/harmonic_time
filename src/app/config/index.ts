@@ -39,3 +39,13 @@ export const UPDATE_PRODUCT_DETAILS = baseUrl + '/api/products/productDetails';
 export const USER_CART = baseUrl + '/api/cart/user/';
 export const ADD_TO_CART = baseUrl + '/api/cart';
 export const DELETE_CART_ITEM = baseUrl + '/api/cart/';
+
+export const DELETE_IMAGE_S3 = baseUrl + '/api/upload/delete-image';
+export const DELETE_IMAGE_DB = baseUrl + '/api/products/productImages/';
+
+export const CREATE_PAYMENT_ORDER = baseUrl + '/api/payments/create-order';
+export const VERIFY_PAYMENT_ORDER = baseUrl + '/api/payments/verify-payment';
+
+export const CREATE_ADDRESS = baseUrl + '/api/users/address';
+export const CHECKOUT_ITEM = baseUrl + '/api/checkout';
+export const CHECKOUT_ITEM_ORDER = baseUrl + '/api/checkoutItems';

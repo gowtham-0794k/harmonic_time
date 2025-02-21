@@ -137,8 +137,13 @@
               </div>
             </div>
           </div>
-          <div>
-            <button mat-button matStepperNext (click)="stepperNext(1, stepper)">
+          <div class="d-md-flex justify-content-end">
+            <button
+              mat-button
+              matStepperNext
+              (click)="stepperNext(1, stepper)"
+              class="os-btn"
+            >
               Next
             </button>
           </div>
@@ -343,9 +348,11 @@
               </div>
             </div>
           </div>
-          <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
+          <div class="d-md-flex justify-content-end">
+            <button mat-button matStepperPrevious class="os-btn mr-5">
+              Back
+            </button>
+            <button mat-button matStepperNext class="os-btn">Next</button>
           </div>
         </form>
       </mat-step>
@@ -388,9 +395,11 @@
               </div>
             </div>
           </div>
-          <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
+          <div class="d-md-flex justify-content-end">
+            <button mat-button matStepperPrevious class="os-btn mr-5">
+              Back
+            </button>
+            <button mat-button matStepperNext class="os-btn">Next</button>
           </div>
         </form>
       </mat-step>
@@ -420,9 +429,11 @@
               </div>
             </div>
           </div>
-          <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
+          <div class="d-md-flex justify-content-end">
+            <button mat-button matStepperPrevious class="os-btn mr-5">
+              Back
+            </button>
+            <button mat-button matStepperNext class="os-btn">Next</button>
           </div>
         </form>
       </mat-step>
@@ -454,34 +465,33 @@
               </div>
             </div>
             <div class="col-12">
-              <div class="col-12" *ngIf="uploadedImages.length > 0">
-                <div class="table-content table-responsive">
-                  <table class="table">
-                    <tbody>
-                      <tr *ngFor="let img of uploadedImages; let i = index">
-                        <td class="product-thumbnail">
-                          <a>
-                            <img [src]="img.url" alt="product-img" />
-                          </a>
-                        </td>
-                        <td class="product-name">
-                          <a>{{ img.file.name }}</a>
-                        </td>
-                        <td class="product-remove">
-                          <a (click)="removeImage(i)" class="cursor-pointer">
-                            <i class="fa fa-times"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+              <div class="row" *ngIf="uploadedImages.length > 0">
+                <div
+                  class="col-auto m-2"
+                  *ngFor="let img of uploadedImages; let i = index"
+                >
+                  <div class="position-relative image-container">
+                    <img
+                      [src]="img.url"
+                      alt="product-img"
+                      class="uploaded-img m-2"
+                    />
+                    <a
+                      (click)="removeImage(img, i)"
+                      class="position-absolute top-0 end-0 text-danger cursor-pointer"
+                    >
+                      <i class="fa fa-times"></i>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>
+          <div class="d-md-flex justify-content-end">
+            <button mat-button matStepperPrevious class="os-btn mr-5">
+              Back
+            </button>
+            <button mat-button matStepperNext class="os-btn">
               {{ !productData ? "Create Product" : "Update Product" }}
             </button>
           </div>

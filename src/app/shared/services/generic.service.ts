@@ -67,6 +67,11 @@ export class GenericService {
     return this._httpClient.delete(url);
   }
 
+  deletePayloadObservable(_url: string, data: any): Observable<any> {
+    const url = _url;
+    return this._httpClient.delete(url, { body: data });
+  }
+
   getData() {
     return of([1, 2, 3]);
   }

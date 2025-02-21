@@ -26,6 +26,8 @@ import {
   UPDATE_PRODUCT_DETAILS,
   POST_UPLOAD_IMAGES,
   POST_PRODUCT_IMAGES,
+  DELETE_IMAGE_S3,
+  DELETE_IMAGE_DB,
 } from 'src/app/config';
 import { GenericService } from 'src/app/shared/services/generic.service';
 import {
@@ -42,8 +44,9 @@ import {
 } from 'src/app/shared/types/product-d-t';
 import { AppState } from 'src/app/store/app.state';
 import { selectUserData } from 'src/app/store/selectors/user.selectors';
-import { concatMap } from 'rxjs/operators';
+import { catchError, concatMap, switchMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+import { forkJoin } from 'rxjs';
 
 interface SelectOption {
   id: number;
@@ -254,6 +257,10 @@ export class AddEditComponent implements OnInit {
           deliveryInfo: data.DeliveryAndReturns.DeliveryInformation,
           returnsPolicy: data.DeliveryAndReturns.ReturnsPolicy,
         });
+
+        this.uploadedImages = data.Images.map((el: any) => {
+          return { url: el.ImageURL, ...el };
+        });
       });
       // Example of loading product data
       // const product = await this.productService.getProduct(this.productId);
@@ -347,8 +354,32 @@ export class AddEditComponent implements OnInit {
     this.errorMessage = '';
   }
 
-  removeImage(index: number): void {
-    this.uploadedImages.splice(index, 1);
+  removeImage(image: any, index: number): void {
+    if (image.key) {
+      const s3DeleteUrl = DELETE_IMAGE_S3;
+      const dbDeleteUrl = `${DELETE_IMAGE_DB}${image._id}`;
+
+      const deleteS3Payload = { imageUrl: image.key };
+
+      this.genericService
+        .deletePayloadObservable(s3DeleteUrl, deleteS3Payload)
+        .subscribe({
+          next: () => {
+            this.genericService.deleteObservable(dbDeleteUrl).subscribe({
+              next: () => {
+                this.uploadedImages.splice(index, 1);
+                this.toastrService.success('Image deleted successfully!');
+              },
+              error: () =>
+                this.toastrService.error('Failed to delete image from DB!'),
+            });
+          },
+          error: () =>
+            this.toastrService.error('Failed to delete image from S3!'),
+        });
+    } else {
+      this.uploadedImages.splice(index, 1);
+    }
   }
 
   isFormValid(): boolean {
@@ -411,7 +442,7 @@ export class AddEditComponent implements OnInit {
     try {
       // Example of submitting the form
       if (this.isEditing) {
-        this.updateProduct(userId, productData);
+        this.updateProduct(userId, productData, formData);
       } else {
         this.createProduct(userId, productData, formData);
       }
@@ -511,14 +542,27 @@ export class AddEditComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.toastrService.success('Product created successfully !');
+          this.resetForm();
         },
         error: (err) => {
           console.error('Error creating product or related details:', err);
+          this.toastrService.error('Error creating product or related details');
         },
       });
   }
 
-  updateProduct(userId: string, productData: any) {
+  resetForm() {
+    this.basicProductInformation.reset();
+    this.productInformation.reset();
+    this.productDescription.reset();
+    this.deliveryAndReturns.reset();
+    this.media.reset();
+    this.uploadedImages = [];
+  }
+
+  updateProduct(userId: string, productData: any, formData: any) {
+    const productId = this.productData._id;
+
     const productPayload = {
       UserID: userId,
       ProductName: productData.productName,
@@ -528,10 +572,6 @@ export class AddEditComponent implements OnInit {
       Price: productData.price,
       RecipientID: productData.recipientId,
     };
-    const UPDATE_PRODUCT_URL = UPDATE_PRODUCT + `/${this.productData._id}`;
-    this.genericService
-      .putObservable(UPDATE_PRODUCT_URL, productPayload)
-      .subscribe((response) => {});
 
     const productDetailsPayload = {
       DialColorID: productData.dialColorId,
@@ -546,36 +586,63 @@ export class AddEditComponent implements OnInit {
       DeliveryOptionID: productData.deliveryOptionId,
     };
 
-    this.genericService
-      .putObservable(
-        UPDATE_PRODUCT_DETAILS + `/${this.productData._id}`,
-        productDetailsPayload
-      )
-      .subscribe((response) => {});
-
     const productDescriptionPayload = {
       Title: productData.shortTitle,
       Content: productData.detailedDescription,
       AdditionalDetails: productData.additionalDescription,
     };
 
-    this.genericService
-      .putObservable(
-        this.CREATE_PRODUCT_DESCRIPTION_URL + `/${this.productData._id}`,
-        productDescriptionPayload
-      )
-      .subscribe((response) => {});
-
     const productDeliveryReturnPayload = {
       DeliveryInformation: productData.deliveryInfo,
       ReturnsPolicy: productData.returnsPolicy,
     };
 
-    this.genericService
-      .putObservable(
-        this.CREATE_PRODUCT_RETURN_POLICY_URL + `/${this.productData._id}`,
+    const updateRequests = [
+      this.genericService.putObservable(
+        `${UPDATE_PRODUCT}/${productId}`,
+        productPayload
+      ),
+      this.genericService.putObservable(
+        `${UPDATE_PRODUCT_DETAILS}/${productId}`,
+        productDetailsPayload
+      ),
+      this.genericService.putObservable(
+        `${this.CREATE_PRODUCT_DESCRIPTION_URL}/${productId}`,
+        productDescriptionPayload
+      ),
+      this.genericService.putObservable(
+        `${this.CREATE_PRODUCT_RETURN_POLICY_URL}/${productId}`,
         productDeliveryReturnPayload
+      ),
+    ];
+
+    forkJoin(updateRequests)
+      .pipe(
+        switchMap(() =>
+          this.genericService.postObservableImages(
+            `${this.POST_UPLOAD_IMAGES}${userId}/${productId}`,
+            formData
+          )
+        ),
+        switchMap((response) => {
+          const imagesPayload = {
+            ProductID: productId,
+            ImageURLs: response.data,
+          };
+          return this.genericService.postObservable(
+            POST_PRODUCT_IMAGES,
+            imagesPayload
+          );
+        }),
+        catchError((err) => {
+          console.error('Error updating product or related details:', err);
+          this.toastrService.error('Error updating product or related details');
+          throw err;
+        })
       )
-      .subscribe((response) => {});
+      .subscribe(() => {
+        this.toastrService.success('Product updated successfully!');
+        this.resetForm();
+      });
   }
 }

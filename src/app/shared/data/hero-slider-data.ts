@@ -108,9 +108,9 @@ const hero_slider_seven: IHeroSlider[] = [
     bgImg: '/assets/img/slider/06/e-01.webp',
     sm_title: '',
     meta: true,
-    title: 'Charm of the HMT Janata',
+    title: 'HMT Janata',
     subtitle:
-      'The Janata is HMT’s most storied, emblematic and charming watch for good reason. Significantly, it begins with the name itself. “Janata” in Hindi means the public; and making a watch dedicated to the people of India is how the Janata got its name. At a time when we were finding our feet as an independent nation, this humble object came along and offered something representative of collective national dreams, as well as a means to unite people through pride in a locally made item.',
+      'The Janata is HMT’s most storied, emblematic and charming watch for good reason. ',
   },
   {
     id: 2,

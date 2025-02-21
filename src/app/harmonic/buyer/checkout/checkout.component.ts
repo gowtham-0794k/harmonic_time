@@ -3,6 +3,23 @@ import { CartService } from 'src/app/shared/services/cart.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { countries } from '@shared/constants/countries';
+import { GenericService } from '@shared/services/generic.service';
+import {
+  CHECKOUT_ITEM,
+  CHECKOUT_ITEM_ORDER,
+  CREATE_ADDRESS,
+  CREATE_PAYMENT_ORDER,
+  VERIFY_PAYMENT_ORDER,
+} from '@config/index';
+import { UserService } from '@shared/services/user.service';
+import {
+  catchError,
+  firstValueFrom,
+  Observable,
+  switchMap,
+  throwError,
+} from 'rxjs';
+declare var Razorpay: any;
 
 @Component({
   selector: 'app-checkout',
@@ -15,10 +32,13 @@ export class CheckoutComponent {
   public couponCode: string = '';
   public payment_name: string = '';
   public countries = countries;
+  public userData: any = {};
 
   constructor(
     public cartService: CartService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    public genericService: GenericService,
+    private userService: UserService
   ) {}
 
   handleOpenLogin() {
@@ -47,6 +67,16 @@ export class CheckoutComponent {
   public formSubmitted = false;
 
   ngOnInit() {
+    this.userService.getUserData();
+    this.userService.userData$.subscribe({
+      next: (data) => {
+        this.userData = data;
+      },
+      error: (err) => {
+        console.error('Error fetching user data:', err);
+      },
+    });
+    this.cartService.loadCartProducts();
     this.checkoutForm = new FormGroup({
       firstName: new FormControl(null, Validators.required),
       lastName: new FormControl(null, Validators.required),
@@ -60,16 +90,36 @@ export class CheckoutComponent {
       orderNote: new FormControl(null),
       email: new FormControl(null, [Validators.required, Validators.email]),
     });
+
+    this.loadRazorpayScript();
+  }
+
+  loadRazorpayScript() {
+    return new Promise((resolve, reject) => {
+      if (document.getElementById('razorpay-script')) {
+        resolve(true);
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.id = 'razorpay-script';
+      script.onload = () => resolve(true);
+      script.onerror = () => reject(false);
+
+      document.body.appendChild(script);
+    });
   }
 
   onSubmit() {
     this.formSubmitted = true;
     if (this.checkoutForm.valid) {
-      this.toastrService.success(`Order successfully`);
+      this.payNow();
+      // this.toastrService.success(`Order successfully`);
 
       // Reset the form
-      this.checkoutForm.reset();
-      this.formSubmitted = false; // Reset formSubmitted to false
+      // this.checkoutForm.reset();
+      // this.formSubmitted = false; // Reset formSubmitted to false
     }
   }
 
@@ -108,5 +158,136 @@ export class CheckoutComponent {
   }
   get email() {
     return this.checkoutForm.get('email');
+  }
+
+  async payNow() {
+    await this.loadRazorpayScript();
+
+    const formValue = this.checkoutForm.value;
+    const cartTotal =
+      this.cartService.computeCartTotal(this.cartService.getCartProducts())
+        .total * 100;
+
+    this.genericService
+      .postObservable(CREATE_PAYMENT_ORDER, { amount: cartTotal })
+      .pipe(
+        switchMap((order: any) => this.initiateRazorpay(order.data, formValue)),
+        catchError((error) => {
+          console.error('Error creating payment order:', error);
+          this.toastrService.error('Payment initialization failed!');
+          return throwError(() => error);
+        })
+      )
+      .subscribe();
+  }
+
+  private initiateRazorpay(orderRes: any, formValue: any) {
+    return new Observable((observer) => {
+      const options = {
+        key: 'rzp_test_z8oH9LFfnlEpw0',
+        amount: orderRes.amount,
+        currency: orderRes.currency,
+        name: 'Your Company',
+        description: 'Test Transaction',
+        image: 'https://your-logo-url.com',
+        order_id: orderRes.id,
+        handler: async (handlerResponse: any) => {
+          try {
+            const verifyResponse = await this.verifyPayment(handlerResponse);
+            if (verifyResponse) {
+              await this.processCheckout(orderRes, formValue);
+            } else {
+              this.toastrService.error('Payment Verification Failed!');
+            }
+          } catch (error) {
+            console.error('Payment Verification Error:', error);
+            this.toastrService.error('Payment Verification Failed!');
+          }
+        },
+        prefill: {
+          name: formValue.firstName,
+          email: formValue.email,
+          contact: formValue.phone,
+        },
+        theme: { color: '#3399cc' },
+      };
+
+      const razorpayInstance = new (window as any).Razorpay(options);
+      razorpayInstance.open();
+      observer.next();
+      observer.complete();
+    });
+  }
+
+  private async verifyPayment(handlerResponse: any): Promise<any> {
+    try {
+      return await firstValueFrom(
+        this.genericService.postObservable(
+          VERIFY_PAYMENT_ORDER,
+          handlerResponse
+        )
+      );
+    } catch (error) {
+      console.error('Error verifying payment:', error);
+      throw error;
+    }
+  }
+
+  private async processCheckout(orderRes: any, formValue: any) {
+    try {
+      const addressPayload = {
+        UserID: this.userData._id,
+        Country: formValue.country,
+        FirstName: formValue.firstName,
+        LastName: formValue.lastName,
+        AddressLine1: formValue.address,
+        AddressLine2: '',
+        City: formValue.city,
+        State: formValue.state,
+        PostalCode: formValue.zipCode,
+        Phone: formValue.phone,
+        orderNotes: formValue.orderNote,
+      };
+
+      const addressResponse = await firstValueFrom(
+        this.genericService.postObservable(CREATE_ADDRESS, addressPayload)
+      );
+
+      const checkoutPayload = {
+        UserID: this.userData._id,
+        TotalAmount: orderRes.amount,
+        PaymentStatus: 'success',
+        CheckoutDate: new Date(),
+        DeliveryStatus: 'pending',
+        AddressID: addressResponse.data.insertedId,
+      };
+
+      const checkOutRes = await firstValueFrom(
+        this.genericService.postObservable(CHECKOUT_ITEM, checkoutPayload)
+      );
+
+      const cartItems = this.cartService
+        .getCartProducts()
+        .map((el: any) => el.ProductID);
+      const checkoutItemOrder = {
+        CheckoutID: checkOutRes.data.insertedId,
+        ProductIDs: cartItems,
+        Price: orderRes.amount,
+      };
+
+      await firstValueFrom(
+        this.genericService.postObservable(
+          CHECKOUT_ITEM_ORDER,
+          checkoutItemOrder
+        )
+      );
+
+      this.toastrService.success(
+        'Payment and Checkout Completed Successfully!'
+      );
+    } catch (error) {
+      console.error('Error in checkout process:', error);
+      this.toastrService.error('Checkout Failed!');
+    }
   }
 }
