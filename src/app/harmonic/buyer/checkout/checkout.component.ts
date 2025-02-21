@@ -64,8 +64,6 @@ export class CheckoutComponent {
 
   onSubmit() {
     this.formSubmitted = true;
-    console.log(this.checkoutForm.valid);
-    console.log(this.checkoutForm.value);
     if (this.checkoutForm.valid) {
       this.toastrService.success(`Order successfully`);
 

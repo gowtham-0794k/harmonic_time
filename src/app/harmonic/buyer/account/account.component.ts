@@ -22,7 +22,6 @@ export class AccountComponent {
     this.userService.getUserData();
     this.userService.userData$.subscribe({
       next: (data) => {
-        console.log({ data });
         this.userData = data;
       },
       error: (err) => {

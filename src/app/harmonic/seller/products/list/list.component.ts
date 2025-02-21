@@ -32,7 +32,6 @@ export class ListComponent {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.utilsService.openMobileMenus);
     this.userService.getUserData();
     this.userService.userData$.subscribe({
       next: (data) => {

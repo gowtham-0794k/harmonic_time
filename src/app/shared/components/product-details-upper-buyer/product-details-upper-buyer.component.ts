@@ -28,7 +28,6 @@ export class ProductDetailsUpperBuyerComponent {
   ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.product);
     if (this.product) {
       this.productService.activeImg = this.product.Images[0].ImageURL;
     }
