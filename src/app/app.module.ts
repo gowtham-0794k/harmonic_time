@@ -16,6 +16,7 @@ import { UserEffects } from './store/effects/user.effects';
 import { appReducer } from './store/app.reducer';
 import { environment } from '@env/environment';
 import { UserService } from '@shared/services/user.service';
+import { CartEffects } from './store/effects/cart.effects';
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,7 +34,7 @@ import { UserService } from '@shared/services/user.service';
       positionClass: 'toast-top-center',
     }),
     StoreModule.forRoot(appReducer),
-    EffectsModule.forRoot([UserEffects]),
+    EffectsModule.forRoot([UserEffects, CartEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,

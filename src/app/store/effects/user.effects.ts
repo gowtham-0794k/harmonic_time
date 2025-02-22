@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 import {
   registerUser,
   registerUserSuccess,
@@ -9,14 +9,20 @@ import {
   loginUserSuccess,
   loginUserFailure,
   loginUser,
+  loadUser,
+  loadUserSuccess,
+  loadUserFailure,
 } from '../actions/user.actions';
 import { GenericService } from 'src/app/shared/services/generic.service';
+import { UserService } from '@shared/services/user.service';
+import { loadCart } from '../actions/cart.actions';
 
 @Injectable()
 export class UserEffects {
   constructor(
     private actions$: Actions,
-    private genericService: GenericService
+    private genericService: GenericService,
+    public userService: UserService
   ) {}
 
   registerUser$ = createEffect(() =>
@@ -48,6 +54,25 @@ export class UserEffects {
           })
         )
       )
+    )
+  );
+
+  loadUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loadUser),
+      switchMap(() =>
+        this.userService.getUserData().pipe(
+          map((user) => loadUserSuccess({ user })),
+          catchError((error) => of(loadUserFailure({ error })))
+        )
+      )
+    )
+  );
+
+  loadUserSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loadUserSuccess),
+      map(() => loadCart()) // Dispatch loadCart only after user loads
     )
   );
 }

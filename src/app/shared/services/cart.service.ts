@@ -9,11 +9,15 @@ import {
   catchError,
   EMPTY,
   map,
+  Observable,
   of,
   switchMap,
   take,
   tap,
 } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectCartItems } from 'src/app/store/selectors/cart.selectors';
+import { loadCart } from 'src/app/store/actions/cart.actions';
 
 const state = {
   cart_products: JSON.parse(localStorage['cart_products'] || '[]'),
@@ -26,43 +30,14 @@ export class CartService {
   public orderQuantity: number = 1;
   public isCartOpen: boolean = false;
   private cartProducts$ = new BehaviorSubject<any[]>([]);
+  cart$: Observable<any[]> = this.store.select(selectCartItems);
 
   constructor(
     private toastrService: ToastrService,
     private userService: UserService,
-    private genericService: GenericService
+    private genericService: GenericService,
+    private store: Store
   ) {}
-
-  public loadCartProducts(): void {
-    this.userService.userData$
-      .pipe(
-        take(1),
-        switchMap((data) => {
-          if (data) {
-            const url = USER_CART + `${data._id}`;
-            return this.genericService.getObservable(url).pipe(
-              map((response: any) => response.data || []), // Extract only `data`
-              catchError((err) => {
-                console.error('Error fetching cart:', err);
-                return of([]); // Return an empty array in case of an error
-              })
-            );
-          }
-          return of([]);
-        })
-      )
-      .subscribe((cartData) => {
-        this.cartProducts$.next(cartData); // Update BehaviorSubject with only `data`
-      });
-  }
-
-  public getCartProducts() {
-    const cartItems = this.cartProducts$.getValue();
-    if (cartItems.length) {
-      return cartItems;
-    }
-    return state.cart_products;
-  }
 
   handleOpenCartSidebar() {
     this.isCartOpen = !this.isCartOpen;
@@ -94,7 +69,7 @@ export class CartService {
                       this.toastrService.success(
                         `${payload.ProductName} added to cart`
                       );
-                      this.loadCartProducts();
+                      this.store.dispatch(loadCart());
                     })
                   );
               })
@@ -192,37 +167,32 @@ export class CartService {
   }
 
   // remover_cart_products
-  removeCartProduct(payload: any) {
-    this.userService.userData$.subscribe({
-      next: (data) => {
-        if (data) {
-          const url = DELETE_CART_ITEM + `${payload._id}`;
-          this.genericService.deleteObservable(url).subscribe({
-            next: (response) => {
-              this.toastrService.success(
-                `${payload.ProductName} removed from cart`
-              );
-              this.loadCartProducts();
-            },
-            error: (err) => {
-              this.toastrService.error(
-                `${payload.ProductName} error removing from cart`
-              );
-            },
-          });
-        }
-      },
-      error: (err) => {
-        state.cart_products = state.cart_products.filter(
-          (p: any) => p._id !== payload._id
-        );
-        this.toastrService.success(`${payload.ProductName} removed from cart`);
-        localStorage.setItem(
-          'cart_products',
-          JSON.stringify(state.cart_products)
-        );
-      },
-    });
+  removeCartProduct(payload: any, userData: any) {
+    if (userData) {
+      const url = DELETE_CART_ITEM + `${payload._id}`;
+      this.genericService.deleteObservable(url).subscribe({
+        next: (response) => {
+          this.toastrService.success(
+            `${payload.ProductName} removed from cart`
+          );
+          this.store.dispatch(loadCart());
+        },
+        error: (err) => {
+          this.toastrService.error(
+            `${payload.ProductName} error removing from cart`
+          );
+        },
+      });
+    } else {
+      state.cart_products = state.cart_products.filter(
+        (p: any) => p._id !== payload._id
+      );
+      this.toastrService.success(`${payload.ProductName} removed from cart`);
+      localStorage.setItem(
+        'cart_products',
+        JSON.stringify(state.cart_products)
+      );
+    }
     if (state.cart_products.length) {
       state.cart_products = state.cart_products.filter(
         (p: any) => p._id !== payload._id

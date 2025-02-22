@@ -64,14 +64,14 @@
     </div>
     <div class="add-cart p-absolute transition-3">
       <a
-        *ngIf="!isItemInCart(product)"
+        *ngIf="!(isProductInCart$(product._id) | async)"
         (click)="addToCart(product)"
         class="cursor-pointer"
       >
         + Add to Cart
       </a>
       <a
-        *ngIf="isItemInCart(product)"
+        *ngIf="isProductInCart$(product._id) | async"
         routerLink="/buyer/cart"
         class="cursor-pointer"
       >

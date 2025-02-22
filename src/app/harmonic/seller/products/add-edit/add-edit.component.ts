@@ -113,22 +113,16 @@ export class AddEditComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private genericService: GenericService,
-    private userService: UserService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
     this.initializeForms();
     this.checkForEditMode();
     this.initialApiCalls();
-    this.userService.getUserData();
-    this.userService.userData$.subscribe({
-      next: (data) => {
-        this.userData = data;
-      },
-      error: (err) => {
-        console.error('Error fetching user data:', err);
-      },
+    this.store.select(selectUserData).subscribe((state) => {
+      this.userData = state.user.data;
     });
   }
 

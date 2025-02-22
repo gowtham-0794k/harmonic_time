@@ -43,7 +43,7 @@
         </div>
         <div class="add-cart-list d-sm-flex align-items-center">
           <a
-            *ngIf="!isItemInCart(product)"
+            *ngIf="!(isProductInCart$(product._id) | async)"
             (click)="addToCart(product)"
             class="add-cart-btn mr-10 cursor-pointer"
           >
@@ -51,7 +51,7 @@
             Add to Cart
           </a>
           <a
-            *ngIf="isItemInCart(product)"
+            *ngIf="isProductInCart$(product._id) | async"
             routerLink="/buyer/cart"
             class="add-cart-btn mr-10 cursor-pointer"
           >

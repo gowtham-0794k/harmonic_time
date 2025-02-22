@@ -1,19 +1,19 @@
 <div class="mini-cart">
-  <div *ngIf="cartService.getCartProducts().length === 0">
+  <div *ngIf="cartItems.length === 0">
     <h5>Your cart is empty</h5>
   </div>
-  <div *ngIf="cartService.getCartProducts().length > 0" class="mini-cart-inner">
+  <div *ngIf="cartItems.length > 0" class="mini-cart-inner">
     <ul
       [ngClass]="[
         'mini-cart-list',
-        cartService.getCartProducts().length === 1
+        cartItems.length === 1
           ? 'slider-height_1'
-          : cartService.getCartProducts().length === 2
+          : cartItems.length === 2
           ? 'slider-height_2'
           : 'slider-height'
       ]"
     >
-      <li *ngFor="let item of cartService.getCartProducts()">
+      <li *ngFor="let item of cartItems">
         <div class="cart-img f-left">
           <a [routerLink]="['/shop/shop-details', item.id]">
             <img [src]="item.Images[0]?.ImageURL" alt="cart-img" />
@@ -35,8 +35,7 @@
     <div class="total-price d-flex justify-content-between mb-30">
       <span>Subtotal:</span>
       <span>{{
-        cartService.computeCartTotal(cartService.getCartProducts()).total
-          | currency : "INR"
+        cartService.computeCartTotal(cartItems).total | currency : "INR"
       }}</span>
     </div>
     <div class="checkout-link">

@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { UserService } from '@shared/services/user.service';
 import menuData from 'src/app/shared/data/menu-data';
 import { IMenuType } from 'src/app/shared/types/menu-d-t';
+import { selectUserData } from 'src/app/store/selectors/user.selectors';
 
 @Component({
   selector: 'app-nav-manus',
@@ -14,17 +16,11 @@ export class NavManusComponent {
 
   bg: string = '/assets/img/bg/mega-menu-bg.jpg';
 
-  constructor(private userService: UserService) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.userService.getUserData();
-    this.userService.userData$.subscribe({
-      next: (data) => {
-        this.roles = data?.roles;
-      },
-      error: (err) => {
-        console.error('Error fetching user data:', err);
-      },
+    this.store.select(selectUserData).subscribe((state) => {
+      this.roles = state.user?.data?.roles;
     });
   }
 

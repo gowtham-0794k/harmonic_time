@@ -45,6 +45,7 @@ export class ShopAreaComponent {
   ) {
     this.route.queryParams.subscribe((params) => {
       this.maxPrice = params['maxPrice'] ? params['maxPrice'] : this.maxPrice;
+      this.minPrice = params['minPrice'] ? params['minPrice'] : this.minPrice;
       this.brand = params['brand'] ? params['brand'] : null;
       this.category = params['category'] ? params['category'] : null;
       this.subcategory = params['subcategory'] ? params['subcategory'] : null;
@@ -100,7 +101,7 @@ export class ShopAreaComponent {
         });
       }
       // Price Filter
-      if (this.minPrice && this.maxPrice) {
+      if (this.minPrice || this.maxPrice) {
         filteredProducts = filteredProducts?.filter(
           (p: any) =>
             p.Price >= Number(this.minPrice) && p.Price <= Number(this.maxPrice)
@@ -121,7 +122,6 @@ export class ShopAreaComponent {
   }
 
   ngOnInit() {
-    this.cartService.loadCartProducts();
     const url = PRODUCT;
     this.genericService.getObservable(url).subscribe({
       next: (response) => {

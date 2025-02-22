@@ -19,6 +19,9 @@ import {
   switchMap,
   throwError,
 } from 'rxjs';
+import { selectUserData } from 'src/app/store/selectors/user.selectors';
+import { Store } from '@ngrx/store';
+import { selectCartItems } from 'src/app/store/selectors/cart.selectors';
 declare var Razorpay: any;
 
 @Component({
@@ -33,12 +36,13 @@ export class CheckoutComponent {
   public payment_name: string = '';
   public countries = countries;
   public userData: any = {};
+  public cartItems: any = [];
 
   constructor(
     public cartService: CartService,
     private toastrService: ToastrService,
     public genericService: GenericService,
-    private userService: UserService
+    private store: Store
   ) {}
 
   handleOpenLogin() {
@@ -67,16 +71,16 @@ export class CheckoutComponent {
   public formSubmitted = false;
 
   ngOnInit() {
-    this.userService.getUserData();
-    this.userService.userData$.subscribe({
-      next: (data) => {
-        this.userData = data;
-      },
-      error: (err) => {
-        console.error('Error fetching user data:', err);
-      },
+    this.store.select(selectUserData).subscribe((state) => {
+      this.userData = state.user.data;
     });
-    this.cartService.loadCartProducts();
+    this.store.select(selectCartItems).subscribe((state) => {
+      if (state?.length) {
+        this.cartItems = state;
+      } else {
+        this.cartItems = [];
+      }
+    });
     this.checkoutForm = new FormGroup({
       firstName: new FormControl(null, Validators.required),
       lastName: new FormControl(null, Validators.required),
@@ -165,8 +169,7 @@ export class CheckoutComponent {
 
     const formValue = this.checkoutForm.value;
     const cartTotal =
-      this.cartService.computeCartTotal(this.cartService.getCartProducts())
-        .total * 100;
+      this.cartService.computeCartTotal(this.cartItems).total * 100;
 
     this.genericService
       .postObservable(CREATE_PAYMENT_ORDER, { amount: cartTotal })
@@ -266,9 +269,7 @@ export class CheckoutComponent {
         this.genericService.postObservable(CHECKOUT_ITEM, checkoutPayload)
       );
 
-      const cartItems = this.cartService
-        .getCartProducts()
-        .map((el: any) => el.ProductID);
+      const cartItems = this.cartItems.map((el: any) => el.ProductID);
       const checkoutItemOrder = {
         CheckoutID: checkOutRes.data.insertedId,
         ProductIDs: cartItems,

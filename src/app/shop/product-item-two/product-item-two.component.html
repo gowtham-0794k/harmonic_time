@@ -11,7 +11,7 @@
       </a>
       <div class="product__action-3 transition-3">
         <a
-          *ngIf="!isItemInCart(product)"
+          *ngIf="!(isProductInCart$(product._id) | async)"
           (click)="addToCart(product)"
           class="action-btn cursor-pointer"
         >
@@ -19,7 +19,7 @@
           Add to cart
         </a>
         <a
-          *ngIf="isItemInCart(product)"
+          *ngIf="isProductInCart$(product._id) | async"
           routerLink="/buyer/cart"
           class="action-btn cursor-pointer"
         >

@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { loginUserSuccess } from 'src/app/store/actions/user.actions';
 import { GenericService } from './generic.service';
 import { USER } from '@config/index';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { CartService } from './cart.service';
 
@@ -35,15 +35,10 @@ export class UserService {
     this.store.dispatch(loginUserSuccess({ data: null }));
   }
 
-  getUserData() {
+  getUserData(): Observable<any> {
     const url = USER;
-    this.genericService.getObservableToken(url).subscribe({
-      next: (response) => {
-        this.userDataSubject.next(response.data);
-      },
-      error: (err) => {
-        console.error(`Error fetching data : `, err);
-      },
-    });
+    return this.genericService
+      .getObservableToken(url)
+      .pipe(tap((response) => this.userDataSubject.next(response.data)));
   }
 }

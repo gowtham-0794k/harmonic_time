@@ -5,6 +5,7 @@ import { PRODUCT } from '@config/index';
 import { GenericService } from '@shared/services/generic.service';
 import { UserService } from '@shared/services/user.service';
 import { UtilsService } from '@shared/services/utils.service';
+import { filter, Subscription, switchMap } from 'rxjs';
 import { ProductService } from 'src/app/shared/services/product.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class ListComponent {
   public pageSize = 10;
   public pageNo: number = 1;
   userData: any;
+  private subscriptions: Subscription = new Subscription();
 
   constructor(
     public productService: ProductService,
@@ -32,48 +34,50 @@ export class ListComponent {
   ) {}
 
   ngOnInit(): void {
-    this.userService.getUserData();
-    this.userService.userData$.subscribe({
-      next: (data) => {
-        this.userData = data;
-        if (this.userData) {
-          const url = PRODUCT + `?UserID=${this.userData._id}`;
-          this.genericService.getObservable(url).subscribe({
-            next: (response) => {
-              this.orders = response?.data;
-              this.paginate = this.productService.getPager(
-                this.orders.length,
-                Number(+this.pageNo),
-                this.pageSize
-              );
-              this.paginationOrders = this.orders.slice(
-                this.paginate.startIndex,
-                this.paginate.endIndex + 1
-              );
-            },
-            error: (err) => {
-              console.error(`Error fetching data for :`, err);
-            },
-          });
-        }
-      },
-      error: (err) => {
-        console.error('Error fetching user data:', err);
-      },
-    });
+    // Subscribe to userData and fetch orders only when userData exists
+    this.subscriptions.add(
+      this.userService.userData$
+        .pipe(
+          filter((user) => !!user), // Ensure userData is not null
+          switchMap((user) => {
+            this.userData = user;
+            const url = `${PRODUCT}?UserID=${this.userData._id}`;
+            return this.genericService.getObservable(url);
+          })
+        )
+        .subscribe({
+          next: (response) => {
+            this.orders = response?.data || [];
+            this.updatePagination();
+          },
+          error: (err) => console.error(`Error fetching product data:`, err),
+        })
+    );
 
-    this.route.queryParams.subscribe((params) => {
-      this.pageNo = params['page'] ? params['page'] : this.pageNo;
-      this.paginate = this.productService.getPager(
-        this.orders.length,
-        Number(+this.pageNo),
-        this.pageSize
-      );
-      this.paginationOrders = this.orders.slice(
-        this.paginate.startIndex,
-        this.paginate.endIndex + 1
-      );
-    });
+    // Subscribe to query params to update pagination
+    this.subscriptions.add(
+      this.route.queryParams.subscribe((params) => {
+        this.pageNo = params['page'] ? Number(params['page']) : this.pageNo;
+        this.updatePagination();
+      })
+    );
+  }
+
+  updatePagination(): void {
+    if (!this.orders.length) return;
+    this.paginate = this.productService.getPager(
+      this.orders.length,
+      this.pageNo,
+      this.pageSize
+    );
+    this.paginationOrders = this.orders.slice(
+      this.paginate.startIndex,
+      this.paginate.endIndex + 1
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe(); // Unsubscribe to avoid memory leaks
   }
 
   setPage(page: number) {

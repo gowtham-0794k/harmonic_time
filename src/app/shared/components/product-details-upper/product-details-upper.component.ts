@@ -20,7 +20,7 @@ export class ProductDetailsUpperComponent {
 
   ngOnInit() {
     if (this.product) {
-      this.productService.activeImg = this.product?.Images[0]?.ImageURL;
+      this.productService.activeImg = this.product?.Images?.[0]?.ImageURL;
     }
   }
 }

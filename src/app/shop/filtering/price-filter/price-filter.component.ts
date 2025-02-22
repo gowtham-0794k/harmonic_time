@@ -60,7 +60,7 @@ export class PriceFilterComponent {
         minPrice,
         maxPrice,
       });
-      minPrice = maxPrice + 1;
+      minPrice = maxPrice;
     }
 
     return ranges;

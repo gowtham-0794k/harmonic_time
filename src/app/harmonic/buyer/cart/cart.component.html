@@ -1,17 +1,14 @@
 <app-breadcrumb-two title="Cart" subtitle="Cart"></app-breadcrumb-two>
 <section class="cart-area pt-100 pb-100">
   <div class="container">
-    <div
-      *ngIf="cartService.getCartProducts().length === 0"
-      class="text-center pt-50"
-    >
+    <div *ngIf="cartItems.length === 0" class="text-center pt-50">
       <h3>No Cart Items Found</h3>
       <a routerLink="/buyer/products" class="os-btn os-btn-black"
         >Continue Shopping</a
       >
     </div>
 
-    <div *ngIf="cartService.getCartProducts().length > 0" class="row">
+    <div *ngIf="cartItems.length > 0" class="row">
       <div class="col-12">
         <div class="table-content table-responsive">
           <table class="table">
@@ -25,7 +22,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of cartService.getCartProducts()">
+              <tr *ngFor="let item of cartItems">
                 <td class="product-thumbnail">
                   <a [routerLink]="['/shop/shop-details', item._id]">
                     <img [src]="item.Images[0]?.ImageURL" alt="product-img" />
@@ -48,7 +45,7 @@
                 </td>
                 <td class="product-remove">
                   <a
-                    (click)="cartService.removeCartProduct(item)"
+                    (click)="cartService.removeCartProduct(item, userData)"
                     class="cursor-pointer"
                   >
                     <i class="fa fa-times"></i>
@@ -91,15 +88,15 @@
                 <li>
                   Subtotal
                   <span>{{
-                    cartService.computeCartTotal(cartService.getCartProducts())
-                      .total | currency : "INR"
+                    cartService.computeCartTotal(cartItems).total
+                      | currency : "INR"
                   }}</span>
                 </li>
                 <li>
                   Total
                   <span>{{
-                    cartService.computeCartTotal(cartService.getCartProducts())
-                      .total | currency : "INR"
+                    cartService.computeCartTotal(cartItems).total
+                      | currency : "INR"
                   }}</span>
                 </li>
               </ul>

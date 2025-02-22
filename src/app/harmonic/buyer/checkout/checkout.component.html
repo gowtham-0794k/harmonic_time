@@ -1,8 +1,5 @@
 <app-breadcrumb-two title="Checkout" subtitle="Checkout"></app-breadcrumb-two>
-<section
-  class="coupon-area pt-100 pb-30"
-  *ngIf="cartService.getCartProducts().length > 0"
->
+<section class="coupon-area pt-100 pb-30" *ngIf="cartItems.length > 0">
   <div class="container">
     <div class="row">
       <div class="col-md-6">
@@ -79,7 +76,7 @@
 <section class="checkout-area pb-70">
   <div class="container">
     <div
-      *ngIf="cartService.getCartProducts().length === 0; else checkoutBlock"
+      *ngIf="cartItems.length === 0; else checkoutBlock"
       class="text-center pt-80 pb-30"
     >
       <h3 class="py-2">No items found in cart to checkout</h3>
@@ -321,10 +318,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr
-                      *ngFor="let item of cartService.getCartProducts()"
-                      class="cart_item"
-                    >
+                    <tr *ngFor="let item of cartItems" class="cart_item">
                       <td class="product-name">
                         {{ item.ProductName }}
                       </td>
@@ -340,9 +334,8 @@
                       <th>Cart Subtotal</th>
                       <td>
                         <span class="amount">{{
-                          cartService.computeCartTotal(
-                            cartService.getCartProducts()
-                          ).total | currency : "INR"
+                          cartService.computeCartTotal(cartItems).total
+                            | currency : "INR"
                         }}</span>
                       </td>
                     </tr>
@@ -352,9 +345,8 @@
                         <strong
                           ><span class="amount">
                             {{
-                              cartService.computeCartTotal(
-                                cartService.getCartProducts()
-                              ).total | currency : "INR"
+                              cartService.computeCartTotal(cartItems).total
+                                | currency : "INR"
                             }}
                           </span></strong
                         >

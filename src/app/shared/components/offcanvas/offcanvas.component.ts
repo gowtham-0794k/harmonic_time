@@ -3,6 +3,8 @@ import { UtilsService } from '../../services/utils.service';
 import { IMobileMenu } from '../../types/menu-d-t';
 import { mobile_menus } from '../../data/menu-data';
 import { UserService } from '@shared/services/user.service';
+import { selectUserData } from 'src/app/store/selectors/user.selectors';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-offcanvas',
@@ -12,24 +14,15 @@ import { UserService } from '@shared/services/user.service';
 export class OffcanvasComponent {
   public roles: number[] = [];
 
-  constructor(
-    public utilsService: UtilsService,
-    private userService: UserService
-  ) {}
+  constructor(public utilsService: UtilsService, private store: Store) {}
 
   mobile_menus: IMobileMenu[] = mobile_menus;
 
   activeMenu: string = '';
 
   ngOnInit(): void {
-    this.userService.getUserData();
-    this.userService.userData$.subscribe({
-      next: (data) => {
-        this.roles = data?.roles;
-      },
-      error: (err) => {
-        console.error('Error fetching user data:', err);
-      },
+    this.store.select(selectUserData).subscribe((state) => {
+      this.roles = state.user.data?.roles;
     });
   }
 
