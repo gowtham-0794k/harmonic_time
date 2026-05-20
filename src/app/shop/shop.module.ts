@@ -19,6 +19,11 @@ import { PriceFilterComponent } from './filtering/price-filter/price-filter.comp
 import { SizeFilteringComponent } from './filtering/size-filtering/size-filtering.component';
 import { ColorFilteringComponent } from './filtering/color-filtering/color-filtering.component';
 import { BrandFilteringComponent } from './filtering/brand-filtering/brand-filtering.component';
+import { MovementFilteringComponent } from './filtering/movement-filtering/movement-filtering.component';
+import { StrapMaterialFilteringComponent } from './filtering/strap-material-filtering/strap-material-filtering.component';
+import { CaseMaterialFilteringComponent } from './filtering/case-material-filtering/case-material-filtering.component';
+import { WatchMarkerFilteringComponent } from './filtering/watch-marker-filtering/watch-marker-filtering.component';
+import { RecipientFilteringComponent } from './filtering/recipient-filtering/recipient-filtering.component';
 import { FeatureProductsComponent } from './widget/feature-products/feature-products.component';
 import { ProductListItemComponent } from './product-list-item/product-list-item.component';
 import { ShopAreaComponent } from './shop-area/shop-area.component';
@@ -52,6 +57,11 @@ import { ShopAreaFiltersComponent } from './shop-area-filters/shop-area-filters.
     SizeFilteringComponent,
     ColorFilteringComponent,
     BrandFilteringComponent,
+    MovementFilteringComponent,
+    StrapMaterialFilteringComponent,
+    CaseMaterialFilteringComponent,
+    WatchMarkerFilteringComponent,
+    RecipientFilteringComponent,
     FeatureProductsComponent,
     ProductListItemComponent,
     ShopAreaComponent,

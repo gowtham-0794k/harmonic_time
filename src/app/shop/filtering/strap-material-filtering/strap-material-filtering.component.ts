@@ -1,18 +1,18 @@
 import { ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { GET_CATEGORIES } from '@config/index';
+import { GET_STRAP_MATERIALS } from '@config/index';
 import { GenericService } from '@shared/services/generic.service';
 import { ProductService } from 'src/app/shared/services/product.service';
 
 @Component({
-  selector: 'app-category-filter',
-  templateUrl: './category-filter.component.html',
-  styleUrls: ['./category-filter.component.scss'],
+  selector: 'app-strap-material-filtering',
+  templateUrl: './strap-material-filtering.component.html',
+  styleUrls: ['./strap-material-filtering.component.scss'],
 })
-export class CategoryFilterComponent {
-  public categories: any[] = [];
-  public category: string | null = null;
+export class StrapMaterialFilteringComponent {
+  public strapMaterials: any[] = [];
+  public strapMaterial: string | null = null;
 
   constructor(
     public productService: ProductService,
@@ -23,25 +23,27 @@ export class CategoryFilterComponent {
   ) {}
 
   ngOnInit(): void {
-    this.genericService.getObservable(GET_CATEGORIES).subscribe({
+    this.genericService.getObservable(GET_STRAP_MATERIALS).subscribe({
       next: (response) => {
-        const productCategories = response.data?.map(
-          (el: any) => el?.CategoryName
+        const productStrapMaterials = response.data?.map(
+          (el: any) => el?.StrapMaterialName
         );
-        this.categories = [...new Set(productCategories)];
+        this.strapMaterials = [...new Set(productStrapMaterials)];
       },
       error: (err) => {
-        this.categories = [];
+        this.strapMaterials = [];
       },
     });
     this.route.queryParams.subscribe((params) => {
-      this.category = params['category'] ? params['category'] : null;
+      this.strapMaterial = params['strapMaterial']
+        ? params['strapMaterial']
+        : null;
     });
   }
 
-  handleCategoryRoute(event: any) {
+  handleStrapMaterialRoute(event: any) {
     const queryParams: Params = {
-      category: (event.target as HTMLSelectElement).value,
+      strapMaterial: (event.target as HTMLSelectElement).value,
     };
     this.router
       .navigate([], {

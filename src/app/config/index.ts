@@ -22,34 +22,28 @@ export const GET_RECIPIENTS = `${baseUrl}/recipients`;
 // products
 export const POST_PRODUCT = `${baseUrl}/products`;
 export const PRODUCT = `${baseUrl}/products`;
-export const GET_PRODUCT_BY_ID = (productID: string) =>
-  `${baseUrl}/products/${productID}`;
+// append the product id: `${GET_PRODUCT_BY_ID}${id}`
+export const GET_PRODUCT_BY_ID = `${baseUrl}/products/`;
 
 // only availability update exists in backend
 export const UPDATE_PRODUCT_AVAILABILITY = `${baseUrl}/products/availability`;
 export const UPDATE_PRODUCT = UPDATE_PRODUCT_AVAILABILITY;
 
-// product details
+// product details (append the product id)
 export const POST_PRODUCT_DETAILS = `${baseUrl}/product-details`;
-export const GET_PRODUCT_DETAILS = (productID: string) =>
-  `${baseUrl}/product-details/${productID}`;
-export const UPDATE_PRODUCT_DETAILS = (productID: string) =>
-  `${baseUrl}/product-details/${productID}`;
+export const GET_PRODUCT_DETAILS = `${baseUrl}/product-details/`;
+export const UPDATE_PRODUCT_DETAILS = `${baseUrl}/product-details/`;
 
-// product descriptions
+// product descriptions (append the product id)
 export const POST_PRODUCT_DESCRIPTION = `${baseUrl}/product-descriptions`;
 export const GET_ALL_PRODUCT_DESCRIPTIONS = `${baseUrl}/product-descriptions`;
-export const GET_PRODUCT_DESCRIPTION = (productID: string) =>
-  `${baseUrl}/product-descriptions/${productID}`;
-export const UPDATE_PRODUCT_DESCRIPTION = (productID: string) =>
-  `${baseUrl}/product-descriptions/${productID}`;
+export const GET_PRODUCT_DESCRIPTION = `${baseUrl}/product-descriptions/`;
+export const UPDATE_PRODUCT_DESCRIPTION = `${baseUrl}/product-descriptions/`;
 
-// delivery returns
+// delivery returns (append the product id)
 export const POST_PRODUCT_RETURN_POLICY = `${baseUrl}/delivery-returns`;
-export const GET_PRODUCT_RETURN_POLICY = (productID: string) =>
-  `${baseUrl}/delivery-returns/product/${productID}`;
-export const UPDATE_PRODUCT_RETURN_POLICY = (productID: string) =>
-  `${baseUrl}/delivery-returns/product/${productID}`;
+export const GET_PRODUCT_RETURN_POLICY = `${baseUrl}/delivery-returns/product/`;
+export const UPDATE_PRODUCT_RETURN_POLICY = `${baseUrl}/delivery-returns/product/`;
 
 // uploads
 export const POST_UPLOAD_IMAGES = `${baseUrl}/upload/images`;
@@ -58,17 +52,16 @@ export const DELETE_IMAGE_S3 = `${baseUrl}/upload/images`;
 
 // product images
 export const POST_PRODUCT_IMAGES = `${baseUrl}/product-images`;
-export const GET_PRODUCT_IMAGES = (productID: string) =>
-  `${baseUrl}/product-images/product/${productID}`;
-export const GET_PRODUCT_IMAGE_BY_ID = (imageID: string) =>
-  `${baseUrl}/product-images/${imageID}`;
-export const DELETE_IMAGE_DB = (imageID: string) =>
-  `${baseUrl}/product-images/${imageID}`;
+// append the product id
+export const GET_PRODUCT_IMAGES = `${baseUrl}/product-images/product/`;
+// append the image id
+export const GET_PRODUCT_IMAGE_BY_ID = `${baseUrl}/product-images/`;
+export const DELETE_IMAGE_DB = `${baseUrl}/product-images/`;
 
 // cart
-export const USER_CART = (userID: string) => `${baseUrl}/cart/user/${userID}`;
+export const USER_CART = `${baseUrl}/cart/user/`; // append the user id
 export const ADD_TO_CART = `${baseUrl}/cart`;
-export const DELETE_CART_ITEM = (cartID: string) => `${baseUrl}/cart/${cartID}`;
+export const DELETE_CART_ITEM = `${baseUrl}/cart/`; // append the cart id
 
 // payments
 export const CREATE_PAYMENT_ORDER = `${baseUrl}/payments/create-order`;
@@ -76,15 +69,12 @@ export const VERIFY_PAYMENT_ORDER = `${baseUrl}/payments/verify`;
 
 // address
 export const CREATE_ADDRESS = `${baseUrl}/address`;
-export const GET_ADDRESSES_BY_USER = (userID: string) =>
-  `${baseUrl}/address/user/${userID}`;
+export const GET_ADDRESSES_BY_USER = `${baseUrl}/address/user/`; // append the user id
 
 // checkout
 export const CHECKOUT_ITEM = `${baseUrl}/checkout`;
-export const GET_ORDERS = (userID: string) =>
-  `${baseUrl}/checkout/user/${userID}`;
+export const GET_ORDERS = `${baseUrl}/checkout/user/`; // append the user id
 
 // checkout items
 export const CHECKOUT_ITEM_ORDER = `${baseUrl}/checkout-items`;
-export const CHECKOUT_ITEMS = (checkoutID: string) =>
-  `${baseUrl}/checkout-items/checkout/${checkoutID}`;
+export const CHECKOUT_ITEMS = `${baseUrl}/checkout-items/checkout/`; // append the checkout id

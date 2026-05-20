@@ -1,18 +1,18 @@
 import { ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { GET_CATEGORIES } from '@config/index';
+import { GET_MOVEMENTS } from '@config/index';
 import { GenericService } from '@shared/services/generic.service';
 import { ProductService } from 'src/app/shared/services/product.service';
 
 @Component({
-  selector: 'app-category-filter',
-  templateUrl: './category-filter.component.html',
-  styleUrls: ['./category-filter.component.scss'],
+  selector: 'app-movement-filtering',
+  templateUrl: './movement-filtering.component.html',
+  styleUrls: ['./movement-filtering.component.scss'],
 })
-export class CategoryFilterComponent {
-  public categories: any[] = [];
-  public category: string | null = null;
+export class MovementFilteringComponent {
+  public movements: any[] = [];
+  public movement: string | null = null;
 
   constructor(
     public productService: ProductService,
@@ -23,25 +23,25 @@ export class CategoryFilterComponent {
   ) {}
 
   ngOnInit(): void {
-    this.genericService.getObservable(GET_CATEGORIES).subscribe({
+    this.genericService.getObservable(GET_MOVEMENTS).subscribe({
       next: (response) => {
-        const productCategories = response.data?.map(
-          (el: any) => el?.CategoryName
+        const productMovements = response.data?.map(
+          (el: any) => el?.MovementName
         );
-        this.categories = [...new Set(productCategories)];
+        this.movements = [...new Set(productMovements)];
       },
       error: (err) => {
-        this.categories = [];
+        this.movements = [];
       },
     });
     this.route.queryParams.subscribe((params) => {
-      this.category = params['category'] ? params['category'] : null;
+      this.movement = params['movement'] ? params['movement'] : null;
     });
   }
 
-  handleCategoryRoute(event: any) {
+  handleMovementRoute(event: any) {
     const queryParams: Params = {
-      category: (event.target as HTMLSelectElement).value,
+      movement: (event.target as HTMLSelectElement).value,
     };
     this.router
       .navigate([], {

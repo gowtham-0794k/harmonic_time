@@ -35,7 +35,8 @@ export class NavManusComponent {
   }
 
   checkRole(value: boolean | undefined) {
-    if (value) return this.roles?.includes(2);
+    // TODO: all the users are sellers / buyers
+    // if (value) return this.roles?.includes(2);
     return true;
   }
 }

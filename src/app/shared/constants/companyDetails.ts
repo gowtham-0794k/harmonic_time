@@ -1,6 +1,6 @@
 export const companyDetails = {
   name: 'Harmonic Time',
-  email: 'harmonictime@gmail.com',
+  email: 'harmonictime@astriagk.com',
   address: '22, 1st cross, BHK Layout, Bangalore - 560026',
   phone: '(+91) 88673 47448',
   description:

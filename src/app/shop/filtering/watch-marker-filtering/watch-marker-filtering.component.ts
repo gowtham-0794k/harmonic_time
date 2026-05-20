@@ -1,18 +1,18 @@
 import { ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { GET_CATEGORIES } from '@config/index';
+import { GET_WATCH_MARKERS } from '@config/index';
 import { GenericService } from '@shared/services/generic.service';
 import { ProductService } from 'src/app/shared/services/product.service';
 
 @Component({
-  selector: 'app-category-filter',
-  templateUrl: './category-filter.component.html',
-  styleUrls: ['./category-filter.component.scss'],
+  selector: 'app-watch-marker-filtering',
+  templateUrl: './watch-marker-filtering.component.html',
+  styleUrls: ['./watch-marker-filtering.component.scss'],
 })
-export class CategoryFilterComponent {
-  public categories: any[] = [];
-  public category: string | null = null;
+export class WatchMarkerFilteringComponent {
+  public watchMarkers: any[] = [];
+  public watchMarker: string | null = null;
 
   constructor(
     public productService: ProductService,
@@ -23,25 +23,25 @@ export class CategoryFilterComponent {
   ) {}
 
   ngOnInit(): void {
-    this.genericService.getObservable(GET_CATEGORIES).subscribe({
+    this.genericService.getObservable(GET_WATCH_MARKERS).subscribe({
       next: (response) => {
-        const productCategories = response.data?.map(
-          (el: any) => el?.CategoryName
+        const productWatchMarkers = response.data?.map(
+          (el: any) => el?.WatchMarkerName
         );
-        this.categories = [...new Set(productCategories)];
+        this.watchMarkers = [...new Set(productWatchMarkers)];
       },
       error: (err) => {
-        this.categories = [];
+        this.watchMarkers = [];
       },
     });
     this.route.queryParams.subscribe((params) => {
-      this.category = params['category'] ? params['category'] : null;
+      this.watchMarker = params['watchMarker'] ? params['watchMarker'] : null;
     });
   }
 
-  handleCategoryRoute(event: any) {
+  handleWatchMarkerRoute(event: any) {
     const queryParams: Params = {
-      category: (event.target as HTMLSelectElement).value,
+      watchMarker: (event.target as HTMLSelectElement).value,
     };
     this.router
       .navigate([], {

@@ -1,18 +1,18 @@
 import { ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { GET_CATEGORIES } from '@config/index';
+import { GET_CASE_MATERIALS } from '@config/index';
 import { GenericService } from '@shared/services/generic.service';
 import { ProductService } from 'src/app/shared/services/product.service';
 
 @Component({
-  selector: 'app-category-filter',
-  templateUrl: './category-filter.component.html',
-  styleUrls: ['./category-filter.component.scss'],
+  selector: 'app-case-material-filtering',
+  templateUrl: './case-material-filtering.component.html',
+  styleUrls: ['./case-material-filtering.component.scss'],
 })
-export class CategoryFilterComponent {
-  public categories: any[] = [];
-  public category: string | null = null;
+export class CaseMaterialFilteringComponent {
+  public caseMaterials: any[] = [];
+  public caseMaterial: string | null = null;
 
   constructor(
     public productService: ProductService,
@@ -23,25 +23,27 @@ export class CategoryFilterComponent {
   ) {}
 
   ngOnInit(): void {
-    this.genericService.getObservable(GET_CATEGORIES).subscribe({
+    this.genericService.getObservable(GET_CASE_MATERIALS).subscribe({
       next: (response) => {
-        const productCategories = response.data?.map(
-          (el: any) => el?.CategoryName
+        const productCaseMaterials = response.data?.map(
+          (el: any) => el?.CaseMaterialName
         );
-        this.categories = [...new Set(productCategories)];
+        this.caseMaterials = [...new Set(productCaseMaterials)];
       },
       error: (err) => {
-        this.categories = [];
+        this.caseMaterials = [];
       },
     });
     this.route.queryParams.subscribe((params) => {
-      this.category = params['category'] ? params['category'] : null;
+      this.caseMaterial = params['caseMaterial']
+        ? params['caseMaterial']
+        : null;
     });
   }
 
-  handleCategoryRoute(event: any) {
+  handleCaseMaterialRoute(event: any) {
     const queryParams: Params = {
-      category: (event.target as HTMLSelectElement).value,
+      caseMaterial: (event.target as HTMLSelectElement).value,
     };
     this.router
       .navigate([], {

@@ -6,12 +6,15 @@
     <div class="color__pick">
       <form action="#">
         <ul>
-          <li *ngFor="let c of all_colors; let i = index">
+          <li *ngFor="let c of all_colors; trackBy: trackByColor">
             <button
               (click)="handleColor(c)"
               type="button"
-              [ngClass]="['color', getColorClass(c)]"
-              [class.active]="color && c?.toLowerCase() === color.toLowerCase()"
+              class="color"
+              [ngStyle]="getColorStyles(c)"
+              [class.active]="color === normalizeColor(c)"
+              [attr.aria-label]="c"
+              [title]="c"
             ></button>
           </li>
         </ul>

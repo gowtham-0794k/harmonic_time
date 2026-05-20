@@ -30,17 +30,17 @@
             <tbody>
               <tr *ngFor="let item of wishlistService.getWishlistProducts()">
                 <td class="product-thumbnail">
-                  <a [routerLink]="['/shop/shop-details', item.id]">
-                    <img [src]="item.img" alt="product-img" />
+                  <a [routerLink]="['/buyer/product-details', item._id]">
+                    <img [src]="item?.Images[0]?.ImageURL" alt="product-img" />
                   </a>
                 </td>
                 <td class="product-name">
-                  <a [routerLink]="['/shop/shop-details', item.id]">{{
-                    item.title
+                  <a [routerLink]="['/buyer/product-details', item._id]">{{
+                    item.ProductName
                   }}</a>
                 </td>
                 <td class="product-price">
-                  <span class="amount">${{ item.price.toFixed(2) }}</span>
+                  <span class="amount">{{ item.Price | currency : "INR" }}</span>
                 </td>
                 <td class="product-quantity">
                   <button

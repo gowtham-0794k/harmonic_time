@@ -22,16 +22,16 @@ export class ProductItemComponent {
     public wishlistService: WishlistService,
     public compareService: CompareService,
     public utilsService: UtilsService,
-    public store: Store
+    public store: Store,
   ) {}
 
   // add to cart
-  addToCart(item: IProduct) {
+  addToCart(item: any) {
     this.cartService.addCartProduct(item);
   }
 
   // add to cart
-  addToWishlist(product: IProduct) {
+  addToWishlist(product: any) {
     this.wishlistService.add_wishlist_product(product);
   }
 
@@ -40,10 +40,10 @@ export class ProductItemComponent {
     this.compareService.add_compare_product(product);
   }
 
-  isItemInWishlist(item: IProduct): boolean {
+  isItemInWishlist(item: any): boolean {
     return this.wishlistService
       .getWishlistProducts()
-      .some((prd: IProduct) => prd.id === item.id);
+      .some((prd: any) => prd._id === item._id);
   }
 
   isItemInCompare(item: IProduct): boolean {

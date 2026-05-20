@@ -45,7 +45,7 @@ import { AppState } from 'src/app/store/app.state';
 import { selectUserData } from 'src/app/store/selectors/user.selectors';
 import { catchError, concatMap, switchMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
 
 interface SelectOption {
   id: number;
@@ -113,7 +113,7 @@ export class AddEditComponent implements OnInit {
     private route: ActivatedRoute,
     private genericService: GenericService,
     private toastrService: ToastrService,
-    private store: Store
+    private store: Store,
   ) {}
 
   ngOnInit(): void {
@@ -121,7 +121,7 @@ export class AddEditComponent implements OnInit {
     this.checkForEditMode();
     this.initialApiCalls();
     this.store.select(selectUserData).subscribe((state) => {
-      this.userData = state.user.data;
+      this.userData = state?.user?.data;
     });
   }
 
@@ -213,6 +213,7 @@ export class AddEditComponent implements OnInit {
   }
 
   private async loadProductData(): Promise<void> {
+    if (!this.productId) return;
     try {
       const url = GET_PRODUCT_BY_ID + `${this.productId}`;
       this.genericService.getObservable(url).subscribe((response) => {
@@ -406,7 +407,7 @@ export class AddEditComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
-    const userId = this.userData._id;
+    const userId = this.userData?._id;
     if (!userId) {
       this.errorMessage = 'Please Login to Create !';
       return;
@@ -427,9 +428,11 @@ export class AddEditComponent implements OnInit {
       ...this.deliveryAndReturns.value,
     };
 
-    // Append images
-    this.uploadedImages.forEach((image, index) => {
-      formData.append(`images`, image.file);
+    // Append only newly added images (existing ones loaded in edit mode have no `file`)
+    this.uploadedImages.forEach((image) => {
+      if (image.file) {
+        formData.append(`images`, image.file);
+      }
     });
 
     try {
@@ -491,46 +494,49 @@ export class AddEditComponent implements OnInit {
             ReturnsPolicy: productData.returnsPolicy,
           };
 
+          // IDs travel in the multipart body, not the URL
+          formData.append('userID', userId);
+          formData.append('productID', productId);
+
           // Return each subsequent postObservable as an observable chain
           return this.genericService
-            .postObservableImages(
-              `${this.POST_UPLOAD_IMAGES}${userId}/${productId}`,
-              formData
-            )
+            .postObservableImages(this.POST_UPLOAD_IMAGES, formData)
             .pipe(
               concatMap((imageResponse) => {
                 const imagesPayload = {
                   ProductID: productId,
-                  ImageURLs: imageResponse.data,
+                  ImageURLs: (imageResponse?.data?.urls ?? []).map(
+                    (url: string) => ({ url }),
+                  ),
                 };
                 return this.genericService
                   .postObservable(
                     this.CREATE_PRODUCT_DETAILS_URL,
-                    productDetailsPayload
+                    productDetailsPayload,
                   )
                   .pipe(
                     concatMap(() =>
                       this.genericService.postObservable(
                         this.CREATE_PRODUCT_DESCRIPTION_URL,
-                        productDescriptionPayload
-                      )
+                        productDescriptionPayload,
+                      ),
                     ),
                     concatMap(() =>
                       this.genericService.postObservable(
                         this.CREATE_PRODUCT_RETURN_POLICY_URL,
-                        productDeliveryReturnPayload
-                      )
+                        productDeliveryReturnPayload,
+                      ),
                     ),
                     concatMap(() =>
                       this.genericService.postObservable(
                         POST_PRODUCT_IMAGES,
-                        imagesPayload
-                      )
-                    )
+                        imagesPayload,
+                      ),
+                    ),
                   );
-              })
+              }),
             );
-        })
+        }),
       )
       .subscribe({
         next: (response) => {
@@ -557,7 +563,7 @@ export class AddEditComponent implements OnInit {
     const productId = this.productData._id;
 
     const productPayload = {
-      UserID: userId,
+      // UserID: userId,
       ProductName: productData.productName,
       BrandID: productData.brandId,
       CollectionID: productData.collectionId,
@@ -590,48 +596,96 @@ export class AddEditComponent implements OnInit {
       ReturnsPolicy: productData.returnsPolicy,
     };
 
-    const updateRequests = [
-      this.genericService.putObservable(
-        `${PRODUCT}/${productId}`,
-        productPayload
-      ),
-      this.genericService.putObservable(
-        `${UPDATE_PRODUCT_DETAILS}/${productId}`,
-        productDetailsPayload
-      ),
-      this.genericService.putObservable(
-        `${this.CREATE_PRODUCT_DESCRIPTION_URL}/${productId}`,
-        productDescriptionPayload
-      ),
-      this.genericService.putObservable(
-        `${this.CREATE_PRODUCT_RETURN_POLICY_URL}/${productId}`,
-        productDeliveryReturnPayload
-      ),
-    ];
+    // Only send a section if the user actually changed it. Angular sets `dirty`
+    // on user edits, not on the setValue() performed while loading the product.
+    const updateRequests: Observable<any>[] = [];
 
-    forkJoin(updateRequests)
-      .pipe(
-        switchMap(() =>
-          this.genericService.postObservableImages(
-            `${this.POST_UPLOAD_IMAGES}${userId}/${productId}`,
-            formData
-          )
+    if (this.basicProductInformation.dirty) {
+      updateRequests.push(
+        this.genericService.putObservable(`${PRODUCT}/${productId}`, productPayload),
+      );
+    }
+    if (this.productInformation.dirty) {
+      updateRequests.push(
+        this.genericService.putObservable(
+          `${UPDATE_PRODUCT_DETAILS}${productId}`,
+          productDetailsPayload,
         ),
-        switchMap((response) => {
-          const imagesPayload = {
-            ProductID: productId,
-            ImageURLs: response.data,
-          };
-          return this.genericService.postObservable(
-            POST_PRODUCT_IMAGES,
-            imagesPayload
-          );
+      );
+    }
+    if (this.productDescription.dirty) {
+      updateRequests.push(
+        this.genericService.putObservable(
+          `${this.CREATE_PRODUCT_DESCRIPTION_URL}/${productId}`,
+          productDescriptionPayload,
+        ),
+      );
+    }
+    if (this.deliveryAndReturns.dirty) {
+      updateRequests.push(
+        this.genericService.putObservable(
+          `${this.CREATE_PRODUCT_RETURN_POLICY_URL}/${productId}`,
+          productDeliveryReturnPayload,
+        ),
+      );
+    }
+
+    // Keep each request independent so one failure can't cancel the siblings
+    // (forkJoin unsubscribes/aborts the rest the moment any source errors).
+    const safeRequests = updateRequests.map((request$) =>
+      request$.pipe(
+        catchError((err) => {
+          console.error('Product update request failed:', err);
+          return of(null);
         }),
+      ),
+    );
+
+    const hasNewImages = this.uploadedImages.some((image) => image.file);
+
+    // Nothing was edited and no new images were added — skip the API calls.
+    if (safeRequests.length === 0 && !hasNewImages) {
+      this.toastrService.info('No changes to update');
+      return;
+    }
+
+    // Upload images only when the user added new ones.
+    let imageUpload$: Observable<any> = of(null);
+    if (hasNewImages) {
+      // IDs travel in the multipart body, not the URL
+      formData.append('userID', userId);
+      formData.append('productID', productId);
+
+      imageUpload$ = this.genericService
+        .postObservableImages(this.POST_UPLOAD_IMAGES, formData)
+        .pipe(
+          switchMap((response) => {
+            const imagesPayload = {
+              ProductID: productId,
+              ImageURLs: (response?.data?.urls ?? []).map((url: string) => ({
+                url,
+              })),
+            };
+            return this.genericService.postObservable(
+              POST_PRODUCT_IMAGES,
+              imagesPayload,
+            );
+          }),
+        );
+    }
+
+    const fieldUpdates$: Observable<any> = safeRequests.length
+      ? forkJoin(safeRequests)
+      : of(null);
+
+    fieldUpdates$
+      .pipe(
+        switchMap(() => imageUpload$),
         catchError((err) => {
           console.error('Error updating product or related details:', err);
           this.toastrService.error('Error updating product or related details');
           throw err;
-        })
+        }),
       )
       .subscribe(() => {
         this.toastrService.success('Product updated successfully!');

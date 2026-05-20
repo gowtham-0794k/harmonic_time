@@ -8,7 +8,7 @@
         alt="product-img"
       />
     </a>
-    <!-- <div class="product__action transition-3">
+    <div class="product__action transition-3">
       <a
         (click)="addToWishlist(product)"
         class="cursor-pointer"
@@ -17,9 +17,9 @@
         data-placement="top"
         title="Add to Wishlist"
       >
-        <i class="fal fa-heart"></i>
+        <i [ngClass]="isItemInWishlist(product) ? 'fas fa-heart' : 'fal fa-heart'"></i>
       </a>
-      <a
+      <!-- <a
         (click)="addToCompare(product)"
         class="cursor-pointer"
         [class.active]="isItemInCompare(product)"
@@ -28,8 +28,8 @@
         title="Compare"
       >
         <i class="fal fa-sliders-h"></i>
-      </a>
-      <a
+      </a> -->
+      <!-- <a
         class="cursor-pointer"
         data-bs-toggle="modal"
         [attr.data-bs-target]="'#' + utilsService.modalId"
@@ -38,8 +38,8 @@
         "
       >
         <i class="fal fa-search"></i>
-      </a>
-    </div> -->
+      </a> -->
+    </div>
     <div *ngIf="product.discount || product.new" class="product__sale">
       <span *ngIf="product.new || product.discount" class="new">new</span>
       <span *ngIf="product.discount" class="percent"

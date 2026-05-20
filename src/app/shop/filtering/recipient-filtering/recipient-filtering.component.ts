@@ -1,18 +1,18 @@
 import { ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { GET_CATEGORIES } from '@config/index';
+import { GET_RECIPIENTS } from '@config/index';
 import { GenericService } from '@shared/services/generic.service';
 import { ProductService } from 'src/app/shared/services/product.service';
 
 @Component({
-  selector: 'app-category-filter',
-  templateUrl: './category-filter.component.html',
-  styleUrls: ['./category-filter.component.scss'],
+  selector: 'app-recipient-filtering',
+  templateUrl: './recipient-filtering.component.html',
+  styleUrls: ['./recipient-filtering.component.scss'],
 })
-export class CategoryFilterComponent {
-  public categories: any[] = [];
-  public category: string | null = null;
+export class RecipientFilteringComponent {
+  public recipients: any[] = [];
+  public recipient: string | null = null;
 
   constructor(
     public productService: ProductService,
@@ -23,25 +23,25 @@ export class CategoryFilterComponent {
   ) {}
 
   ngOnInit(): void {
-    this.genericService.getObservable(GET_CATEGORIES).subscribe({
+    this.genericService.getObservable(GET_RECIPIENTS).subscribe({
       next: (response) => {
-        const productCategories = response.data?.map(
-          (el: any) => el?.CategoryName
+        const productRecipients = response.data?.map(
+          (el: any) => el?.RecipientName
         );
-        this.categories = [...new Set(productCategories)];
+        this.recipients = [...new Set(productRecipients)];
       },
       error: (err) => {
-        this.categories = [];
+        this.recipients = [];
       },
     });
     this.route.queryParams.subscribe((params) => {
-      this.category = params['category'] ? params['category'] : null;
+      this.recipient = params['recipient'] ? params['recipient'] : null;
     });
   }
 
-  handleCategoryRoute(event: any) {
+  handleRecipientRoute(event: any) {
     const queryParams: Params = {
-      category: (event.target as HTMLSelectElement).value,
+      recipient: (event.target as HTMLSelectElement).value,
     };
     this.router
       .navigate([], {

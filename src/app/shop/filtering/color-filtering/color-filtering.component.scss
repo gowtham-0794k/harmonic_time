@@ -1,32 +1,10 @@
-.color-option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 5px;
-  cursor: pointer;
+.color {
+  background: var(--swatch-background, #d4d4d4);
+  border: var(--swatch-border, 1px solid transparent);
+  box-shadow: var(--swatch-shadow, none);
 }
 
-.color-box {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: inline-block;
-  border: 1px solid #ccc;
+.color:hover::after,
+.color.active::after {
+  border-color: var(--swatch-accent, #fbaf5d) !important;
 }
-
-/* Define specific colors */
-.color.red { background-color: red; }
-.color.blue { background-color: blue; }
-.color.green { background-color: green; }
-.color.purple { background-color: purple; }
-.color.black { background-color: black; }
-.color.white { background-color: white; border: 1px solid #ccc; }
-.color.silver { background-color: silver; }
-.color.gold { background-color: gold; }
-.color.brown { background-color: brown; }
-.color.pink { background-color: pink; }
-.color.orange { background-color: orange; }
-.color.grey { background-color: grey; }
-.color.beige { background-color: beige; }
-.color.yellow { background-color: yellow; }
-.color.multicolor { background: linear-gradient(45deg, red, blue, green, yellow); }

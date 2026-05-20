@@ -1,12 +1,12 @@
 <div class="sidebar__widget mb-20">
   <div class="sidebar__widget-title mb-10">
-    <h3>Category</h3>
+    <h3>Movement</h3>
   </div>
   <div class="sidebar__widget-content">
     <div class="filter-shop">
-      <select (change)="handleCategoryRoute($event)">
-        <option *ngFor="let c of categories" [value]="c">
-          {{ c }}
+      <select (change)="handleMovementRoute($event)">
+        <option *ngFor="let m of movements" [value]="m">
+          {{ m }}
         </option>
       </select>
     </div>

@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ViewportScroller } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { normalizeDialColor } from '@shared/constants/dial-colors';
 import { ProductService } from 'src/app/shared/services/product.service';
 import { UtilsService } from 'src/app/shared/services/utils.service';
 import { IProduct } from 'src/app/shared/types/product-d-t';
@@ -29,6 +30,11 @@ export class ShopAreaComponent {
   public size: string | null = null;
   public color: string | null = null;
   public brand: string | null = null;
+  public recipient: string | null = null;
+  public movement: string | null = null;
+  public strapMaterial: string | null = null;
+  public caseMaterial: string | null = null;
+  public watchMarker: string | null = null;
   public pageNo: number = 1;
   public pageSize: number = 12;
   public paginate: any = {}; // Pagination use only
@@ -50,7 +56,16 @@ export class ShopAreaComponent {
       this.category = params['category'] ? params['category'] : null;
       this.subcategory = params['subcategory'] ? params['subcategory'] : null;
       this.size = params['size'] ? params['size'] : null;
-      this.color = params['color'] ? params['color'] : null;
+      this.color = params['color'] ? normalizeDialColor(params['color']) : null;
+      this.recipient = params['recipient'] ? params['recipient'] : null;
+      this.movement = params['movement'] ? params['movement'] : null;
+      this.strapMaterial = params['strapMaterial']
+        ? params['strapMaterial']
+        : null;
+      this.caseMaterial = params['caseMaterial']
+        ? params['caseMaterial']
+        : null;
+      this.watchMarker = params['watchMarker'] ? params['watchMarker'] : null;
       this.pageNo = params['page'] ? params['page'] : this.pageNo;
       this.sortBy = params['sortBy'] ? params['sortBy'] : 'high';
 
@@ -89,7 +104,7 @@ export class ShopAreaComponent {
         filteredProducts = filteredProducts.filter((product: any) => {
           return (
             product?.Details?.DialColorName &&
-            product?.Details?.DialColorName.toLowerCase() === this.color
+            normalizeDialColor(product?.Details?.DialColorName) === this.color
           );
         });
       }
@@ -99,6 +114,54 @@ export class ShopAreaComponent {
           const selectedBrands = this.brand?.toLowerCase();
           return selectedBrands === p?.Details?.BrandName.toLowerCase(); // Check if product brand is in selected brands
         });
+      }
+      // category Filter
+      if (this.category) {
+        filteredProducts = filteredProducts.filter(
+          (p: any) =>
+            this.category?.toLowerCase() ===
+            p?.Details?.CategoryName?.toLowerCase()
+        );
+      }
+      // recipient Filter
+      if (this.recipient) {
+        filteredProducts = filteredProducts.filter(
+          (p: any) =>
+            this.recipient?.toLowerCase() ===
+            p?.Details?.RecipientName?.toLowerCase()
+        );
+      }
+      // movement Filter
+      if (this.movement) {
+        filteredProducts = filteredProducts.filter(
+          (p: any) =>
+            this.movement?.toLowerCase() ===
+            p?.Details?.MovementName?.toLowerCase()
+        );
+      }
+      // strap material Filter
+      if (this.strapMaterial) {
+        filteredProducts = filteredProducts.filter(
+          (p: any) =>
+            this.strapMaterial?.toLowerCase() ===
+            p?.Details?.StrapMaterialName?.toLowerCase()
+        );
+      }
+      // case material Filter
+      if (this.caseMaterial) {
+        filteredProducts = filteredProducts.filter(
+          (p: any) =>
+            this.caseMaterial?.toLowerCase() ===
+            p?.Details?.CaseMaterialName?.toLowerCase()
+        );
+      }
+      // watch marker Filter
+      if (this.watchMarker) {
+        filteredProducts = filteredProducts.filter(
+          (p: any) =>
+            this.watchMarker?.toLowerCase() ===
+            p?.Details?.WatchMarkerName?.toLowerCase()
+        );
       }
       // Price Filter
       if (this.minPrice || this.maxPrice) {

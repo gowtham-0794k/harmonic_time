@@ -2,8 +2,14 @@ import { ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { GET_DIAL_COLORS } from '@config/index';
+import {
+  DIAL_COLOR_OPTIONS,
+  getDialColorSwatch,
+  normalizeDialColor,
+} from '@shared/constants/dial-colors';
 import { GenericService } from '@shared/services/generic.service';
 import { ProductService } from 'src/app/shared/services/product.service';
+import { DialColor } from 'src/app/shared/types/product-d-t';
 
 @Component({
   selector: 'app-color-filtering',
@@ -11,8 +17,8 @@ import { ProductService } from 'src/app/shared/services/product.service';
   styleUrls: ['./color-filtering.component.scss'],
 })
 export class ColorFilteringComponent {
-  public all_colors: any = [];
-  public color: string = '';
+  public all_colors: string[] = [];
+  public color: string | null = null;
 
   constructor(
     public productService: ProductService,
@@ -25,45 +31,45 @@ export class ColorFilteringComponent {
   ngOnInit(): void {
     this.genericService.getObservable(GET_DIAL_COLORS).subscribe({
       next: (response) => {
-        const productColors = response.data
-          ?.map((el: any) => el?.DialColorName)
-          .sort((a: string, b: string) => a.localeCompare(b));
-        this.all_colors = [...new Set(productColors)];
+        const productColors = (response.data ?? [])
+          .map((el: DialColor) => el?.DialColorName)
+          .filter((dialColorName: string | undefined): dialColorName is string =>
+            Boolean(dialColorName),
+          );
+        this.all_colors = this.mergeAndSortColors(productColors);
       },
-      error: (err) => {
-        this.all_colors = [];
+      error: () => {
+        this.all_colors = this.mergeAndSortColors();
       },
     });
     this.route.queryParams.subscribe((params) => {
-      this.color = params['color'] ? params['color'] : null;
+      this.color = params['color'] ? normalizeDialColor(params['color']) : null;
     });
   }
 
-  getColorClass(color: string): string {
-    const colorMap: { [key: string]: string } = {
-      Red: 'red',
-      Blue: 'blue',
-      Green: 'green',
-      Purple: 'purple',
-      Black: 'black',
-      White: 'white',
-      Silver: 'silver',
-      Gold: 'gold',
-      Brown: 'brown',
-      Pink: 'pink',
-      Orange: 'orange',
-      Grey: 'grey',
-      Beige: 'beige',
-      Yellow: 'yellow',
-      Multicolor: 'multicolor',
+  getColorStyles(color: string): Record<string, string> {
+    const swatch = getDialColorSwatch(color);
+
+    return {
+      '--swatch-accent': swatch.accent,
+      '--swatch-background': swatch.background,
+      '--swatch-border': swatch.border ?? '1px solid transparent',
+      '--swatch-shadow': swatch.boxShadow ?? 'none',
     };
-    return `color ${colorMap[color] || 'default'}`;
+  }
+
+  trackByColor(_: number, color: string): string {
+    return color;
+  }
+
+  normalizeColor(color: string): string {
+    return normalizeDialColor(color);
   }
 
   handleColor(color: string) {
     // Define the query parameters as an object
     const queryParams: Params = {
-      color: color.toLowerCase(),
+      color: normalizeDialColor(color),
     };
 
     this.router
@@ -77,5 +83,20 @@ export class ColorFilteringComponent {
         this.viewScroller.setOffset([120, 120]);
         this.viewScroller.scrollToAnchor('products'); // Anchore Link
       });
+  }
+
+  private mergeAndSortColors(productColors: string[] = []): string[] {
+    const uniqueColors = new Map<string, string>();
+
+    [...DIAL_COLOR_OPTIONS, ...productColors].forEach((dialColor) => {
+      const normalizedColor = normalizeDialColor(dialColor);
+      if (!uniqueColors.has(normalizedColor)) {
+        uniqueColors.set(normalizedColor, dialColor);
+      }
+    });
+
+    return [...uniqueColors.values()].sort((a, b) =>
+      a.localeCompare(b, undefined, { sensitivity: 'base' }),
+    );
   }
 }
