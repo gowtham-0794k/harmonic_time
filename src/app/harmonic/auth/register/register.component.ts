@@ -6,6 +6,7 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
 import { REGISTER_USER } from 'src/app/config';
@@ -28,7 +29,8 @@ export class RegisterComponent {
   constructor(
     private toastrService: ToastrService,
     public genericService: GenericService,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -81,10 +83,14 @@ export class RegisterComponent {
         password: formValue.password,
       };
       this.store.dispatch(registerUser({ url, payload }));
-      this.store.select(selectUserData).subscribe((state) => {
-        // this.toastrService.success('Registration successful!');
-        // this.registerForm.reset();
-        // this.formSubmitted = false; // Reset the form submission state
+      this.store.select(selectUserData).subscribe((state: any) => {
+        if (state && state?.data?.token) {
+          localStorage.setItem('token', JSON.stringify(state?.data?.token));
+          this.toastrService.success('Registration successful!');
+          this.registerForm.reset();
+          this.formSubmitted = false; // Reset the form submission state
+          this.router.navigate(['/buyer/products']);
+        }
       });
     } else if (this.registerForm.hasError('passwordsMismatch')) {
       this.toastrService.error('Passwords do not match.');

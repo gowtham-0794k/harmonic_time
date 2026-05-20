@@ -9,6 +9,7 @@ import {
   CHECKOUT_ITEM_ORDER,
   CREATE_ADDRESS,
   CREATE_PAYMENT_ORDER,
+  UPDATE_PRODUCT,
   VERIFY_PAYMENT_ORDER,
 } from '@config/index';
 import { UserService } from '@shared/services/user.service';
@@ -22,6 +23,8 @@ import {
 import { selectUserData } from 'src/app/store/selectors/user.selectors';
 import { Store } from '@ngrx/store';
 import { selectCartItems } from 'src/app/store/selectors/cart.selectors';
+import { loadCart } from 'src/app/store/actions/cart.actions';
+import { Router } from '@angular/router';
 declare var Razorpay: any;
 
 @Component({
@@ -42,7 +45,8 @@ export class CheckoutComponent {
     public cartService: CartService,
     private toastrService: ToastrService,
     public genericService: GenericService,
-    private store: Store
+    private store: Store,
+    private router: Router
   ) {}
 
   handleOpenLogin() {
@@ -255,6 +259,7 @@ export class CheckoutComponent {
       const addressResponse = await firstValueFrom(
         this.genericService.postObservable(CREATE_ADDRESS, addressPayload)
       );
+      const cartItems = this.cartItems.map((el: any) => el.ProductID);
 
       const checkoutPayload = {
         UserID: this.userData._id,
@@ -263,13 +268,13 @@ export class CheckoutComponent {
         CheckoutDate: new Date(),
         DeliveryStatus: 'pending',
         AddressID: addressResponse.data.insertedId,
+        ProductIDs: cartItems,
       };
 
       const checkOutRes = await firstValueFrom(
         this.genericService.postObservable(CHECKOUT_ITEM, checkoutPayload)
       );
 
-      const cartItems = this.cartItems.map((el: any) => el.ProductID);
       const checkoutItemOrder = {
         CheckoutID: checkOutRes.data.insertedId,
         ProductIDs: cartItems,
@@ -283,9 +288,21 @@ export class CheckoutComponent {
         )
       );
 
-      this.toastrService.success(
-        'Payment and Checkout Completed Successfully!'
+      const updateProducts = {
+        ProductIDs: cartItems,
+      };
+
+      const updateProductsRes = await firstValueFrom(
+        this.genericService.putObservable(UPDATE_PRODUCT, updateProducts)
       );
+
+      if (updateProductsRes) {
+        this.router.navigate(['/buyer/products']);
+        await this.store.dispatch(loadCart());
+        await this.toastrService.success(
+          'Payment and Checkout Completed Successfully!'
+        );
+      }
     } catch (error) {
       console.error('Error in checkout process:', error);
       this.toastrService.error('Checkout Failed!');

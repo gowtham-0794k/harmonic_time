@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { UserService } from '@shared/services/user.service';
+import { selectUserData } from 'src/app/store/selectors/user.selectors';
 
 @Component({
   selector: 'app-extra-info',
@@ -8,7 +10,15 @@ import { UserService } from '@shared/services/user.service';
   styleUrls: ['./extra-info.component.scss'],
 })
 export class ExtraInfoComponent {
-  constructor(private userService: UserService) {}
+  public userData: any = null;
+
+  constructor(private userService: UserService, private store: Store) {}
+
+  ngOnInit(): void {
+    this.store.select(selectUserData).subscribe((state) => {
+      this.userData = state.user.data;
+    });
+  }
 
   navigate() {
     this.userService.logout();

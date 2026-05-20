@@ -350,14 +350,12 @@
         }
         & .table > :not(caption) > * > *{
             border: 0;
-            padding-left: 0;
-            padding-right: 0;
         }
 
         & tbody{
             & tr{
                 & td{
-                    padding: 20px 0;
+                    padding: 10px;
                 }
             }
         }

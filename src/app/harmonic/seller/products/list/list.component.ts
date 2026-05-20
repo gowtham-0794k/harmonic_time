@@ -1,47 +1,48 @@
 import { ViewportScroller } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { PRODUCT } from '@config/index';
 import { GenericService } from '@shared/services/generic.service';
-import { UserService } from '@shared/services/user.service';
 import { UtilsService } from '@shared/services/utils.service';
 import { filter, Subscription, switchMap } from 'rxjs';
 import { ProductService } from 'src/app/shared/services/product.service';
+import { selectUserData } from 'src/app/store/selectors/user.selectors';
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
 })
-export class ListComponent {
-  public orders = [];
-  paginationOrders: any = [];
-
-  public paginate: any = {}; // Pagination use only
+export class ListComponent implements OnInit, OnDestroy {
+  public orders: any[] = [];
+  public paginationOrders: any[] = [];
+  public paginate: any = {}; // Pagination data
   public pageSize = 10;
   public pageNo: number = 1;
-  userData: any;
   private subscriptions: Subscription = new Subscription();
+  private userData: any;
 
   constructor(
+    private store: Store,
     public productService: ProductService,
     private router: Router,
     private route: ActivatedRoute,
     private viewScroller: ViewportScroller,
     private genericService: GenericService,
-    private userService: UserService,
     public utilsService: UtilsService
   ) {}
 
   ngOnInit(): void {
-    // Subscribe to userData and fetch orders only when userData exists
+    // Subscribe to user data from store and fetch products
     this.subscriptions.add(
-      this.userService.userData$
+      this.store
+        .select(selectUserData)
         .pipe(
-          filter((user) => !!user), // Ensure userData is not null
-          switchMap((user) => {
-            this.userData = user;
-            const url = `${PRODUCT}?UserID=${this.userData._id}`;
+          filter((state) => !!state?.user?.data), // Ensure userData exists
+          switchMap((state) => {
+            this.userData = state.user.data;
+            const url = `${PRODUCT}?UserID=${this.userData._id}&IsAvailable=true`;
             return this.genericService.getObservable(url);
           })
         )
@@ -54,7 +55,7 @@ export class ListComponent {
         })
     );
 
-    // Subscribe to query params to update pagination
+    // Subscribe to query params for pagination
     this.subscriptions.add(
       this.route.queryParams.subscribe((params) => {
         this.pageNo = params['page'] ? Number(params['page']) : this.pageNo;
@@ -76,11 +77,7 @@ export class ListComponent {
     );
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe(); // Unsubscribe to avoid memory leaks
-  }
-
-  setPage(page: number) {
+  setPage(page: number): void {
     this.router
       .navigate([], {
         relativeTo: this.route,
@@ -91,5 +88,9 @@ export class ListComponent {
       .finally(() => {
         this.viewScroller.setOffset([120, 120]);
       });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe(); // Prevent memory leaks
   }
 }

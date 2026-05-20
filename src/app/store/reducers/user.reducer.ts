@@ -11,7 +11,7 @@ import {
 } from '../actions/user.actions';
 
 export interface UserState {
-  data: string[];
+  data: any[];
   loading: boolean;
   error: string | null;
   user: any;

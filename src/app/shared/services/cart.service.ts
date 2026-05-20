@@ -18,6 +18,8 @@ import {
 import { Store } from '@ngrx/store';
 import { selectCartItems } from 'src/app/store/selectors/cart.selectors';
 import { loadCart } from 'src/app/store/actions/cart.actions';
+import { Router } from '@angular/router';
+import { selectUserData } from 'src/app/store/selectors/user.selectors';
 
 const state = {
   cart_products: JSON.parse(localStorage['cart_products'] || '[]'),
@@ -29,14 +31,14 @@ const state = {
 export class CartService {
   public orderQuantity: number = 1;
   public isCartOpen: boolean = false;
-  private cartProducts$ = new BehaviorSubject<any[]>([]);
   cart$: Observable<any[]> = this.store.select(selectCartItems);
 
   constructor(
     private toastrService: ToastrService,
     private userService: UserService,
     private genericService: GenericService,
-    private store: Store
+    private store: Store,
+    private router: Router
   ) {}
 
   handleOpenCartSidebar() {
@@ -45,10 +47,13 @@ export class CartService {
 
   // add_cart_product
   addCartProduct(payload: any) {
-    this.userService.userData$
+    this.store
+      .select(selectUserData)
       .pipe(
         take(1),
-        switchMap((data) => {
+        switchMap((state) => {
+          const data = state?.user?.data; // Extract user data from store
+
           if (data) {
             const url = USER_CART + `${data._id}/${payload._id}`;
             return this.genericService.getObservable(url).pipe(
@@ -58,6 +63,7 @@ export class CartService {
                 )
               ),
               catchError(() => {
+                // If item is not found in the cart, add it
                 const cartPayload = {
                   UserID: data._id,
                   ProductID: payload._id,
@@ -69,25 +75,14 @@ export class CartService {
                       this.toastrService.success(
                         `${payload.ProductName} added to cart`
                       );
-                      this.store.dispatch(loadCart());
+                      this.store.dispatch(loadCart()); // Dispatch action to reload cart
                     })
                   );
               })
             );
           } else {
-            const isExist = state.cart_products.some(
-              (i: any) => i._id === payload._id
-            );
-            if (!isExist) {
-              state.cart_products.push({ ...payload, orderQuantity: 1 });
-              localStorage.setItem(
-                'cart_products',
-                JSON.stringify(state.cart_products)
-              );
-              this.toastrService.success(
-                `${payload.ProductName} added to cart`
-              );
-            }
+            this.router.navigate(['/auth/login']);
+            this.toastrService.warning(`Please Login to Add item to Cart !`);
             return EMPTY;
           }
         })
@@ -167,8 +162,8 @@ export class CartService {
   }
 
   // remover_cart_products
-  removeCartProduct(payload: any, userData: any) {
-    if (userData) {
+  removeCartProduct(payload: any) {
+    if (payload._id) {
       const url = DELETE_CART_ITEM + `${payload._id}`;
       this.genericService.deleteObservable(url).subscribe({
         next: (response) => {
@@ -183,25 +178,6 @@ export class CartService {
           );
         },
       });
-    } else {
-      state.cart_products = state.cart_products.filter(
-        (p: any) => p._id !== payload._id
-      );
-      this.toastrService.success(`${payload.ProductName} removed from cart`);
-      localStorage.setItem(
-        'cart_products',
-        JSON.stringify(state.cart_products)
-      );
-    }
-    if (state.cart_products.length) {
-      state.cart_products = state.cart_products.filter(
-        (p: any) => p._id !== payload._id
-      );
-      this.toastrService.success(`${payload.ProductName} removed from cart`);
-      localStorage.setItem(
-        'cart_products',
-        JSON.stringify(state.cart_products)
-      );
     }
   }
 

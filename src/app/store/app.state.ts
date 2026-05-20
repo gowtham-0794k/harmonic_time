@@ -5,7 +5,7 @@ export interface AppState {
   user: UserState;
   wishlist: WishlistState;
   cart: any;
-  // orders: OrderState;
+  orders: any;
   // profile: ProfileState;
   // recentlyViewed: RecentlyViewedState;
   // offers: OfferState;

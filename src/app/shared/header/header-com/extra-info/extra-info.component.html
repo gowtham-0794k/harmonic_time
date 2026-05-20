@@ -1,4 +1,4 @@
-<ul class="extra-info">
+<ul class="extra-info" *ngIf="userData">
   <li>
     <div class="my-account">
       <div class="extra-title">
@@ -10,7 +10,9 @@
         <li><a routerLink="/buyer/checkout">Checkout</a></li>
         <!-- <li><a routerLink="/auth/register">Create Account</a></li> -->
         <li><a routerLink="/buyer/account">Account</a></li>
-        <li><a routerLink="/auth/login" (click)="navigate()">Logout</a></li>
+        <li>
+          <a routerLink="/auth/login" (click)="navigate()">Logout</a>
+        </li>
       </ul>
     </div>
   </li>

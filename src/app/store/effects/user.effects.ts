@@ -31,7 +31,7 @@ export class UserEffects {
       mergeMap((action) =>
         this.genericService.postObservable(action.url, action.payload).pipe(
           map((result: any) => {
-            return registerUserSuccess({ data: result });
+            return registerUserSuccess({ data: result.data });
           }),
           catchError((err) => {
             return of(registerUserFailure({ error: err }));
@@ -47,13 +47,27 @@ export class UserEffects {
       mergeMap((action) =>
         this.genericService.postObservable(action.url, action.payload).pipe(
           map((result: any) => {
-            return loginUserSuccess({ data: result });
+            return loginUserSuccess({ data: result.data });
           }),
           catchError((err) => {
             return of(loginUserFailure({ error: err }));
           })
         )
       )
+    )
+  );
+
+  loginSuccessLoadUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loginUserSuccess), // Wait for login to succeed
+      map(() => loadUser()) // Dispatch loadUser action
+    )
+  );
+
+  registerSuccessLoadUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(registerUserSuccess), // Wait for login to succeed
+      map(() => loadUser()) // Dispatch loadUser action
     )
   );
 

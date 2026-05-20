@@ -1,7 +1,7 @@
 import { ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { GET_DIAL_COLOR } from '@config/index';
+import { GET_DIAL_COLORS } from '@config/index';
 import { GenericService } from '@shared/services/generic.service';
 import { ProductService } from 'src/app/shared/services/product.service';
 
@@ -23,7 +23,7 @@ export class ColorFilteringComponent {
   ) {}
 
   ngOnInit(): void {
-    this.genericService.getObservable(GET_DIAL_COLOR).subscribe({
+    this.genericService.getObservable(GET_DIAL_COLORS).subscribe({
       next: (response) => {
         const productColors = response.data
           ?.map((el: any) => el?.DialColorName)

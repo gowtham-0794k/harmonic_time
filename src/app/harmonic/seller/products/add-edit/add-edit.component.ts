@@ -7,22 +7,21 @@ import { Store } from '@ngrx/store';
 import { UserService } from '@shared/services/user.service';
 import {
   GET_BRANDS,
-  GET_CASE_MATERIAL,
+  GET_CASE_MATERIALS,
   GET_CATEGORIES,
-  GET_COLLECTION,
+  GET_COLLECTIONS,
   GET_DELIVERY_OPTIONS,
-  GET_DIAL_COLOR,
+  GET_DIAL_COLORS,
   GET_MOVEMENTS,
   GET_PRODUCT_BY_ID,
   GET_RECIPIENTS,
-  GET_STRAP_MATERIAL,
+  GET_STRAP_MATERIALS,
   GET_WATCH_MARKERS,
   POST_PRODUCT,
-  PRODUCT_DESCRIPTION,
+  POST_PRODUCT_DESCRIPTION,
   POST_PRODUCT_DETAILS,
   POST_PRODUCT_RETURN_POLICY,
   PRODUCT,
-  UPDATE_PRODUCT,
   UPDATE_PRODUCT_DETAILS,
   POST_UPLOAD_IMAGES,
   POST_PRODUCT_IMAGES,
@@ -104,7 +103,7 @@ export class AddEditComponent implements OnInit {
 
   CREATE_PRODUCT_URL = POST_PRODUCT;
   CREATE_PRODUCT_DETAILS_URL = POST_PRODUCT_DETAILS;
-  CREATE_PRODUCT_DESCRIPTION_URL = PRODUCT_DESCRIPTION;
+  CREATE_PRODUCT_DESCRIPTION_URL = POST_PRODUCT_DESCRIPTION;
   CREATE_PRODUCT_RETURN_POLICY_URL = POST_PRODUCT_RETURN_POLICY;
   POST_UPLOAD_IMAGES = POST_UPLOAD_IMAGES;
   productData: any;
@@ -190,11 +189,11 @@ export class AddEditComponent implements OnInit {
     const apiMapping: { url: string; target: TargetKeys }[] = [
       { url: GET_BRANDS, target: 'brands' },
       { url: GET_CATEGORIES, target: 'categories' },
-      { url: GET_COLLECTION, target: 'collections' },
-      { url: GET_DIAL_COLOR, target: 'dialColors' },
+      { url: GET_COLLECTIONS, target: 'collections' },
+      { url: GET_DIAL_COLORS, target: 'dialColors' },
       { url: GET_MOVEMENTS, target: 'movements' },
-      { url: GET_STRAP_MATERIAL, target: 'strapMaterials' },
-      { url: GET_CASE_MATERIAL, target: 'caseMaterials' },
+      { url: GET_STRAP_MATERIALS, target: 'strapMaterials' },
+      { url: GET_CASE_MATERIALS, target: 'caseMaterials' },
       { url: GET_WATCH_MARKERS, target: 'watchMarkers' },
       { url: GET_DELIVERY_OPTIONS, target: 'deliveryOptions' },
       { url: GET_RECIPIENTS, target: 'recipients' },
@@ -593,7 +592,7 @@ export class AddEditComponent implements OnInit {
 
     const updateRequests = [
       this.genericService.putObservable(
-        `${UPDATE_PRODUCT}/${productId}`,
+        `${PRODUCT}/${productId}`,
         productPayload
       ),
       this.genericService.putObservable(

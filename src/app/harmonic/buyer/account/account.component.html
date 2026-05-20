@@ -155,74 +155,48 @@
                   class="order__info-top d-flex justify-content-between align-items-center"
                 >
                   <h3 class="order__info-title">My Orders</h3>
-                  <button type="button" class="order__info-btn">
-                    <i class="fa-regular fa-trash-can"></i> Clear
-                  </button>
                 </div>
 
                 <div class="order__list white-bg table-responsive">
                   <table class="table">
                     <thead>
                       <tr>
-                        <th scope="col">Order ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Details</th>
+                        <th style="width: 100px">Image</th>
+                        <th style="width: 300px">Product Name</th>
+                        <th style="width: 150px">Price</th>
+                        <th style="width: 150px">Tracking ID</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td class="order__id">#3520</td>
-                        <td>
-                          <a
-                            [routerLink]="['/shop/shop-details']"
-                            class="order__title"
-                            >University seminar series global.</a
-                          >
+                      <tr *ngFor="let order of orders">
+                        <td
+                          *ngFor="let product of order.Products"
+                          class="product-cell"
+                        >
+                          <img
+                            [src]="product.ImageURL"
+                            alt="{{ product.ProductName }}"
+                            class="product-img"
+                            style="width: 120px"
+                          />
                         </td>
-                        <td>$144.00</td>
-                        <td>
-                          <a
-                            [routerLink]="['/shop/shop-details']"
-                            class="order__view-btn"
-                            >View</a
-                          >
+                        <td
+                          *ngFor="let product of order.Products"
+                          class="order__title pr-2 pl-2"
+                        >
+                          {{ product.ProductName }}
                         </td>
-                      </tr>
-                      <tr>
-                        <td class="order__id">#2441</td>
-                        <td>
-                          <a
-                            [routerLink]="['/shop/shop-details']"
-                            class="order__title"
-                            >Web coding and apache basics</a
-                          >
+                        <td
+                          *ngFor="let product of order.Products"
+                          class="order__title pr-2 pl-2"
+                        >
+                          {{ product.Price | currency : "INR" }}
                         </td>
-                        <td>$59.54</td>
-                        <td>
-                          <a
-                            [routerLink]="['/shop/shop-details']"
-                            class="order__view-btn"
-                            >View</a
-                          >
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="order__id">#2357</td>
-                        <td>
-                          <a
-                            [routerLink]="['/shop/shop-details']"
-                            class="order__title"
-                            >Economics historical development</a
-                          >
-                        </td>
-                        <td>$89.90</td>
-                        <td>
-                          <a
-                            [routerLink]="['/shop/shop-details']"
-                            class="order__view-btn"
-                            >View</a
-                          >
+                        <td
+                          *ngFor="let product of order.Products"
+                          class="order__title pr-2 pl-2"
+                        >
+                          {{ product.Tracking }}
                         </td>
                       </tr>
                     </tbody>
