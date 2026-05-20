@@ -16,7 +16,7 @@ export class ExtraInfoComponent {
 
   ngOnInit(): void {
     this.store.select(selectUserData).subscribe((state) => {
-      this.userData = state.user.data;
+      this.userData = state?.user?.data;
     });
   }
 

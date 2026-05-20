@@ -11,6 +11,8 @@ import {
   selectUserError,
 } from 'src/app/store/selectors/user.selectors';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -26,6 +28,9 @@ export class LoginComponent {
 
   public loginForm!: FormGroup;
   public formSubmitted = false;
+
+  private userDataSub?: Subscription;
+  private userErrorSub?: Subscription;
 
   constructor(
     private toastrService: ToastrService,
@@ -57,20 +62,35 @@ export class LoginComponent {
         email: formValue.email,
         password: formValue.password,
       };
+      // Drop any subscriptions from a previous submit so toasts don't stack
+      this.userDataSub?.unsubscribe();
+      this.userErrorSub?.unsubscribe();
+
       this.store.dispatch(loginUser({ url, payload }));
-      this.store.select(selectUserError).subscribe((state: any) => {
-        if (state)
+
+      this.userErrorSub = this.store
+        .select(selectUserError)
+        .pipe(
+          filter((error: any) => !!error),
+          take(1)
+        )
+        .subscribe(() => {
           this.toastrService.error('Please check email and password !');
-      });
-      this.store.select(selectUserData).subscribe((state: any) => {
-        if (state && state?.data?.token) {
+        });
+
+      this.userDataSub = this.store
+        .select(selectUserData)
+        .pipe(
+          filter((state: any) => !!state?.data?.token),
+          take(1)
+        )
+        .subscribe((state: any) => {
           localStorage.setItem('token', JSON.stringify(state?.data?.token));
           this.toastrService.success('Login successful !');
           this.loginForm.reset();
           this.formSubmitted = false; // Reset the form submission state
           this.router.navigate(['/buyer/products']);
-        }
-      });
+        });
     }
   }
 }

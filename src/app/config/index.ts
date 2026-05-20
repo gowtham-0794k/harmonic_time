@@ -58,6 +58,10 @@ export const GET_PRODUCT_IMAGES = `${baseUrl}/product-images/product/`;
 export const GET_PRODUCT_IMAGE_BY_ID = `${baseUrl}/product-images/`;
 export const DELETE_IMAGE_DB = `${baseUrl}/product-images/`;
 
+// reviews (append the product id to GET)
+export const POST_REVIEW = `${baseUrl}/reviews`;
+export const GET_PRODUCT_REVIEWS = `${baseUrl}/reviews/product/`;
+
 // cart
 export const USER_CART = `${baseUrl}/cart/user/`; // append the user id
 export const ADD_TO_CART = `${baseUrl}/cart`;

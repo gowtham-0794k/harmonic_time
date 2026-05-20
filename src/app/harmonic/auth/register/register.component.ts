@@ -14,6 +14,8 @@ import { GenericService } from 'src/app/shared/services/generic.service';
 import { registerUser } from 'src/app/store/actions/user.actions';
 import { AppState } from 'src/app/store/app.state';
 import { selectUserData } from 'src/app/store/selectors/user.selectors';
+import { Subscription } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-register',
@@ -25,6 +27,8 @@ export class RegisterComponent {
   public showConfirmPassword = false;
   public registerForm!: FormGroup;
   public formSubmitted = false;
+
+  private userDataSub?: Subscription;
 
   constructor(
     private toastrService: ToastrService,
@@ -40,7 +44,7 @@ export class RegisterComponent {
         password: new FormControl(null, [
           Validators.required,
           Validators.pattern(
-            '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'
+            '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$'
           ),
         ]),
         confirmPassword: new FormControl(null, [Validators.required]),
@@ -82,16 +86,22 @@ export class RegisterComponent {
         email: formValue.email,
         password: formValue.password,
       };
+      // Drop any subscription from a previous submit so toasts don't stack
+      this.userDataSub?.unsubscribe();
       this.store.dispatch(registerUser({ url, payload }));
-      this.store.select(selectUserData).subscribe((state: any) => {
-        if (state && state?.data?.token) {
+      this.userDataSub = this.store
+        .select(selectUserData)
+        .pipe(
+          filter((state: any) => !!state?.data?.token),
+          take(1)
+        )
+        .subscribe((state: any) => {
           localStorage.setItem('token', JSON.stringify(state?.data?.token));
           this.toastrService.success('Registration successful!');
           this.registerForm.reset();
           this.formSubmitted = false; // Reset the form submission state
           this.router.navigate(['/buyer/products']);
-        }
-      });
+        });
     } else if (this.registerForm.hasError('passwordsMismatch')) {
       this.toastrService.error('Passwords do not match.');
     }

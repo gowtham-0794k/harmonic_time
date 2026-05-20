@@ -24,7 +24,7 @@ export class CartComponent {
 
   ngOnInit(): void {
     this.store.select(selectUserData).subscribe((state) => {
-      if (state.user.data) {
+      if (state?.user?.data) {
         this.userData = state.user.data;
       }
     });

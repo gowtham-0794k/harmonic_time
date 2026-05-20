@@ -22,7 +22,7 @@ export class OffcanvasComponent {
 
   ngOnInit(): void {
     this.store.select(selectUserData).subscribe((state) => {
-      this.roles = state.user.data?.roles;
+      this.roles = state?.user?.data?.roles;
     });
   }
 

@@ -23,13 +23,12 @@ export class GenericService {
   }
 
   getObservableToken(_url: string | any): Observable<any> {
+    const token = localStorage.getItem('token');
     const httpOptionsToken = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         Accept: '*/*',
-        Authorization: `Bearer ${JSON.parse(
-          localStorage.getItem('token') || ''
-        )}`,
+        Authorization: `Bearer ${token ? JSON.parse(token) : ''}`,
       }),
     };
     const url = _url;

@@ -1,33 +1,58 @@
 import {
+  AfterViewInit,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
+  OnDestroy,
   Output,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import { IProduct, Product } from '../../types/product-d-t';
 import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 import { Store } from '@ngrx/store';
 import { selectCartItems } from 'src/app/store/selectors/cart.selectors';
+import { ReviewFormComponent } from '../forms/review-form/review-form.component';
 
 @Component({
   selector: 'app-product-details-upper-buyer',
   templateUrl: './product-details-upper-buyer.component.html',
   styleUrls: ['./product-details-upper-buyer.component.scss'],
 })
-export class ProductDetailsUpperBuyerComponent {
+export class ProductDetailsUpperBuyerComponent implements AfterViewInit, OnDestroy {
   @Input() product!: any; //  Product;
   @Input() bottomShow: boolean = true;
   @Input() style_2: boolean = false;
   @Output() itemDetails: EventEmitter<any> = new EventEmitter<any>();
   cartItems: any = [];
 
+  @ViewChild('reviewModal') reviewModalRef?: ElementRef<HTMLElement>;
+  @ViewChild(ReviewFormComponent) reviewFormCmp?: ReviewFormComponent;
+
   constructor(
     public productService: ProductService,
     public cartService: CartService,
     public store: Store
   ) {}
+
+  // Reset the review form whenever the modal is closed
+  private onModalHidden = () => this.reviewFormCmp?.resetForm();
+
+  ngAfterViewInit(): void {
+    this.reviewModalRef?.nativeElement.addEventListener(
+      'hidden.bs.modal',
+      this.onModalHidden
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.reviewModalRef?.nativeElement.removeEventListener(
+      'hidden.bs.modal',
+      this.onModalHidden
+    );
+  }
 
   ngOnInit() {
     this.store.select(selectCartItems).subscribe((state) => {

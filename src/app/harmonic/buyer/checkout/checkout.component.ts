@@ -1,7 +1,13 @@
 import { Component } from '@angular/core';
 import { CartService } from 'src/app/shared/services/cart.service';
 import { ToastrService } from 'ngx-toastr';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { countries } from '@shared/constants/countries';
 import { GenericService } from '@shared/services/generic.service';
 import {
@@ -9,18 +15,27 @@ import {
   CHECKOUT_ITEM_ORDER,
   CREATE_ADDRESS,
   CREATE_PAYMENT_ORDER,
+  LOGIN_USER,
+  REGISTER_USER,
   UPDATE_PRODUCT,
   VERIFY_PAYMENT_ORDER,
 } from '@config/index';
+import { loginUser, registerUser } from 'src/app/store/actions/user.actions';
 import { UserService } from '@shared/services/user.service';
 import {
   catchError,
+  filter,
   firstValueFrom,
   Observable,
+  Subscription,
   switchMap,
+  take,
   throwError,
 } from 'rxjs';
-import { selectUserData } from 'src/app/store/selectors/user.selectors';
+import {
+  selectUserData,
+  selectUserError,
+} from 'src/app/store/selectors/user.selectors';
 import { Store } from '@ngrx/store';
 import { selectCartItems } from 'src/app/store/selectors/cart.selectors';
 import { loadCart } from 'src/app/store/actions/cart.actions';
@@ -34,6 +49,7 @@ declare var Razorpay: any;
 })
 export class CheckoutComponent {
   public isOpenLogin = false;
+  public isOpenRegister = false;
   public isOpenCoupon = false;
   public couponCode: string = '';
   public payment_name: string = '';
@@ -41,16 +57,33 @@ export class CheckoutComponent {
   public userData: any = {};
   public cartItems: any = [];
 
+  // Returning customer login
+  public loginForm!: FormGroup;
+  public loginSubmitted = false;
+  public showLoginPassword = false;
+
+  // New customer register
+  public registerForm!: FormGroup;
+  public registerSubmitted = false;
+  public showRegisterPassword = false;
+  public showRegisterConfirmPassword = false;
+
+  private authDataSub?: Subscription;
+  private authErrorSub?: Subscription;
+
   constructor(
     public cartService: CartService,
     private toastrService: ToastrService,
     public genericService: GenericService,
     private store: Store,
-    private router: Router
+    private router: Router,
   ) {}
 
   handleOpenLogin() {
     this.isOpenLogin = !this.isOpenLogin;
+  }
+  handleOpenRegister() {
+    this.isOpenRegister = !this.isOpenRegister;
   }
   handleOpenCoupon() {
     this.isOpenCoupon = !this.isOpenCoupon;
@@ -76,7 +109,7 @@ export class CheckoutComponent {
 
   ngOnInit() {
     this.store.select(selectUserData).subscribe((state) => {
-      this.userData = state.user.data;
+      this.userData = state?.user?.data;
     });
     this.store.select(selectCartItems).subscribe((state) => {
       if (state?.length) {
@@ -99,7 +132,136 @@ export class CheckoutComponent {
       email: new FormControl(null, [Validators.required, Validators.email]),
     });
 
+    this.loginForm = new FormGroup({
+      email: new FormControl(null, [Validators.required, Validators.email]),
+      password: new FormControl(null, [Validators.required]),
+    });
+
+    this.registerForm = new FormGroup(
+      {
+        email: new FormControl(null, [Validators.required, Validators.email]),
+        password: new FormControl(null, [
+          Validators.required,
+          Validators.pattern(
+            '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$',
+          ),
+        ]),
+        confirmPassword: new FormControl(null, [Validators.required]),
+      },
+      { validators: this.passwordsMatchValidator },
+    );
+
     this.loadRazorpayScript();
+  }
+
+  passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
+    const password = group.get('password')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { passwordsMismatch: true };
+  }
+
+  // Returning customer login form getters
+  get loginEmail() {
+    return this.loginForm.get('email');
+  }
+  get loginPassword() {
+    return this.loginForm.get('password');
+  }
+
+  // New customer register form getters
+  get registerEmail() {
+    return this.registerForm.get('email');
+  }
+  get registerPassword() {
+    return this.registerForm.get('password');
+  }
+  get registerConfirmPassword() {
+    return this.registerForm.get('confirmPassword');
+  }
+
+  toggleLoginPassword() {
+    this.showLoginPassword = !this.showLoginPassword;
+  }
+
+  toggleRegisterPassword(field: 'password' | 'confirmPassword') {
+    if (field === 'password') {
+      this.showRegisterPassword = !this.showRegisterPassword;
+    } else {
+      this.showRegisterConfirmPassword = !this.showRegisterConfirmPassword;
+    }
+  }
+
+  // Login using the same endpoint/action as the login page,
+  // but stay on checkout so the user can continue ordering.
+  onLogin() {
+    this.loginSubmitted = true;
+    if (this.loginForm.valid) {
+      const formValue = this.loginForm.value;
+      const payload = {
+        email: formValue.email,
+        password: formValue.password,
+      };
+      // Drop any subscriptions from a previous submit so toasts don't stack
+      this.authDataSub?.unsubscribe();
+      this.authErrorSub?.unsubscribe();
+
+      this.store.dispatch(loginUser({ url: LOGIN_USER, payload }));
+
+      this.authErrorSub = this.store
+        .select(selectUserError)
+        .pipe(
+          filter((error: any) => !!error),
+          take(1)
+        )
+        .subscribe(() => {
+          this.toastrService.error('Please check email and password !');
+        });
+
+      this.authDataSub = this.store
+        .select(selectUserData)
+        .pipe(
+          filter((state: any) => !!state?.data?.token),
+          take(1)
+        )
+        .subscribe((state: any) => {
+          localStorage.setItem('token', JSON.stringify(state?.data?.token));
+          this.toastrService.success('Login successful !');
+          this.loginForm.reset();
+          this.loginSubmitted = false;
+          this.isOpenLogin = false;
+        });
+    }
+  }
+
+  // Register using the same endpoint/action as the register page,
+  // but stay on checkout so the user can continue ordering.
+  onRegister() {
+    this.registerSubmitted = true;
+    if (this.registerForm.valid) {
+      const formValue = this.registerForm.value;
+      const payload = {
+        email: formValue.email,
+        password: formValue.password,
+      };
+      // Drop any subscription from a previous submit so toasts don't stack
+      this.authDataSub?.unsubscribe();
+      this.store.dispatch(registerUser({ url: REGISTER_USER, payload }));
+      this.authDataSub = this.store
+        .select(selectUserData)
+        .pipe(
+          filter((state: any) => !!state?.data?.token),
+          take(1)
+        )
+        .subscribe((state: any) => {
+          localStorage.setItem('token', JSON.stringify(state?.data?.token));
+          this.toastrService.success('Registration successful!');
+          this.registerForm.reset();
+          this.registerSubmitted = false;
+          this.isOpenRegister = false;
+        });
+    } else if (this.registerForm.hasError('passwordsMismatch')) {
+      this.toastrService.error('Passwords do not match.');
+    }
   }
 
   loadRazorpayScript() {
@@ -183,7 +345,7 @@ export class CheckoutComponent {
           console.error('Error creating payment order:', error);
           this.toastrService.error('Payment initialization failed!');
           return throwError(() => error);
-        })
+        }),
       )
       .subscribe();
   }
@@ -231,8 +393,8 @@ export class CheckoutComponent {
       return await firstValueFrom(
         this.genericService.postObservable(
           VERIFY_PAYMENT_ORDER,
-          handlerResponse
-        )
+          handlerResponse,
+        ),
       );
     } catch (error) {
       console.error('Error verifying payment:', error);
@@ -257,7 +419,7 @@ export class CheckoutComponent {
       };
 
       const addressResponse = await firstValueFrom(
-        this.genericService.postObservable(CREATE_ADDRESS, addressPayload)
+        this.genericService.postObservable(CREATE_ADDRESS, addressPayload),
       );
       const cartItems = this.cartItems.map((el: any) => el.ProductID);
 
@@ -272,7 +434,7 @@ export class CheckoutComponent {
       };
 
       const checkOutRes = await firstValueFrom(
-        this.genericService.postObservable(CHECKOUT_ITEM, checkoutPayload)
+        this.genericService.postObservable(CHECKOUT_ITEM, checkoutPayload),
       );
 
       const checkoutItemOrder = {
@@ -284,8 +446,8 @@ export class CheckoutComponent {
       await firstValueFrom(
         this.genericService.postObservable(
           CHECKOUT_ITEM_ORDER,
-          checkoutItemOrder
-        )
+          checkoutItemOrder,
+        ),
       );
 
       const updateProducts = {
@@ -293,14 +455,14 @@ export class CheckoutComponent {
       };
 
       const updateProductsRes = await firstValueFrom(
-        this.genericService.putObservable(UPDATE_PRODUCT, updateProducts)
+        this.genericService.putObservable(UPDATE_PRODUCT, updateProducts),
       );
 
       if (updateProductsRes) {
         this.router.navigate(['/buyer/products']);
         await this.store.dispatch(loadCart());
         await this.toastrService.success(
-          'Payment and Checkout Completed Successfully!'
+          'Payment and Checkout Completed Successfully!',
         );
       }
     } catch (error) {

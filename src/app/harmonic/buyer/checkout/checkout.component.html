@@ -3,7 +3,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6">
-        <div class="coupon-accordion">
+        <div class="coupon-accordion" *ngIf="!userData">
           <h3>
             Returning customer?
             <span id="showlogin" (click)="handleOpenLogin()"
@@ -13,31 +13,130 @@
           <div *ngIf="isOpenLogin" id="checkout-login" class="coupon-content">
             <div class="coupon-info">
               <p class="coupon-text">
-                Quisque gravida turpis sit amet nulla posuere lacinia. Cras sed
-                est sit amet ipsum luctus.
+                If you already have an account, please login below to continue
+                with your order.
               </p>
-              <form action="#">
+              <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
                 <p class="form-row-first">
-                  <label
-                    >Username or email <span class="required">*</span></label
+                  <label>Email <span class="required">*</span></label>
+                  <input type="text" formControlName="email" />
+                  <span
+                    *ngIf="
+                      loginEmail?.invalid &&
+                      (loginEmail?.touched || loginSubmitted)
+                    "
+                    class="text-danger"
                   >
-                  <input type="text" />
+                    A valid email is required
+                  </span>
                 </p>
                 <p class="form-row-last">
                   <label>Password <span class="required">*</span></label>
-                  <input type="text" />
+                  <input
+                    [type]="showLoginPassword ? 'text' : 'password'"
+                    formControlName="password"
+                  />
+                  <span
+                    *ngIf="
+                      loginPassword?.invalid &&
+                      (loginPassword?.touched || loginSubmitted)
+                    "
+                    class="text-danger"
+                  >
+                    Password is required
+                  </span>
                 </p>
                 <p class="form-row">
                   <button class="os-btn os-btn-black" type="submit">
                     Login
                   </button>
                   <label>
-                    <input type="checkbox" />
-                    Remember me
+                    <input type="checkbox" (change)="toggleLoginPassword()" />
+                    Show password
                   </label>
                 </p>
-                <p class="lost-password">
-                  <a href="#">Lost your password?</a>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="coupon-accordion" *ngIf="!userData">
+          <h3>
+            New customer?
+            <span id="showregister" (click)="handleOpenRegister()"
+              >Click here to register</span
+            >
+          </h3>
+          <div
+            *ngIf="isOpenRegister"
+            id="checkout-register"
+            class="coupon-content"
+          >
+            <div class="coupon-info">
+              <p class="coupon-text">
+                Create an account to track your orders and check out faster.
+              </p>
+              <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+                <p class="form-row-first">
+                  <label>Email <span class="required">*</span></label>
+                  <input type="text" formControlName="email" />
+                  <span
+                    *ngIf="
+                      registerEmail?.invalid &&
+                      (registerEmail?.touched || registerSubmitted)
+                    "
+                    class="text-danger"
+                  >
+                    A valid email is required
+                  </span>
+                </p>
+                <p class="form-row-first">
+                  <label>Password <span class="required">*</span></label>
+                  <input
+                    [type]="showRegisterPassword ? 'text' : 'password'"
+                    formControlName="password"
+                  />
+                  <span
+                    *ngIf="
+                      registerPassword?.invalid &&
+                      (registerPassword?.touched || registerSubmitted)
+                    "
+                    class="text-danger"
+                  >
+                    Password must be at least 6 characters and include
+                    uppercase, lowercase, a number and a special character
+                  </span>
+                </p>
+                <p class="form-row-last">
+                  <label
+                    >Confirm Password <span class="required">*</span></label
+                  >
+                  <input
+                    [type]="showRegisterConfirmPassword ? 'text' : 'password'"
+                    formControlName="confirmPassword"
+                  />
+                  <span
+                    *ngIf="
+                      registerForm.hasError('passwordsMismatch') &&
+                      (registerConfirmPassword?.dirty || registerSubmitted)
+                    "
+                    class="text-danger"
+                  >
+                    Passwords do not match
+                  </span>
+                </p>
+                <p class="form-row">
+                  <button class="os-btn os-btn-black" type="submit">
+                    Register
+                  </button>
+                  <label>
+                    <input
+                      type="checkbox"
+                      (change)="toggleRegisterPassword('password')"
+                    />
+                    Show password
+                  </label>
                 </p>
               </form>
             </div>
@@ -324,7 +423,7 @@
                       </td>
                       <td class="product-total">
                         <span class="amount">{{
-                          item.Price | currency : "INR"
+                          item.Price | currency: "INR"
                         }}</span>
                       </td>
                     </tr>
@@ -335,7 +434,7 @@
                       <td>
                         <span class="amount">{{
                           cartService.computeCartTotal(cartItems).total
-                            | currency : "INR"
+                            | currency: "INR"
                         }}</span>
                       </td>
                     </tr>
@@ -346,7 +445,7 @@
                           ><span class="amount">
                             {{
                               cartService.computeCartTotal(cartItems).total
-                                | currency : "INR"
+                                | currency: "INR"
                             }}
                           </span></strong
                         >

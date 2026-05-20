@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import {
   registerUser,
   registerUserSuccess,
@@ -15,14 +15,15 @@ import {
 } from '../actions/user.actions';
 import { GenericService } from 'src/app/shared/services/generic.service';
 import { UserService } from '@shared/services/user.service';
-import { loadCart } from '../actions/cart.actions';
+import { CartService } from '@shared/services/cart.service';
 
 @Injectable()
 export class UserEffects {
   constructor(
     private actions$: Actions,
     private genericService: GenericService,
-    public userService: UserService
+    public userService: UserService,
+    private cartService: CartService
   ) {}
 
   registerUser$ = createEffect(() =>
@@ -31,6 +32,11 @@ export class UserEffects {
       mergeMap((action) =>
         this.genericService.postObservable(action.url, action.payload).pipe(
           map((result: any) => {
+            // Persist the token here so the loadUser effect (triggered next)
+            // can authenticate getUserData
+            if (result?.data?.token) {
+              localStorage.setItem('token', JSON.stringify(result.data.token));
+            }
             return registerUserSuccess({ data: result.data });
           }),
           catchError((err) => {
@@ -47,6 +53,11 @@ export class UserEffects {
       mergeMap((action) =>
         this.genericService.postObservable(action.url, action.payload).pipe(
           map((result: any) => {
+            // Persist the token here so the loadUser effect (triggered next)
+            // can authenticate getUserData
+            if (result?.data?.token) {
+              localStorage.setItem('token', JSON.stringify(result.data.token));
+            }
             return loginUserSuccess({ data: result.data });
           }),
           catchError((err) => {
@@ -83,10 +94,19 @@ export class UserEffects {
     )
   );
 
-  loadUserSuccess$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(loadUserSuccess),
-      map(() => loadCart()) // Dispatch loadCart only after user loads
-    )
+  // After the user loads, merge any guest (session-storage) cart into the
+  // server cart. mergeGuestCart dispatches loadCart once the merge completes.
+  mergeGuestCartOnLogin$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(loadUserSuccess),
+        tap((action: any) => {
+          const userId = action?.user?.data?._id;
+          if (userId) {
+            this.cartService.mergeGuestCart(userId);
+          }
+        })
+      ),
+    { dispatch: false }
   );
 }

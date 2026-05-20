@@ -8,6 +8,7 @@ import {
   BehaviorSubject,
   catchError,
   EMPTY,
+  forkJoin,
   map,
   Observable,
   of,
@@ -17,7 +18,7 @@ import {
 } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCartItems } from 'src/app/store/selectors/cart.selectors';
-import { loadCart } from 'src/app/store/actions/cart.actions';
+import { loadCart, updateCart } from 'src/app/store/actions/cart.actions';
 import { Router } from '@angular/router';
 import { selectUserData } from 'src/app/store/selectors/user.selectors';
 
@@ -81,14 +82,19 @@ export class CartService {
               })
             );
           } else {
-            this.router.navigate(['/auth/login']);
-            this.toastrService.warning(`Please Login to Add item to Cart !`);
+            // Guest user: keep the cart in session storage instead of forcing login
+            this.addGuestCartProduct(payload);
             return EMPTY;
           }
         })
       )
       .subscribe({
-        error: (err) => this.toastrService.error(`Error: ${err.message}`),
+        error: (err) => {
+          // Surface the server's message (e.g. "Product already in cart")
+          const message =
+            err?.error?.message || 'Something went wrong. Please try again.';
+          this.toastrService.error(message);
+        },
       });
   }
 
@@ -163,22 +169,93 @@ export class CartService {
 
   // remover_cart_products
   removeCartProduct(payload: any) {
-    if (payload._id) {
-      const url = DELETE_CART_ITEM + `${payload._id}`;
-      this.genericService.deleteObservable(url).subscribe({
-        next: (response) => {
-          this.toastrService.success(
-            `${payload.ProductName} removed from cart`
-          );
-          this.store.dispatch(loadCart());
-        },
-        error: (err) => {
-          this.toastrService.error(
-            `${payload.ProductName} error removing from cart`
-          );
-        },
+    this.store
+      .select(selectUserData)
+      .pipe(take(1))
+      .subscribe((state: any) => {
+        const user = state?.user?.data;
+        if (user) {
+          // Logged-in user: delete the cart row on the server (payload._id is the cart row id)
+          if (payload._id) {
+            const url = DELETE_CART_ITEM + `${payload._id}`;
+            this.genericService.deleteObservable(url).subscribe({
+              next: () => {
+                this.toastrService.success(
+                  `${payload.ProductName} removed from cart`
+                );
+                this.store.dispatch(loadCart());
+              },
+              error: () => {
+                this.toastrService.error(
+                  `${payload.ProductName} error removing from cart`
+                );
+              },
+            });
+          }
+        } else {
+          // Guest user: remove from the session-storage cart
+          this.removeGuestCartProduct(payload);
+        }
       });
+  }
+
+  // ----- Guest cart (session storage) -----
+  private readonly GUEST_CART_KEY = 'guest_cart';
+
+  private getGuestCart(): any[] {
+    return JSON.parse(sessionStorage.getItem(this.GUEST_CART_KEY) || '[]');
+  }
+
+  private saveGuestCart(cart: any[]) {
+    sessionStorage.setItem(this.GUEST_CART_KEY, JSON.stringify(cart));
+    this.store.dispatch(updateCart({ cart }));
+  }
+
+  // Hydrate the store from session storage on app start (guest users)
+  loadGuestCart() {
+    this.store.dispatch(updateCart({ cart: this.getGuestCart() }));
+  }
+
+  private addGuestCartProduct(payload: any) {
+    const guestCart = this.getGuestCart();
+    const exists = guestCart.some((p: any) => p.ProductID === payload._id);
+    if (exists) {
+      this.toastrService.warning(`${payload.ProductName} exists in the cart`);
+      return;
     }
+    // Keep ProductID so isProductInCart() and the merge-on-login flow work
+    const item = { ...payload, ProductID: payload._id };
+    this.saveGuestCart([...guestCart, item]);
+    this.toastrService.success(`${payload.ProductName} added to cart`);
+  }
+
+  private removeGuestCartProduct(payload: any) {
+    const guestCart = this.getGuestCart().filter(
+      (p: any) => p.ProductID !== payload._id && p._id !== payload._id
+    );
+    this.saveGuestCart(guestCart);
+    this.toastrService.success(`${payload.ProductName} removed from cart`);
+  }
+
+  // On login, push any guest cart items to the server, clear session, reload cart
+  mergeGuestCart(userId: string) {
+    const guestCart = this.getGuestCart();
+    if (!guestCart.length) {
+      this.store.dispatch(loadCart());
+      return;
+    }
+    const requests = guestCart.map((item: any) =>
+      this.genericService
+        .postObservable(ADD_TO_CART, {
+          UserID: userId,
+          ProductID: item.ProductID || item._id,
+        })
+        .pipe(catchError(() => of(null)))
+    );
+    forkJoin(requests).subscribe(() => {
+      sessionStorage.removeItem(this.GUEST_CART_KEY);
+      this.store.dispatch(loadCart());
+    });
   }
 
   // clear cart

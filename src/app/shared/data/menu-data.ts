@@ -2,6 +2,11 @@ import { IMenuType, IMobileMenu } from '../types/menu-d-t';
 
 const menuData: IMenuType[] = [
   {
+    link: '/buyer/products',
+    title: 'Shop',
+    hasDropdown: false,
+  },
+  {
     link: '/seller/product-list',
     title: 'Seller',
     seller: true,
@@ -14,11 +19,6 @@ const menuData: IMenuType[] = [
     ],
   },
   {
-    link: '/buyer/products',
-    title: 'Shop',
-    hasDropdown: false,
-  },
-  {
     link: '/pages/contact',
     title: 'Contact',
   },
@@ -29,6 +29,10 @@ export default menuData;
 // mobile menus
 export const mobile_menus: IMobileMenu[] = [
   {
+    title: 'Shop',
+    link: '/buyer/products',
+  },
+  {
     title: 'Seller',
     seller: true,
     dropdownMenu: [
@@ -36,10 +40,6 @@ export const mobile_menus: IMobileMenu[] = [
       { link: '/seller/order-list', title: 'Order List' },
       { link: '/seller/add-product', title: 'Add Product' },
     ],
-  },
-  {
-    title: 'Shop',
-    link: '/buyer/products',
   },
   {
     title: 'Contact',

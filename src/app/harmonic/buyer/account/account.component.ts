@@ -25,9 +25,11 @@ export class AccountComponent {
 
   ngOnInit(): void {
     this.store.select(selectUserData).subscribe((state) => {
-      this.userData = state.user.data;
-      const userId = this.userData._id;
-      this.store.dispatch(loadOrders({ userId }));
+      this.userData = state?.user?.data;
+      const userId = this.userData?._id;
+      if (userId) {
+        this.store.dispatch(loadOrders({ userId }));
+      }
     });
     this.store.select(selectCartItems).subscribe((state) => {
       if (state?.length) {
