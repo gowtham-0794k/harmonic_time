@@ -8,6 +8,7 @@ import { BlogThreeColComponent } from './blog-three-col/blog-three-col.component
 import { BlogDetailsComponent } from './blog-details/blog-details.component';
 import { BlogDynamicDetailsComponent } from './blog-dynamic-details/blog-dynamic-details.component';
 import { ContactComponent } from './contact/contact.component';
+import { PolicyComponent } from './policy/policy.component';
 
 const routes: Routes = [
   {
@@ -49,6 +50,11 @@ const routes: Routes = [
     path: 'contact',
     component: ContactComponent,
     title: 'Contact Page',
+  },
+  {
+    path: 'policy/:slug',
+    component: PolicyComponent,
+    title: 'Information',
   },
 ];
 

@@ -106,7 +106,7 @@ const hero_slider_seven: IHeroSlider[] = [
   {
     id: 1,
     bgImg: '/assets/img/slider/06/e-01.webp',
-    sm_title: '',
+    sm_title: 'Milky White',
     meta: true,
     title: 'HMT Janata',
     subtitle:

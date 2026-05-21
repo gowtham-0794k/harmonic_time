@@ -13,6 +13,7 @@ import { BlogDetailsComponent } from './blog-details/blog-details.component';
 import { BlogDynamicDetailsComponent } from './blog-dynamic-details/blog-dynamic-details.component';
 import { ContactComponent } from './contact/contact.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { PolicyComponent } from './policy/policy.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     BlogDynamicDetailsComponent,
     ContactComponent,
     NotFoundComponent,
+    PolicyComponent,
   ],
   imports: [
     CommonModule,

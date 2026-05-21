@@ -17,7 +17,7 @@ const category_data: ICategoryType[] = [
   },
   {
     id: 3,
-    img: '/assets/img/shop/banner/pilot.jpg',
+    img: '/assets/img/shop/banner/pilot.png',
     parentTitle: 'PILOT',
     children: ['Watch'],
     smDesc: '',
