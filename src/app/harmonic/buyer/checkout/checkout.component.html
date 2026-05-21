@@ -433,7 +433,44 @@
                       <th>Cart Subtotal</th>
                       <td>
                         <span class="amount">{{
-                          cartService.computeCartTotal(cartItems).total
+                          cartService.computeCheckoutSummary(cartItems).subtotal
+                            | currency: "INR"
+                        }}</span>
+                      </td>
+                    </tr>
+                    <tr class="cart-subtotal additional-charges">
+                      <th>
+                        <button
+                          class="charges-toggle"
+                          [class.collapsed]="!showChargesDetails"
+                          type="button"
+                          [attr.aria-expanded]="showChargesDetails"
+                          (click)="showChargesDetails = !showChargesDetails"
+                        >
+                          Additional Charges
+                        </button>
+                      </th>
+                      <td>
+                        <span class="amount">{{
+                          cartService.computeCheckoutSummary(cartItems).charges
+                            | currency: "INR"
+                        }}</span>
+                      </td>
+                    </tr>
+                    <tr *ngIf="showChargesDetails" class="cart-subtotal charges-detail">
+                      <th>Platform Charges (2%)</th>
+                      <td>
+                        <span class="amount">{{
+                          cartService.computeCheckoutSummary(cartItems).platform
+                            | currency: "INR"
+                        }}</span>
+                      </td>
+                    </tr>
+                    <tr *ngIf="showChargesDetails" class="cart-subtotal charges-detail">
+                      <th>Extra Charges</th>
+                      <td>
+                        <span class="amount">{{
+                          cartService.computeCheckoutSummary(cartItems).extra
                             | currency: "INR"
                         }}</span>
                       </td>
@@ -444,8 +481,8 @@
                         <strong
                           ><span class="amount">
                             {{
-                              cartService.computeCartTotal(cartItems).total
-                                | currency: "INR"
+                              cartService.computeCheckoutSummary(cartItems)
+                                .grandTotal | currency: "INR"
                             }}
                           </span></strong
                         >

@@ -2,7 +2,12 @@ import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { IProduct } from '../types/product-d-t';
 import { UserService } from './user.service';
-import { ADD_TO_CART, DELETE_CART_ITEM, USER_CART } from '@config/index';
+import {
+  ADD_TO_CART,
+  DELETE_CART_ITEM,
+  ORDER_CHARGES,
+  USER_CART,
+} from '@config/index';
 import { GenericService } from './generic.service';
 import {
   BehaviorSubject,
@@ -136,6 +141,18 @@ export class CartService {
       },
       { total: 0, quantity: 0 }
     );
+  }
+
+  // Subtotal + platform + extra charges, plus the grand total to pay.
+  // GST is computed but excluded from the total for now.
+  computeCheckoutSummary(cartItems: any) {
+    const subtotal = this.computeCartTotal(cartItems).total;
+    const gst = (subtotal * ORDER_CHARGES.gstPercent) / 100;
+    const platform = (subtotal * ORDER_CHARGES.platformPercent) / 100;
+    const extra = subtotal > 0 ? ORDER_CHARGES.extraFlat : 0;
+    const charges = platform + extra; // total additional charges (GST excluded for now)
+    const grandTotal = subtotal + charges;
+    return { subtotal, gst, platform, extra, charges, grandTotal };
   }
 
   // quantity increment

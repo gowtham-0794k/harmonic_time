@@ -19,6 +19,18 @@ export const GET_WATCH_MARKERS = `${baseUrl}/watch-markers`;
 export const GET_DELIVERY_OPTIONS = `${baseUrl}/delivery-options`;
 export const GET_RECIPIENTS = `${baseUrl}/recipients`;
 
+// catalog lookups - create (POST to the same collection URL)
+export const CREATE_BRAND = GET_BRANDS;
+export const CREATE_CATEGORY = GET_CATEGORIES;
+export const CREATE_COLLECTION = GET_COLLECTIONS;
+export const CREATE_DIAL_COLOR = GET_DIAL_COLORS;
+export const CREATE_MOVEMENT = GET_MOVEMENTS;
+export const CREATE_STRAP_MATERIAL = GET_STRAP_MATERIALS;
+export const CREATE_CASE_MATERIAL = GET_CASE_MATERIALS;
+export const CREATE_WATCH_MARKER = GET_WATCH_MARKERS;
+export const CREATE_DELIVERY_OPTION = GET_DELIVERY_OPTIONS;
+export const CREATE_RECIPIENT = GET_RECIPIENTS;
+
 // products
 export const POST_PRODUCT = `${baseUrl}/products`;
 export const PRODUCT = `${baseUrl}/products`;
@@ -82,3 +94,10 @@ export const GET_ORDERS = `${baseUrl}/checkout/user/`; // append the user id
 // checkout items
 export const CHECKOUT_ITEM_ORDER = `${baseUrl}/checkout-items`;
 export const CHECKOUT_ITEMS = `${baseUrl}/checkout-items/checkout/`; // append the checkout id
+
+// order charges applied on top of the cart subtotal at checkout
+export const ORDER_CHARGES = {
+  gstPercent: 18, // % of subtotal
+  platformPercent: 2, // % of subtotal
+  extraFlat: 50, // flat amount in INR
+};

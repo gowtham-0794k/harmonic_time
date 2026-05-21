@@ -27,6 +27,16 @@ import {
   POST_PRODUCT_IMAGES,
   DELETE_IMAGE_S3,
   DELETE_IMAGE_DB,
+  CREATE_BRAND,
+  CREATE_CATEGORY,
+  CREATE_COLLECTION,
+  CREATE_RECIPIENT,
+  CREATE_DIAL_COLOR,
+  CREATE_MOVEMENT,
+  CREATE_STRAP_MATERIAL,
+  CREATE_CASE_MATERIAL,
+  CREATE_WATCH_MARKER,
+  CREATE_DELIVERY_OPTION,
 } from 'src/app/config';
 import { GenericService } from 'src/app/shared/services/generic.service';
 import {
@@ -43,7 +53,7 @@ import {
 } from 'src/app/shared/types/product-d-t';
 import { AppState } from 'src/app/store/app.state';
 import { selectUserData } from 'src/app/store/selectors/user.selectors';
-import { catchError, concatMap, switchMap } from 'rxjs/operators';
+import { catchError, concatMap, finalize, switchMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin, Observable, of } from 'rxjs';
 
@@ -55,6 +65,28 @@ interface SelectOption {
 interface UploadedImage {
   file: File;
   url: string;
+}
+
+interface LookupConfig {
+  label: string; // e.g. 'Brand' -> modal title "Add Brand"
+  url: string; // collection endpoint (CREATE_* alias)
+  nameField: string; // payload + display field, e.g. 'BrandName'
+  arrayKey:
+    | 'brands'
+    | 'categories'
+    | 'collections'
+    | 'recipients'
+    | 'dialColors'
+    | 'movements'
+    | 'strapMaterials'
+    | 'caseMaterials'
+    | 'watchMarkers'
+    | 'deliveryOptions';
+  formGroup: 'basicProductInformation' | 'productInformation';
+  controlName: string; // e.g. 'brandId'
+  // Optional extra payload (Collection needs BrandID). Return value: null to
+  // block the save and show `error` in the modal.
+  extraPayload?: () => { value: Record<string, any> | null; error?: string };
 }
 
 @Component({
@@ -107,6 +139,107 @@ export class AddEditComponent implements OnInit {
   CREATE_PRODUCT_RETURN_POLICY_URL = POST_PRODUCT_RETURN_POLICY;
   POST_UPLOAD_IMAGES = POST_UPLOAD_IMAGES;
   productData: any;
+
+  // Inline "add new lookup" modal state
+  isAddLookupModalOpen = false;
+  activeLookupKey: string | null = null;
+  newLookupName = '';
+  // Brand chosen inside the "Add Collection" modal (a collection needs a brand).
+  newLookupBrandId = '';
+  isSavingLookup = false;
+  lookupError = '';
+
+  // Drives the reusable "Add new" modal for every lookup dropdown.
+  lookupConfigs: Record<string, LookupConfig> = {
+    brand: {
+      label: 'Brand',
+      url: CREATE_BRAND,
+      nameField: 'BrandName',
+      arrayKey: 'brands',
+      formGroup: 'basicProductInformation',
+      controlName: 'brandId',
+    },
+    category: {
+      label: 'Category',
+      url: CREATE_CATEGORY,
+      nameField: 'CategoryName',
+      arrayKey: 'categories',
+      formGroup: 'basicProductInformation',
+      controlName: 'categoryId',
+    },
+    collection: {
+      label: 'Collection',
+      url: CREATE_COLLECTION,
+      nameField: 'CollectionName',
+      arrayKey: 'collections',
+      formGroup: 'basicProductInformation',
+      controlName: 'collectionId',
+      // A collection belongs to a brand. The brand is chosen in the modal
+      // (pre-filled from the form's selected brand when available).
+      extraPayload: () => {
+        const brandId = this.newLookupBrandId;
+        return brandId
+          ? { value: { BrandID: brandId } }
+          : { value: null, error: 'Please select a Brand' };
+      },
+    },
+    recipient: {
+      label: 'Recipient',
+      url: CREATE_RECIPIENT,
+      nameField: 'RecipientName',
+      arrayKey: 'recipients',
+      formGroup: 'basicProductInformation',
+      controlName: 'recipientId',
+    },
+    dialColor: {
+      label: 'Dial Color',
+      url: CREATE_DIAL_COLOR,
+      nameField: 'DialColorName',
+      arrayKey: 'dialColors',
+      formGroup: 'productInformation',
+      controlName: 'dialColorId',
+    },
+    movement: {
+      label: 'Movement',
+      url: CREATE_MOVEMENT,
+      nameField: 'MovementName',
+      arrayKey: 'movements',
+      formGroup: 'productInformation',
+      controlName: 'movementId',
+    },
+    strapMaterial: {
+      label: 'Strap Material',
+      url: CREATE_STRAP_MATERIAL,
+      nameField: 'StrapMaterialName',
+      arrayKey: 'strapMaterials',
+      formGroup: 'productInformation',
+      controlName: 'strapMaterialId',
+    },
+    caseMaterial: {
+      label: 'Case Material',
+      url: CREATE_CASE_MATERIAL,
+      nameField: 'CaseMaterialName',
+      arrayKey: 'caseMaterials',
+      formGroup: 'productInformation',
+      controlName: 'caseMaterialId',
+    },
+    watchMarker: {
+      label: 'Watch Markers',
+      url: CREATE_WATCH_MARKER,
+      nameField: 'WatchMarkerName',
+      arrayKey: 'watchMarkers',
+      formGroup: 'productInformation',
+      controlName: 'watchMarkersId',
+    },
+    deliveryOption: {
+      label: 'Delivery Option',
+      url: CREATE_DELIVERY_OPTION,
+      nameField: 'DeliveryOptionName',
+      arrayKey: 'deliveryOptions',
+      formGroup: 'productInformation',
+      controlName: 'deliveryOptionId',
+    },
+  };
 
   constructor(
     private fb: FormBuilder,
@@ -374,6 +507,111 @@ export class AddEditComponent implements OnInit {
     } else {
       this.uploadedImages.splice(index, 1);
     }
+  }
+
+  // Convenience accessor for the template.
+  get activeLookupConfig(): LookupConfig | null {
+    return this.activeLookupKey
+      ? this.lookupConfigs[this.activeLookupKey]
+      : null;
+  }
+
+  openAddLookup(key: string): void {
+    if (!this.lookupConfigs[key]) return;
+    this.activeLookupKey = key;
+    this.newLookupName = '';
+    // Pre-fill the modal's brand selector with the brand already chosen on the
+    // form (only relevant for the Collection modal).
+    this.newLookupBrandId = this.basicProductInformation.value.brandId || '';
+    this.lookupError = '';
+    this.isAddLookupModalOpen = true;
+  }
+
+  closeAddLookup(): void {
+    this.isAddLookupModalOpen = false;
+    this.activeLookupKey = null;
+    this.newLookupName = '';
+    this.newLookupBrandId = '';
+    this.lookupError = '';
+    this.isSavingLookup = false;
+  }
+
+  saveLookup(): void {
+    const cfg = this.activeLookupConfig;
+    if (!cfg) return;
+
+    const name = this.newLookupName.trim();
+    if (!name) {
+      this.lookupError = `${cfg.label} name is required`;
+      return;
+    }
+
+    // Build the request body: the name field plus any lookup-specific extras.
+    const payload: Record<string, any> = { [cfg.nameField]: name };
+    if (cfg.extraPayload) {
+      const extra = cfg.extraPayload();
+      if (!extra.value) {
+        this.lookupError = extra.error ?? 'Missing required field';
+        return;
+      }
+      Object.assign(payload, extra.value);
+    }
+
+    this.isSavingLookup = true;
+    this.lookupError = '';
+
+    this.genericService
+      .postObservable(cfg.url, payload)
+      .pipe(finalize(() => (this.isSavingLookup = false)))
+      .subscribe({
+        next: (response) => {
+          const newId = response?.data?._id ?? response?.data?.insertedId;
+          if (newId) {
+            // Append the created item locally and auto-select it.
+            (this[cfg.arrayKey] as any[]).push({
+              _id: newId,
+              [cfg.nameField]: name,
+            });
+            this.selectNewLookup(cfg, newId);
+            this.toastrService.success(`${cfg.label} added successfully!`);
+            this.closeAddLookup();
+          } else {
+            // Thin create response: re-fetch the list and match by name.
+            this.refreshLookupAndSelect(cfg, name);
+          }
+        },
+        error: (err) => {
+          console.error(`Error adding ${cfg.label}:`, err);
+          this.lookupError = `Could not add ${cfg.label}. Please try again.`;
+          this.toastrService.error(`Could not add ${cfg.label}`);
+        },
+      });
+  }
+
+  private selectNewLookup(cfg: LookupConfig, id: string): void {
+    const group = this[cfg.formGroup];
+    group.patchValue({ [cfg.controlName]: id });
+    group.get(cfg.controlName)?.markAsDirty();
+  }
+
+  private refreshLookupAndSelect(cfg: LookupConfig, name: string): void {
+    this.genericService.getObservable(cfg.url).subscribe({
+      next: (response) => {
+        const list: any[] = response?.data ?? [];
+        (this[cfg.arrayKey] as any[]) = list;
+        const created = list.find((item) => item[cfg.nameField] === name);
+        if (created?._id) {
+          this.selectNewLookup(cfg, created._id);
+        }
+        this.toastrService.success(`${cfg.label} added successfully!`);
+        this.closeAddLookup();
+      },
+      error: (err) => {
+        console.error(`Error refreshing ${cfg.label} list:`, err);
+        this.toastrService.error(`${cfg.label} added, but list refresh failed`);
+        this.closeAddLookup();
+      },
+    });
   }
 
   isFormValid(): boolean {

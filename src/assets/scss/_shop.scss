@@ -532,13 +532,41 @@
     margin-bottom: 15px;
     overflow: hidden;
 
+    // Keep every card image the same size regardless of the uploaded image
+    // dimensions: a consistent box with the image shown at its natural size
+    // (no upscaling / stretching) and centered both ways.
+    & a.w-img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 300px;
+      background-color: $white;
+
+      & img {
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+
     &-2 {
       position: absolute;
       top: 0;
+      right: 0;
+      bottom: 0;
       left: 0;
+      margin: auto;
       visibility: hidden;
       opacity: 0;
       @include transform(scaleX(0));
+    }
+  }
+
+  &__nav-img {
+    & img {
+      object-fit: contain;
+      background-color: $white;
     }
   }
 
@@ -1179,6 +1207,32 @@
 .product__modal {
   &-inner {
     padding: 40px;
+  }
+
+  // Let the image area fill the remaining width next to the thumbnail strip
+  // so the main image can actually center horizontally.
+  &-box {
+    & > .mb-20 {
+      flex: 1;
+    }
+  }
+
+  // Show the main product image at its natural size (no upscaling / stretching),
+  // centered both horizontally and vertically within a consistent box.
+  &-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 460px;
+    background-color: $white;
+
+    & img {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+    }
   }
 
   &-content {

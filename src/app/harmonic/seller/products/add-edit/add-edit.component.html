@@ -33,7 +33,20 @@
 
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div class="country-select">
-                <label for="brand">Brand <span class="required">*</span></label>
+                <div class="lookup-label-row">
+                  <label for="brand"
+                    >Brand <span class="required">*</span></label
+                  >
+                  <button
+                    type="button"
+                    class="add-lookup-icon"
+                    (click)="openAddLookup('brand')"
+                    title="Add new Brand"
+                    aria-label="Add new Brand"
+                  >
+                    +
+                  </button>
+                </div>
                 <select id="brand" formControlName="brandId">
                   <option value="" disabled>- Please select -</option>
                   <option *ngFor="let brand of brands" [value]="brand._id">
@@ -50,9 +63,20 @@
 
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div class="country-select">
-                <label for="category"
-                  >Category <span class="required">*</span></label
-                >
+                <div class="lookup-label-row">
+                  <label for="category"
+                    >Category <span class="required">*</span></label
+                  >
+                  <button
+                    type="button"
+                    class="add-lookup-icon"
+                    (click)="openAddLookup('category')"
+                    title="Add new Category"
+                    aria-label="Add new Category"
+                  >
+                    +
+                  </button>
+                </div>
                 <select id="category" formControlName="categoryId">
                   <option value="" disabled>- Please select -</option>
                   <option
@@ -74,9 +98,20 @@
 
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div class="country-select">
-                <label for="collection"
-                  >Collection<span class="required">*</span></label
-                >
+                <div class="lookup-label-row">
+                  <label for="collection"
+                    >Collection<span class="required">*</span></label
+                  >
+                  <button
+                    type="button"
+                    class="add-lookup-icon"
+                    (click)="openAddLookup('collection')"
+                    title="Add new Collection"
+                    aria-label="Add new Collection"
+                  >
+                    +
+                  </button>
+                </div>
                 <select id="collection" formControlName="collectionId">
                   <option value="" disabled>- Please select -</option>
                   <option
@@ -115,9 +150,20 @@
 
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div class="country-select">
-                <label for="recipientId"
-                  >Recipient <span class="required">*</span></label
-                >
+                <div class="lookup-label-row">
+                  <label for="recipientId"
+                    >Recipient <span class="required">*</span></label
+                  >
+                  <button
+                    type="button"
+                    class="add-lookup-icon"
+                    (click)="openAddLookup('recipient')"
+                    title="Add new Recipient"
+                    aria-label="Add new Recipient"
+                  >
+                    +
+                  </button>
+                </div>
                 <select id="recipientId" formControlName="recipientId">
                   <option value="" disabled>- Please select -</option>
                   <option
@@ -155,9 +201,20 @@
           <div class="row">
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div class="country-select">
-                <label for="dialColorId"
-                  >Dial Color <span class="required">*</span></label
-                >
+                <div class="lookup-label-row">
+                  <label for="dialColorId"
+                    >Dial Color <span class="required">*</span></label
+                  >
+                  <button
+                    type="button"
+                    class="add-lookup-icon"
+                    (click)="openAddLookup('dialColor')"
+                    title="Add new Dial Color"
+                    aria-label="Add new Dial Color"
+                  >
+                    +
+                  </button>
+                </div>
                 <select id="dialColorId" formControlName="dialColorId">
                   <option value="" disabled>- Please select -</option>
                   <option *ngFor="let color of dialColors" [value]="color._id">
@@ -207,9 +264,20 @@
 
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div class="country-select">
-                <label for="movementId"
-                  >Movement <span class="required">*</span></label
-                >
+                <div class="lookup-label-row">
+                  <label for="movementId"
+                    >Movement <span class="required">*</span></label
+                  >
+                  <button
+                    type="button"
+                    class="add-lookup-icon"
+                    (click)="openAddLookup('movement')"
+                    title="Add new Movement"
+                    aria-label="Add new Movement"
+                  >
+                    +
+                  </button>
+                </div>
                 <select id="movementId" formControlName="movementId">
                   <option value="" disabled>- Please select -</option>
                   <option
@@ -231,9 +299,20 @@
 
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div class="country-select">
-                <label for="strapMaterialId"
-                  >Strap Material <span class="required">*</span></label
-                >
+                <div class="lookup-label-row">
+                  <label for="strapMaterialId"
+                    >Strap Material <span class="required">*</span></label
+                  >
+                  <button
+                    type="button"
+                    class="add-lookup-icon"
+                    (click)="openAddLookup('strapMaterial')"
+                    title="Add new Strap Material"
+                    aria-label="Add new Strap Material"
+                  >
+                    +
+                  </button>
+                </div>
                 <select id="strapMaterialId" formControlName="strapMaterialId">
                   <option value="" disabled>- Please select -</option>
                   <option
@@ -256,9 +335,20 @@
 
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div class="country-select">
-                <label for="caseMaterialId"
-                  >Case Material <span class="required">*</span></label
-                >
+                <div class="lookup-label-row">
+                  <label for="caseMaterialId"
+                    >Case Material <span class="required">*</span></label
+                  >
+                  <button
+                    type="button"
+                    class="add-lookup-icon"
+                    (click)="openAddLookup('caseMaterial')"
+                    title="Add new Case Material"
+                    aria-label="Add new Case Material"
+                  >
+                    +
+                  </button>
+                </div>
                 <select id="caseMaterialId" formControlName="caseMaterialId">
                   <option value="" disabled>- Please select -</option>
                   <option
@@ -281,9 +371,20 @@
 
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div class="country-select">
-                <label for="watchMarkersId"
-                  >Watch Markers <span class="required">*</span></label
-                >
+                <div class="lookup-label-row">
+                  <label for="watchMarkersId"
+                    >Watch Markers <span class="required">*</span></label
+                  >
+                  <button
+                    type="button"
+                    class="add-lookup-icon"
+                    (click)="openAddLookup('watchMarker')"
+                    title="Add new Watch Markers"
+                    aria-label="Add new Watch Markers"
+                  >
+                    +
+                  </button>
+                </div>
                 <select id="watchMarkersId" formControlName="watchMarkersId">
                   <option value="" disabled>- Please select -</option>
                   <option
@@ -332,11 +433,19 @@
 
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div class="country-select">
-                <label for="deliveryOptionId">Delivery Option</label>
-                <select
-                  id="deliveryOptionId"
-                  formControlName="deliveryOptionId"
-                >
+                <div class="lookup-label-row">
+                  <label for="deliveryOptionId">Delivery Option</label>
+                  <button
+                    type="button"
+                    class="add-lookup-icon"
+                    (click)="openAddLookup('deliveryOption')"
+                    title="Add new Delivery Option"
+                    aria-label="Add new Delivery Option"
+                  >
+                    +
+                  </button>
+                </div>
+                <select id="deliveryOptionId" formControlName="deliveryOptionId">
                   <option value="" disabled>- Please select -</option>
                   <option
                     *ngFor="let deliveryOptions of deliveryOptions"
@@ -500,3 +609,82 @@
     </mat-vertical-stepper>
   </div>
 </section>
+
+<!-- Reusable "Add new lookup" modal -->
+<div
+  *ngIf="isAddLookupModalOpen && activeLookupConfig"
+  class="modal fade show add-lookup-modal"
+  tabindex="-1"
+  role="dialog"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add {{ activeLookupConfig.label }}</h5>
+        <button
+          type="button"
+          class="add-lookup-close"
+          aria-label="Close"
+          (click)="closeAddLookup()"
+        >
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- A collection belongs to a brand, so let the user pick it here. -->
+        <div
+          *ngIf="activeLookupKey === 'collection'"
+          class="country-select mb-3"
+        >
+          <label for="newLookupBrand"
+            >Brand <span class="required">*</span></label
+          >
+          <select
+            id="newLookupBrand"
+            [(ngModel)]="newLookupBrandId"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <option value="" disabled>- Please select -</option>
+            <option *ngFor="let brand of brands" [value]="brand._id">
+              {{ brand.BrandName }}
+            </option>
+          </select>
+        </div>
+        <div class="checkout-form-list">
+          <label for="newLookupName"
+            >{{ activeLookupConfig.label }} Name
+            <span class="required">*</span></label
+          >
+          <input
+            id="newLookupName"
+            type="text"
+            [(ngModel)]="newLookupName"
+            [ngModelOptions]="{ standalone: true }"
+            (keyup.enter)="saveLookup()"
+            [placeholder]="'Enter ' + activeLookupConfig.label + ' name'"
+          />
+          <span *ngIf="lookupError" class="text-danger">{{ lookupError }}</span>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-end">
+        <button
+          type="button"
+          class="os-btn mr-5"
+          (click)="closeAddLookup()"
+          [disabled]="isSavingLookup"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="os-btn"
+          (click)="saveLookup()"
+          [disabled]="isSavingLookup"
+        >
+          {{ isSavingLookup ? "Saving..." : "Save" }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="isAddLookupModalOpen" class="modal-backdrop fade show"></div>

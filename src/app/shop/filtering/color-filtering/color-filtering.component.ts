@@ -1,15 +1,12 @@
 import { ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { GET_DIAL_COLORS } from '@config/index';
 import {
   DIAL_COLOR_OPTIONS,
   getDialColorSwatch,
   normalizeDialColor,
 } from '@shared/constants/dial-colors';
-import { GenericService } from '@shared/services/generic.service';
 import { ProductService } from 'src/app/shared/services/product.service';
-import { DialColor } from 'src/app/shared/types/product-d-t';
 
 @Component({
   selector: 'app-color-filtering',
@@ -17,7 +14,8 @@ import { DialColor } from 'src/app/shared/types/product-d-t';
   styleUrls: ['./color-filtering.component.scss'],
 })
 export class ColorFilteringComponent {
-  public all_colors: string[] = [];
+  // Use only the curated colors defined in constants (not fetched from the API).
+  public all_colors: string[] = [...DIAL_COLOR_OPTIONS];
   public color: string | null = null;
 
   constructor(
@@ -25,23 +23,9 @@ export class ColorFilteringComponent {
     private route: ActivatedRoute,
     private router: Router,
     private viewScroller: ViewportScroller,
-    private genericService: GenericService
   ) {}
 
   ngOnInit(): void {
-    this.genericService.getObservable(GET_DIAL_COLORS).subscribe({
-      next: (response) => {
-        const productColors = (response.data ?? [])
-          .map((el: DialColor) => el?.DialColorName)
-          .filter((dialColorName: string | undefined): dialColorName is string =>
-            Boolean(dialColorName),
-          );
-        this.all_colors = this.mergeAndSortColors(productColors);
-      },
-      error: () => {
-        this.all_colors = this.mergeAndSortColors();
-      },
-    });
     this.route.queryParams.subscribe((params) => {
       this.color = params['color'] ? normalizeDialColor(params['color']) : null;
     });
@@ -83,20 +67,5 @@ export class ColorFilteringComponent {
         this.viewScroller.setOffset([120, 120]);
         this.viewScroller.scrollToAnchor('products'); // Anchore Link
       });
-  }
-
-  private mergeAndSortColors(productColors: string[] = []): string[] {
-    const uniqueColors = new Map<string, string>();
-
-    [...DIAL_COLOR_OPTIONS, ...productColors].forEach((dialColor) => {
-      const normalizedColor = normalizeDialColor(dialColor);
-      if (!uniqueColors.has(normalizedColor)) {
-        uniqueColors.set(normalizedColor, dialColor);
-      }
-    });
-
-    return [...uniqueColors.values()].sort((a, b) =>
-      a.localeCompare(b, undefined, { sensitivity: 'base' }),
-    );
   }
 }

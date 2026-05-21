@@ -51,6 +51,7 @@ export class CheckoutComponent {
   public isOpenLogin = false;
   public isOpenRegister = false;
   public isOpenCoupon = false;
+  public showChargesDetails = false;
   public couponCode: string = '';
   public payment_name: string = '';
   public countries = countries;
@@ -335,7 +336,7 @@ export class CheckoutComponent {
 
     const formValue = this.checkoutForm.value;
     const cartTotal =
-      this.cartService.computeCartTotal(this.cartItems).total * 100;
+      this.cartService.computeCheckoutSummary(this.cartItems).grandTotal * 100;
 
     this.genericService
       .postObservable(CREATE_PAYMENT_ORDER, { amount: cartTotal })
