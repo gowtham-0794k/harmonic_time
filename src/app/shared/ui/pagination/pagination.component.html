@@ -6,11 +6,11 @@
       </a>
     </li>
 
-    <li *ngFor="let page of paginate.pages" [ngClass]="{ active: paginate.currentPage == page }">
-      <a
-        class="cursor-pointer"
-        (click)="pageSet(page)"
-      >
+    <li
+      *ngFor="let page of paginate.pages"
+      [ngClass]="{ active: paginate.currentPage == page }"
+    >
+      <a class="cursor-pointer" (click)="pageSet(page)">
         {{ page }}
       </a>
     </li>

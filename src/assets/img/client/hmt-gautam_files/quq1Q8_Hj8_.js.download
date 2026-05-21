@@ -1,0 +1,3 @@
+;/*FB_PKG_DELIM*/
+
+__d("usePolarisMinimalProfileIsBottomUpsellPersistent",["PolarisConfig","PolarisUA","qex","usePolarisMinimalContent","usePolarisPageID"],(function(a,b,c,d,e,f,g){"use strict";function a(){var a=c("usePolarisPageID")(),b=d("usePolarisMinimalContent").usePolarisMinimalContent();if(!d("PolarisConfig").isLoggedOutUser()||!d("PolarisUA").isMobile())return!1;if(a!=="profilePage")return!1;return!b?!1:((a=c("qex")._("1849"))!=null?a:!1)===!0}g.usePolarisMinimalProfileIsBottomUpsellPersistent=a}),98);

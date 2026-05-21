@@ -19,6 +19,11 @@ import { PriceFilterComponent } from './filtering/price-filter/price-filter.comp
 import { SizeFilteringComponent } from './filtering/size-filtering/size-filtering.component';
 import { ColorFilteringComponent } from './filtering/color-filtering/color-filtering.component';
 import { BrandFilteringComponent } from './filtering/brand-filtering/brand-filtering.component';
+import { MovementFilteringComponent } from './filtering/movement-filtering/movement-filtering.component';
+import { StrapMaterialFilteringComponent } from './filtering/strap-material-filtering/strap-material-filtering.component';
+import { CaseMaterialFilteringComponent } from './filtering/case-material-filtering/case-material-filtering.component';
+import { WatchMarkerFilteringComponent } from './filtering/watch-marker-filtering/watch-marker-filtering.component';
+import { RecipientFilteringComponent } from './filtering/recipient-filtering/recipient-filtering.component';
 import { FeatureProductsComponent } from './widget/feature-products/feature-products.component';
 import { ProductListItemComponent } from './product-list-item/product-list-item.component';
 import { ShopAreaComponent } from './shop-area/shop-area.component';
@@ -29,12 +34,13 @@ import { ShopDetailsComponent } from './pages/shop-details/shop-details.componen
 import { ProductDetailsAreaComponent } from './product-details-area/product-details-area.component';
 import { RelatedProductsComponent } from './related-products/related-products.component';
 import { DynamicShopDetailsComponent } from './pages/dynamic-shop-details/dynamic-shop-details.component';
-import { CartComponent } from './pages/cart/cart.component';
-import { WishlistComponent } from './pages/wishlist/wishlist.component';
 import { CompareComponent } from './pages/compare/compare.component';
 import { SearchComponent } from './pages/search/search.component';
-
-
+import { ProductDetailsAreaSellerComponent } from './product-details-area-seller/product-details-area-seller.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ShopAreaFiltersComponent } from './shop-area-filters/shop-area-filters.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +57,11 @@ import { SearchComponent } from './pages/search/search.component';
     SizeFilteringComponent,
     ColorFilteringComponent,
     BrandFilteringComponent,
+    MovementFilteringComponent,
+    StrapMaterialFilteringComponent,
+    CaseMaterialFilteringComponent,
+    WatchMarkerFilteringComponent,
+    RecipientFilteringComponent,
     FeatureProductsComponent,
     ProductListItemComponent,
     ShopAreaComponent,
@@ -61,10 +72,10 @@ import { SearchComponent } from './pages/search/search.component';
     ProductDetailsAreaComponent,
     RelatedProductsComponent,
     DynamicShopDetailsComponent,
-    CartComponent,
-    WishlistComponent,
     CompareComponent,
     SearchComponent,
+    ProductDetailsAreaSellerComponent,
+    ShopAreaFiltersComponent,
   ],
   imports: [
     CommonModule,
@@ -73,8 +84,11 @@ import { SearchComponent } from './pages/search/search.component';
     ShopRoutingModule,
     NgxSliderModule,
     FormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatCheckboxModule,
   ],
-  exports:[
+  exports: [
     ProductItemComponent,
     ProductBannerComponent,
     ShopCategoryComponent,
@@ -83,6 +97,10 @@ import { SearchComponent } from './pages/search/search.component';
     SaleOfProductsComponent,
     ProductItemTwoComponent,
     ShopComponent,
-  ]
+    ProductDetailsAreaComponent,
+    ProductDetailsAreaSellerComponent,
+    ShopAreaComponent,
+    RelatedProductsComponent,
+  ],
 })
-export class ShopModule { }
+export class ShopModule {}

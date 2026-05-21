@@ -1,8 +1,9 @@
+import { ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import category_data from 'src/app/shared/data/category-data';
-import { UtilsService } from 'src/app/shared/services/utils.service';
-import { ICategoryType } from 'src/app/shared/types/category-d-t';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { GET_CATEGORIES } from '@config/index';
+import { GenericService } from '@shared/services/generic.service';
+import { ProductService } from 'src/app/shared/services/product.service';
 
 @Component({
   selector: 'app-category-filter',
@@ -10,36 +11,48 @@ import { ICategoryType } from 'src/app/shared/types/category-d-t';
   styleUrls: ['./category-filter.component.scss'],
 })
 export class CategoryFilterComponent {
-  public categoryData: ICategoryType[] = category_data;;
+  public categories: any[] = [];
   public category: string | null = null;
-  public subcategory: string | null = null;
 
   constructor(
-    private router: Router,
+    public productService: ProductService,
     private route: ActivatedRoute,
-    public utilsService: UtilsService
-  ) {
+    private router: Router,
+    private viewScroller: ViewportScroller,
+    private genericService: GenericService
+  ) {}
+
+  ngOnInit(): void {
+    this.genericService.getObservable(GET_CATEGORIES).subscribe({
+      next: (response) => {
+        const productCategories = response.data?.map(
+          (el: any) => el?.CategoryName
+        );
+        this.categories = [...new Set(productCategories)];
+      },
+      error: (err) => {
+        this.categories = [];
+      },
+    });
     this.route.queryParams.subscribe((params) => {
       this.category = params['category'] ? params['category'] : null;
-      this.subcategory = params['subcategory'] ? params['subcategory'] : null;
     });
   }
 
-  public handleParentCategory(categoryValue: string): void {
-    const currentQueryParams = this.route.snapshot.queryParams; // Get current query parameters
-    const queryParams = {
-      ...currentQueryParams, // Keep the existing query parameters
-      category: this.utilsService.convertToURL(categoryValue),
+  handleCategoryRoute(event: any) {
+    const queryParams: Params = {
+      category: (event.target as HTMLSelectElement).value,
     };
-    this.router.navigate(['/shop'], { queryParams });
-  }
-
-  public handleSubCategory(subcategoryValue: string): void {
-    const currentQueryParams = this.route.snapshot.queryParams; // Get current query parameters
-    const queryParams = {
-      ...currentQueryParams, // Keep the existing query parameters
-      subcategory: this.utilsService.convertToURL(subcategoryValue),
-    };
-    this.router.navigate(['/shop'], { queryParams });
+    this.router
+      .navigate([], {
+        relativeTo: this.route,
+        queryParams,
+        queryParamsHandling: 'merge',
+        skipLocationChange: false,
+      })
+      .finally(() => {
+        this.viewScroller.setOffset([120, 120]);
+        this.viewScroller.scrollToAnchor('products'); // Anchore Link
+      });
   }
 }

@@ -5,12 +5,18 @@
         <div class="col-xl-6 col-lg-6 col-md-6 col-12">
           <div class="footer__widget mb-30">
             <div class="footer__widget-title mb-25">
-              <a routerLink="/home/home-style-1">
-                <img src="/assets/img/logo/logo-2.png" alt="logo">
+              <a routerLink="/home/home-style-7">
+                <img
+                  src="/assets/logo/logo-light.png"
+                  alt="logo"
+                  style="width: 60%"
+                />
               </a>
             </div>
             <div class="footer__widget-content">
-              <p>Outstock is a premium Templates theme with advanced admin module. It’s extremely customizable, easy to use and fully responsive and retina ready.</p>
+              <p>
+                {{ details.description }}
+              </p>
               <div class="footer__contact">
                 <ul>
                   <li>
@@ -18,7 +24,7 @@
                       <i class="fal fa-map-marker-alt"></i>
                     </div>
                     <div class="text">
-                      <span>Add: 1234 Heaven Stress, Beverly Hill, Melbourne, USA.</span>
+                      <span>Add: {{ details.address }}</span>
                     </div>
                   </li>
                   <li>
@@ -26,7 +32,7 @@
                       <i class="fal fa-envelope-open-text"></i>
                     </div>
                     <div class="text">
-                      <span>Email: Contact@basictheme.com</span>
+                      <span>Email: {{ details.email }}</span>
                     </div>
                   </li>
                   <li>
@@ -34,7 +40,7 @@
                       <i class="fal fa-phone-alt"></i>
                     </div>
                     <div class="text">
-                      <span>Phone Number: (800) 123 456 789</span>
+                      <span>Phone Number: {{ details.phone }}</span>
                     </div>
                   </li>
                 </ul>
@@ -50,11 +56,17 @@
             <div class="footer__widget-content">
               <div class="footer__links">
                 <ul>
-                  <li><a href="#">About Us</a></li>
-                  <li><a href="#">Careers</a></li>
-                  <li><a href="#">Delivery Inforamtion</a></li>
-                  <li><a href="#">Privacy Policy</a></li>
-                  <li><a href="#">Terms & Condition</a></li>
+                  <li><a routerLink="/pages/policy/about">About Us</a></li>
+                  <li><a routerLink="/pages/policy/careers">Careers</a></li>
+                  <li>
+                    <a routerLink="/pages/policy/delivery"
+                      >Delivery Information</a
+                    >
+                  </li>
+                  <li><a routerLink="/pages/policy/privacy">Privacy Policy</a></li>
+                  <li>
+                    <a routerLink="/pages/policy/terms">Terms &amp; Condition</a>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -68,11 +80,17 @@
             <div class="footer__widget-content">
               <div class="footer__links">
                 <ul>
-                  <li><a href="#">Shipping Policy</a></li>
-                  <li><a href="#">Help & Contact Us</a></li>
-                  <li><a href="#">Returns & Refunds</a></li>
-                  <li><a href="#">Online Stores</a></li>
-                  <li><a href="#">Terms & Conditions</a></li>
+                  <li>
+                    <a routerLink="/pages/policy/shipping">Shipping Policy</a>
+                  </li>
+                  <li><a routerLink="/pages/contact">Help &amp; Contact Us</a></li>
+                  <li>
+                    <a routerLink="/pages/policy/returns">Returns &amp; Refunds</a>
+                  </li>
+                  <li><a routerLink="/pages/policy/stores">Online Stores</a></li>
+                  <li>
+                    <a routerLink="/pages/policy/terms">Terms &amp; Conditions</a>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -86,8 +104,10 @@
       <div class="row">
         <div class="col-xl-6 col-lg-7">
           <div class="footer__copyright">
-            <p>Copyright © <a routerLink="/home/home-style-1">Outstock</a> all rights reserved. Powered by
-              <a routerLink="/home/home-style-1">Theme_pure</a>
+            <p>
+              Copyright ©
+              <a routerLink="/home/home-style-7">{{ details.name }}</a> all
+              rights reserved.
             </p>
           </div>
         </div>
@@ -95,7 +115,9 @@
           <div class="footer__social f-right">
             <ul>
               <li *ngFor="let item of social_links">
-                <a [href]="item.link" target="_blank"><i [class]="item.icon"></i></a>
+                <a [href]="item.link" target="_blank"
+                  ><i [class]="item.icon"></i
+                ></a>
               </li>
             </ul>
           </div>

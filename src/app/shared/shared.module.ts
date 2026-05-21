@@ -15,13 +15,11 @@ import { HeroSliderTwoComponent } from './components/slider/hero-slider-two/hero
 import { HomeThreeTestimonialComponent } from './components/testimonial/home-three-testimonial/home-three-testimonial.component';
 import { MiniCartComponent } from './header/header-com/mini-cart/mini-cart.component';
 import { ExtraInfoComponent } from './header/header-com/extra-info/extra-info.component';
-import { FooterTwoComponent } from './footer/footer-two/footer-two.component';
 import { HeaderTwoComponent } from './header/header-two/header-two.component';
 import { HeaderThreeComponent } from './header/header-three/header-three.component';
 import { SearchPopupComponent } from './header/header-com/search-popup/search-popup.component';
 import { HeaderFourComponent } from './header/header-four/header-four.component';
 import { HomeSevenTestimonialComponent } from './components/testimonial/home-seven-testimonial/home-seven-testimonial.component';
-import { FooterThreeComponent } from './footer/footer-three/footer-three.component';
 import { VideoPopupComponent } from './components/modals/video-popup/video-popup.component';
 import { BreadcrumbOneComponent } from './components/breadcrumb/breadcrumb-one/breadcrumb-one.component';
 import { PaginationComponent } from './ui/pagination/pagination.component';
@@ -35,7 +33,13 @@ import { BlogReplyFormComponent } from './components/forms/blog-reply-form/blog-
 import { ProductModalComponent } from './components/modals/product-modal/product-modal.component';
 import { ContactFormComponent } from './components/forms/contact-form/contact-form.component';
 import { OffcanvasComponent } from './components/offcanvas/offcanvas.component';
-
+import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
+import { SellerLayoutComponent } from './layout/seller-layout/seller-layout.component';
+import { BuyerLayoutComponent } from './layout/buyer-layout/buyer-layout.component';
+import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
+import { BreadcrumbTwoComponent } from './components/breadcrumb/breadcrumb-two/breadcrumb-two.component';
+import { ProductDetailsUpperSellerComponent } from './components/product-details-upper-seller/product-details-upper-seller.component';
+import { ProductDetailsUpperBuyerComponent } from './components/product-details-upper-buyer/product-details-upper-buyer.component';
 
 @NgModule({
   declarations: [
@@ -51,13 +55,11 @@ import { OffcanvasComponent } from './components/offcanvas/offcanvas.component';
     HomeThreeTestimonialComponent,
     MiniCartComponent,
     ExtraInfoComponent,
-    FooterTwoComponent,
     HeaderTwoComponent,
     HeaderThreeComponent,
     SearchPopupComponent,
     HeaderFourComponent,
     HomeSevenTestimonialComponent,
-    FooterThreeComponent,
     VideoPopupComponent,
     BreadcrumbOneComponent,
     PaginationComponent,
@@ -71,14 +73,16 @@ import { OffcanvasComponent } from './components/offcanvas/offcanvas.component';
     ProductModalComponent,
     ContactFormComponent,
     OffcanvasComponent,
+    AuthLayoutComponent,
+    SellerLayoutComponent,
+    BuyerLayoutComponent,
+    AdminLayoutComponent,
+    BreadcrumbTwoComponent,
+    ProductDetailsUpperSellerComponent,
+    ProductDetailsUpperBuyerComponent,
   ],
-  imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
-  exports:[
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
+  exports: [
     HeaderOneComponent,
     BlogItemComponent,
     SubscribeAreaComponent,
@@ -88,12 +92,10 @@ import { OffcanvasComponent } from './components/offcanvas/offcanvas.component';
     BlogSliderComponent,
     HeroSliderTwoComponent,
     HomeThreeTestimonialComponent,
-    FooterTwoComponent,
     HeaderTwoComponent,
     HeaderThreeComponent,
     HeaderFourComponent,
     HomeSevenTestimonialComponent,
-    FooterThreeComponent,
     VideoPopupComponent,
     BreadcrumbOneComponent,
     PaginationComponent,
@@ -106,6 +108,11 @@ import { OffcanvasComponent } from './components/offcanvas/offcanvas.component';
     ProductModalComponent,
     ContactFormComponent,
     OffcanvasComponent,
-  ]
+    BuyerLayoutComponent,
+    AdminLayoutComponent,
+    BreadcrumbTwoComponent,
+    ProductDetailsUpperSellerComponent,
+    ProductDetailsUpperBuyerComponent,
+  ],
 })
-export class SharedModule { }
+export class SharedModule {}

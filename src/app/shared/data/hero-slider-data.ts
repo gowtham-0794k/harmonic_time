@@ -105,26 +105,29 @@ const hero_slider_five: IHeroSlider[] = [
 const hero_slider_seven: IHeroSlider[] = [
   {
     id: 1,
-    bgImg: '/assets/img/slider/05/slide111.webp',
-    sm_title:'up to 50% off',
-    meta:true,
-    title: "Life style that you <br/>need, Yo.",
-    subtitle: "Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum.",
+    bgImg: '/assets/img/slider/06/e-01.webp',
+    sm_title: 'Milky White',
+    meta: true,
+    title: 'HMT Janata',
+    subtitle:
+      'The Janata is HMT’s most storied, emblematic and charming watch for good reason. ',
   },
   {
     id: 2,
     bgImg: '/assets/img/slider/05/slide112.webp',
-    sm_title:'Quick parcel delivery',
-    title: "Creative theme <br/>Awesome.",
-    subtitle: "Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum.",
+    sm_title: 'Quick parcel delivery',
+    title: 'Creative theme <br/>Awesome.',
+    subtitle:
+      'Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum.',
   },
   {
     id: 3,
     bgImg: '/assets/img/slider/05/slide113.webp',
-    sm_title:'Quick parcel delivery',
-    title: "The world is<br/>make all.",
-    subtitle: "Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum.",
-  }
+    sm_title: 'Quick parcel delivery',
+    title: 'The world is<br/>make all.',
+    subtitle:
+      'Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum.',
+  },
 ];
 
 export const HeroSliderData = {

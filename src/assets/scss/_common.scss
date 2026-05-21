@@ -691,6 +691,60 @@ p {
 	}
 }
 
+/* page title area */
+
+.page{
+	&__title_two{
+		height: 360px;
+		@include background();
+		@media #{$sm}{
+			height: 400px;
+		}
+		@media #{$xs}{
+			height: 350px;
+		}
+		&-inner{
+			& h1{
+				font-size: 36px;
+				color: $black-2;
+				text-transform: capitalize;
+				margin-bottom: 25px;
+			}
+			@media #{$sm}{
+				margin-top: 100px;
+			}
+			@media #{$xs}{
+				margin-top: 100px;
+			}
+		}
+		&-breadcrumb{
+			& .breadcrumb{
+				background: transparent;
+				padding: 0;
+				margin-bottom: 0;
+				@include border-radius(0);
+			}
+			& .breadcrumb-item{
+				font-size: 12px;
+				text-transform: capitalize;
+				color: $black-soft;
+				font-weight: 500;
+				& a{
+					&:hover{
+						color: $theme-color;
+					}
+				}
+				&.active{
+					color: $black-2;
+					&::before{
+						color: $black-soft;
+					}
+				}
+			}
+		}
+	}
+}
+
 
 /* rating */
 

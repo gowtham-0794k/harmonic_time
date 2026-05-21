@@ -12,7 +12,7 @@ import { UtilsService } from 'src/app/shared/services/utils.service';
 @Component({
   selector: 'app-home-seven',
   templateUrl: './home-seven.component.html',
-  styleUrls: ['./home-seven.component.scss']
+  styleUrls: ['./home-seven.component.scss'],
 })
 export class HomeSevenComponent {
   @ViewChild('heroSliderContainer') heroSliderContainer!: ElementRef;
@@ -26,33 +26,35 @@ export class HomeSevenComponent {
   public brandSliderInstance: Swiper | undefined;
 
   public hero_slider_data: IHeroSlider[] = HeroSliderData.hero_slider_seven;
-  public blog_items: IBlogType[] = blog_data.filter(b => b.blog === 'home-7');
+  public blog_items: IBlogType[] = blog_data.filter((b) => b.blog === 'home-7');
 
   public big_item_1: IProduct | undefined;
   public big_item_2: IProduct | undefined;
   public trending_products: IProduct[] = [];
   public sm_best_prd: IProduct[] = [];
 
-  constructor(private productService: ProductService,public utilsService:UtilsService) {
+  constructor(
+    private productService: ProductService,
+    public utilsService: UtilsService
+  ) {
     this.productService.products.subscribe((products) => {
       const best_sale_prd = products.filter((p) => p.bestSeller);
-      this.big_item_1 = best_sale_prd.filter(p => p.big_img)[0];
-      this.big_item_2 = best_sale_prd.filter(p => p.big_img)[1];
-      this.sm_best_prd = best_sale_prd.filter(p => !p.big_img);
+      this.big_item_1 = best_sale_prd.filter((p) => p.big_img)[0];
+      this.big_item_2 = best_sale_prd.filter((p) => p.big_img)[1];
+      this.sm_best_prd = best_sale_prd.filter((p) => !p.big_img);
     });
   }
 
-
   // client logos
-  public client_logos:string[] = [
-    '/assets/img/client/client-1.jpg',
-    '/assets/img/client/client-2.jpg',
-    '/assets/img/client/client-3.jpg',
-    '/assets/img/client/client-4.jpg',
-    '/assets/img/client/client-5.jpg',
-    '/assets/img/client/client-2.jpg',
-    '/assets/img/client/client-4.jpg',
-  ]
+  public client_logos: string[] = [
+    '/assets/img/client/hmt.webp',
+    '/assets/img/client/seiko.jpg',
+    '/assets/img/client/timex.png',
+    '/assets/img/client/casio.png',
+    '/assets/img/client/r-weil.png',
+    '/assets/img/client/titoni.jfif',
+    '/assets/img/client/citizen.png',
+  ];
 
   ngAfterViewInit() {
     if (this.heroSliderContainer) {
@@ -60,13 +62,13 @@ export class HomeSevenComponent {
         slidesPerView: 1,
         spaceBetween: 0,
         loop: false,
-        effect : 'fade',
-        modules:[Pagination,EffectFade],
+        effect: 'fade',
+        modules: [Pagination, EffectFade],
         pagination: {
           clickable: true,
-          el:'.tp-slider-dot'
+          el: '.tp-slider-dot',
         },
-      })
+      });
     }
 
     if (this.productSliderContainer) {
@@ -86,8 +88,8 @@ export class HomeSevenComponent {
           '0': {
             slidesPerView: 1,
           },
-        }
-      })
+        },
+      });
     }
 
     if (this.blogSliderContainer) {
@@ -104,8 +106,8 @@ export class HomeSevenComponent {
           '0': {
             slidesPerView: 1,
           },
-        }
-      })
+        },
+      });
     }
 
     if (this.brandSliderContainer) {
@@ -128,9 +130,8 @@ export class HomeSevenComponent {
           '0': {
             slidesPerView: 1,
           },
-        }
-      })
+        },
+      });
     }
-
   }
 }
