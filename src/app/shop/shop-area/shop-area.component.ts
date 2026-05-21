@@ -39,6 +39,7 @@ export class ShopAreaComponent {
   public pageSize: number = 12;
   public paginate: any = {}; // Pagination use only
   public sortBy: string = 'asc'; // Sorting Order
+  public showFilters: boolean = false; // Toggle filter sidebar on mobile
 
   constructor(
     public productService: ProductService,
@@ -237,6 +238,11 @@ export class ShopAreaComponent {
         this.viewScroller.setOffset([120, 120]);
         this.viewScroller.scrollToAnchor('products'); // Anchore Link
       });
+  }
+
+  // Toggle the filter sidebar visibility on mobile
+  toggleFilters() {
+    this.showFilters = !this.showFilters;
   }
 
   handleResetFilter(event: any) {

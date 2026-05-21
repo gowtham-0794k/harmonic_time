@@ -11,9 +11,7 @@ import {
 import { countries } from '@shared/constants/countries';
 import { GenericService } from '@shared/services/generic.service';
 import {
-  CHECKOUT_ITEM,
   CHECKOUT_ITEM_ORDER,
-  CREATE_ADDRESS,
   CREATE_PAYMENT_ORDER,
   LOGIN_USER,
   REGISTER_USER,
@@ -22,16 +20,7 @@ import {
 } from '@config/index';
 import { loginUser, registerUser } from 'src/app/store/actions/user.actions';
 import { UserService } from '@shared/services/user.service';
-import {
-  catchError,
-  filter,
-  firstValueFrom,
-  Observable,
-  Subscription,
-  switchMap,
-  take,
-  throwError,
-} from 'rxjs';
+import { filter, firstValueFrom, Subscription, take } from 'rxjs';
 import {
   selectUserData,
   selectUserError,
@@ -40,6 +29,7 @@ import { Store } from '@ngrx/store';
 import { selectCartItems } from 'src/app/store/selectors/cart.selectors';
 import { loadCart } from 'src/app/store/actions/cart.actions';
 import { Router } from '@angular/router';
+import { environment } from '@env/environment';
 declare var Razorpay: any;
 
 @Component({
@@ -212,7 +202,7 @@ export class CheckoutComponent {
         .select(selectUserError)
         .pipe(
           filter((error: any) => !!error),
-          take(1)
+          take(1),
         )
         .subscribe(() => {
           this.toastrService.error('Please check email and password !');
@@ -222,7 +212,7 @@ export class CheckoutComponent {
         .select(selectUserData)
         .pipe(
           filter((state: any) => !!state?.data?.token),
-          take(1)
+          take(1),
         )
         .subscribe((state: any) => {
           localStorage.setItem('token', JSON.stringify(state?.data?.token));
@@ -251,7 +241,7 @@ export class CheckoutComponent {
         .select(selectUserData)
         .pipe(
           filter((state: any) => !!state?.data?.token),
-          take(1)
+          take(1),
         )
         .subscribe((state: any) => {
           localStorage.setItem('token', JSON.stringify(state?.data?.token));
@@ -335,58 +325,116 @@ export class CheckoutComponent {
     await this.loadRazorpayScript();
 
     const formValue = this.checkoutForm.value;
-    const cartTotal =
-      this.cartService.computeCheckoutSummary(this.cartItems).grandTotal * 100;
+    const grandTotal = this.cartService.computeCheckoutSummary(
+      this.cartItems,
+    ).grandTotal;
+    const amount = grandTotal * 100; // Razorpay expects the amount in paise
 
-    this.genericService
-      .postObservable(CREATE_PAYMENT_ORDER, { amount: cartTotal })
-      .pipe(
-        switchMap((order: any) => this.initiateRazorpay(order.data, formValue)),
-        catchError((error) => {
-          console.error('Error creating payment order:', error);
-          this.toastrService.error('Payment initialization failed!');
-          return throwError(() => error);
+    try {
+      const cartItems = this.cartItems.map((el: any) => el.ProductID);
+
+      // Consolidated flow: send the address and checkout data nested inside
+      // create-order. The backend only holds these as a draft against a pending
+      // Payment and persists Address/Checkout when /verify succeeds, so nothing
+      // is written for abandoned or failed payments.
+      const order: any = await firstValueFrom(
+        this.genericService.postObservable(CREATE_PAYMENT_ORDER, {
+          UserID: this.userData._id,
+          amount,
+          currency: 'INR',
+          address: {
+            FirstName: formValue.firstName,
+            LastName: formValue.lastName,
+            Country: formValue.country,
+            AddressLine1: formValue.address,
+            AddressLine2: '',
+            City: formValue.city,
+            State: formValue.state,
+            PostalCode: formValue.zipCode,
+            Phone: formValue.phone,
+            orderNotes: formValue.orderNote,
+            IsDefault: false,
+          },
+          checkout: {
+            ProductIDs: cartItems,
+            TotalAmount: grandTotal,
+            DeliveryStatus: 'Pending',
+            CheckoutDate: new Date(),
+          },
         }),
-      )
-      .subscribe();
+      );
+      console.log('Payment order created:', order?.data);
+
+      // Use the key_id the backend returns so the checkout key can't drift from
+      // the account/mode the order was created in. Check both the envelope and
+      // the data payload, then fall back to the known test key.
+      const keyId =
+        order?.key_id ?? order?.data?.key_id ?? environment.razorpayKeyId;
+
+      this.initiateRazorpay(order.data, formValue, cartItems, keyId);
+    } catch (error) {
+      console.error('Error creating payment order:', error);
+      this.toastrService.error('Payment initialization failed!');
+    }
   }
 
-  private initiateRazorpay(orderRes: any, formValue: any) {
-    return new Observable((observer) => {
-      const options = {
-        key: 'rzp_test_z8oH9LFfnlEpw0',
-        amount: orderRes.amount,
-        currency: orderRes.currency,
-        name: 'Your Company',
-        description: 'Test Transaction',
-        image: 'https://your-logo-url.com',
-        order_id: orderRes.id,
-        handler: async (handlerResponse: any) => {
-          try {
-            const verifyResponse = await this.verifyPayment(handlerResponse);
-            if (verifyResponse) {
-              await this.processCheckout(orderRes, formValue);
-            } else {
-              this.toastrService.error('Payment Verification Failed!');
-            }
-          } catch (error) {
-            console.error('Payment Verification Error:', error);
+  private initiateRazorpay(
+    orderRes: any,
+    formValue: any,
+    cartItems: any[],
+    keyId: string,
+  ) {
+    const options = {
+      key: keyId,
+      amount: orderRes.amount,
+      currency: orderRes.currency,
+      name: 'Your Company',
+      description: 'Test Transaction',
+      image: 'https://your-logo-url.com',
+      order_id: orderRes.id,
+      handler: async (handlerResponse: any) => {
+        try {
+          // /verify creates Address -> Checkout -> Payment on a valid signature
+          // and returns the created CheckoutID for the post-payment steps.
+          const verifyResponse = await this.verifyPayment(handlerResponse);
+          const checkoutId = verifyResponse?.data?.CheckoutID;
+          if (verifyResponse && checkoutId) {
+            await this.finalizeCheckout(orderRes, checkoutId, cartItems);
+          } else {
             this.toastrService.error('Payment Verification Failed!');
           }
+        } catch (error) {
+          console.error('Payment Verification Error:', error);
+          this.toastrService.error('Payment Verification Failed!');
+        }
+      },
+      prefill: {
+        name: formValue.firstName,
+        email: formValue.email,
+        contact: formValue.phone,
+      },
+      theme: { color: '#3399cc' },
+      // Fired when the user closes the checkout without paying. The handler
+      // above only runs on a successful payment. With the consolidated flow the
+      // backend writes nothing until /verify, so a cancel leaves no Address or
+      // Checkout rows behind.
+      modal: {
+        ondismiss: () => {
+          this.toastrService.info('Payment cancelled.');
         },
-        prefill: {
-          name: formValue.firstName,
-          email: formValue.email,
-          contact: formValue.phone,
-        },
-        theme: { color: '#3399cc' },
-      };
+      },
+    };
 
-      const razorpayInstance = new (window as any).Razorpay(options);
-      razorpayInstance.open();
-      observer.next();
-      observer.complete();
+    const razorpayInstance = new (window as any).Razorpay(options);
+
+    // Razorpay reports a declined/failed payment via this event rather than the
+    // success handler, so finalizeCheckout never runs for these either.
+    razorpayInstance.on('payment.failed', (response: any) => {
+      console.error('Razorpay payment failed:', response?.error);
+      this.toastrService.error('Payment Failed!');
     });
+
+    razorpayInstance.open();
   }
 
   private async verifyPayment(handlerResponse: any): Promise<any> {
@@ -403,43 +451,14 @@ export class CheckoutComponent {
     }
   }
 
-  private async processCheckout(orderRes: any, formValue: any) {
+  private async finalizeCheckout(
+    orderRes: any,
+    checkoutId: string,
+    cartItems: any[],
+  ) {
     try {
-      const addressPayload = {
-        UserID: this.userData._id,
-        Country: formValue.country,
-        FirstName: formValue.firstName,
-        LastName: formValue.lastName,
-        AddressLine1: formValue.address,
-        AddressLine2: '',
-        City: formValue.city,
-        State: formValue.state,
-        PostalCode: formValue.zipCode,
-        Phone: formValue.phone,
-        orderNotes: formValue.orderNote,
-      };
-
-      const addressResponse = await firstValueFrom(
-        this.genericService.postObservable(CREATE_ADDRESS, addressPayload),
-      );
-      const cartItems = this.cartItems.map((el: any) => el.ProductID);
-
-      const checkoutPayload = {
-        UserID: this.userData._id,
-        TotalAmount: orderRes.amount,
-        PaymentStatus: 'success',
-        CheckoutDate: new Date(),
-        DeliveryStatus: 'pending',
-        AddressID: addressResponse.data.insertedId,
-        ProductIDs: cartItems,
-      };
-
-      const checkOutRes = await firstValueFrom(
-        this.genericService.postObservable(CHECKOUT_ITEM, checkoutPayload),
-      );
-
       const checkoutItemOrder = {
-        CheckoutID: checkOutRes.data.insertedId,
+        CheckoutID: checkoutId,
         ProductIDs: cartItems,
         Price: orderRes.amount,
       };

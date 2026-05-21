@@ -7,6 +7,37 @@
 
   &__sidebar {}
 
+  // Mobile-only button that toggles the filter sidebar so it no longer
+  // occupies the full screen above the products on small viewports.
+  &__filter-toggle {
+    width: 100%;
+    height: 50px;
+    line-height: 46px;
+    padding: 0 20px;
+
+    & .filter-arrow {
+      margin-left: 8px;
+      font-size: 12px;
+    }
+  }
+
+  // Collapsible wrapper around <app-shop-area-filters>. On desktop the
+  // filters are always shown; below the $md breakpoint they collapse and
+  // only expand when the toggle adds the `.show` class.
+  &__filter-collapse {
+    @media #{$sm}, #{$xs} {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.35s ease, opacity 0.35s ease;
+
+      &.show {
+        max-height: 2000px;
+        opacity: 1;
+      }
+    }
+  }
+
   &__header {
     & .nav-link {
       font-size: 16px;

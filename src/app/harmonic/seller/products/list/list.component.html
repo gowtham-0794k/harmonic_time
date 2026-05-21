@@ -19,23 +19,37 @@
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">Order ID</th>
+          <th scope="col">ID</th>
           <th scope="col">Brand Name</th>
           <th scope="col">Product Name</th>
           <th scope="col">Price</th>
+          <th scope="col">Available</th>
         </tr>
       </thead>
       <tbody>
         <ng-container *ngFor="let order of paginationOrders; let i = index">
           <tr
-            [routerLink]="['/seller/product-details', order._id]"
-            class="clickable-row"
+            [routerLink]="
+              order.IsSold ? null : ['/seller/product-details', order._id]
+            "
+            [class.clickable-row]="!order.IsSold"
             [attr.aria-label]="'View order #' + order.id + ' details'"
           >
             <td>{{ i + 1 }}</td>
             <td>{{ order.Details.BrandName }}</td>
             <td>{{ order.ProductName }}</td>
-            <td>{{ order.Price | currency : "INR" }}</td>
+            <td>{{ order.Price | currency: "INR" }}</td>
+            <td (click)="$event.stopPropagation()">
+              <span *ngIf="order.IsSold" class="sold-badge">Sold</span>
+              <label *ngIf="!order.IsSold" class="availability-switch">
+                <input
+                  type="checkbox"
+                  [checked]="order.IsAvailable"
+                  (change)="toggleAvailability(order, $event)"
+                />
+                <span class="slider"></span>
+              </label>
+            </td>
           </tr>
         </ng-container>
       </tbody>

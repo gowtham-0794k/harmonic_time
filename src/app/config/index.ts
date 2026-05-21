@@ -36,6 +36,8 @@ export const POST_PRODUCT = `${baseUrl}/products`;
 export const PRODUCT = `${baseUrl}/products`;
 // append the product id: `${GET_PRODUCT_BY_ID}${id}`
 export const GET_PRODUCT_BY_ID = `${baseUrl}/products/`;
+// update editable fields of a single product (append the product id)
+export const UPDATE_PRODUCT_BY_ID = `${baseUrl}/products/`;
 
 // only availability update exists in backend
 export const UPDATE_PRODUCT_AVAILABILITY = `${baseUrl}/products/availability`;
@@ -90,10 +92,15 @@ export const GET_ADDRESSES_BY_USER = `${baseUrl}/address/user/`; // append the u
 // checkout
 export const CHECKOUT_ITEM = `${baseUrl}/checkout`;
 export const GET_ORDERS = `${baseUrl}/checkout/user/`; // append the user id
+export const GET_SELLER_ORDERS = `${baseUrl}/checkout/seller/`; // append the seller id
 
 // checkout items
 export const CHECKOUT_ITEM_ORDER = `${baseUrl}/checkout-items`;
 export const CHECKOUT_ITEMS = `${baseUrl}/checkout-items/checkout/`; // append the checkout id
+
+// shipments
+export const CREATE_SHIPMENT = `${baseUrl}/shipments`;
+export const UPDATE_SHIPMENT = `${baseUrl}/shipments/`; // append the shipment id
 
 // order charges applied on top of the cart subtotal at checkout
 export const ORDER_CHARGES = {

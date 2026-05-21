@@ -186,11 +186,8 @@
                         >
                           {{ product.ProductName }}
                         </td>
-                        <td
-                          *ngFor="let product of order.Products"
-                          class="order__title pr-2 pl-2"
-                        >
-                          {{ product.Price | currency : "INR" }}
+                        <td class="order__title pr-2 pl-2">
+                          {{ order.TotalAmount | currency : "INR" }}
                         </td>
                         <td
                           *ngFor="let product of order.Products"
